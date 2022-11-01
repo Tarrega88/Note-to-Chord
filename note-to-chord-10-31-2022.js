@@ -7,14 +7,15 @@ let majorOrMinor = "";
 let romanNumeral = "";
 let indexOfRoot = 0;
 
-let majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majorIV", "skip", "majorV", "skip", "majorvi", "skip", "majorvii"];
-let naturalMinorRomanNumerals = ["minori", "skip", "minorii", "minorIII", "skip", "minoriv", "skip", "minorv", "minorVI", "skip", "minorVII", "skip"];
-let harmonicMinorRomanNumerals = ["skip", "skip", "skip", "skip", "skip", "skip", "skip", "minorV", "skip", "skip", "skip", "minorvii"];
+const majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majorIV", "skip", "majorV", "skip", "majorvi", "skip", "majorvii"];
+const naturalMinorRomanNumerals = ["minori", "skip", "minorii", "minorIII", "skip", "minoriv", "skip", "minorv", "minorVI", "skip", "minorVII", "skip"];
+const harmonicMinorRomanNumerals = ["skip", "skip", "skip", "skip", "skip", "skip", "skip", "minorV", "skip", "skip", "skip", "minorvii"];
+const specialCases = ["skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "augmented6", "skip", "skip", "skip"]; //will fill later;
 
-let enharmonicEquivalentsHigher = ["ABbb", "skip", "BCb", "CDbb", "skip", "DEbb", "skip", "EFb", "FGbb", "skip", "GAbb", "skip"];
-let enharmonicEquivalentsLower = ["AGx", "skip", "BAx", "CB#", "skip", "DCx", "skip", "EDx", "FE#", "skip", "GFx", "skip"];
+const enharmonicEquivalentsHigher = ["ABbb", "skip", "BCb", "CDbb", "skip", "DEbb", "skip", "EFb", "FGbb", "skip", "GAbb", "skip"];
+const enharmonicEquivalentsLower = ["AGx", "skip", "BAx", "CB#", "skip", "DCx", "skip", "EDx", "FE#", "skip", "GFx", "skip"];
 
-let chromaticArrayKey = ["A", "A#Bb", "B", "C", "C#Db", "D", "D#Eb", "E", "F", "F#Gb", "G", "G#Ab"];
+const chromaticArrayKey = ["A", "A#Bb", "B", "C", "C#Db", "D", "D#Eb", "E", "F", "F#Gb", "G", "G#Ab"];
 
 for (let i = 0; i < Number(noteNumber); i++) {
     let chordNotes = prompt(`What's note number ${i + 1}?`);
@@ -239,6 +240,67 @@ case "0,2,6,9":
     group = 2;
     hasAlternate = true;
     break;
+// 9 Chord
+    case "0,2,4,7,10":
+chordQuality = "9";
+    position =" Root";
+    group = 3;
+        break;
+ case "0,2,5,8,10":
+    chordQuality = "9";
+    position = "4th Inversion";
+    group = 3;
+    hasAlternate = true;
+    break;
+case "0,3,6,8,10":
+    chordQuality = "9";
+    position = "1st Inversion";
+    group = 3;
+    hasAlternate = true;
+    break;
+case "0,3,5,7,9":
+    chordQuality = "9";
+    position = "2nd Inversion";
+    group = 3;
+    hasAlternate = true;
+    break;
+case "0,2,4,6,9":
+    chordQuality = "9";
+    position = "3rd Inversion";
+    group = 3;
+    hasAlternate = true;
+    break; 
+
+// 7b9 Chord
+    case "0,1,4,7,10":
+chordQuality = "7b9";
+    position =" Root";
+    group = 3;
+        break;
+ case "0,3,6,9,11":
+    chordQuality = "7b9";
+    position = "4th Inversion";
+    group = 3;
+    hasAlternate = true;
+    break;
+case "0,3,6,8,9":
+    chordQuality = "7b9";
+    position = "1st Inversion";
+    group = 3;
+    hasAlternate = true;
+    break;
+case "0,3,5,6,9":
+    chordQuality = "7b9";
+    position = "2nd Inversion";
+    group = 3;
+    hasAlternate = true;
+    break;
+case "0,2,3,6,9":
+    chordQuality = "7b9";
+    position = "3rd Inversion";
+    group = 3;
+    hasAlternate = true;
+    break;
     //AUGMENTED 6TH CHORDS
     // Italian Augmented 6th:
 case "0,4,10":
@@ -404,23 +466,23 @@ if (group === 3) {
 }
 
 let whatThisChordCanBe = [];
-let majorI = "majorI";
-let majorii = "majorii";
-let majoriii = "majoriii";
-let majorIV = "majorIV";
-let majorV = "majorV";
-let majorvi = "majorvi";
-let majorvii = "majorvii";
+const majorI = "majorI";
+const majorii = "majorii";
+const majoriii = "majoriii";
+const majorIV = "majorIV";
+const majorV = "majorV";
+const majorvi = "majorvi";
+const majorvii = "majorvii";
 
-let minori = "minori";
-let minorii = "minorii";
-let minorIII = "minorIII";
-let minoriv = "minoriv";
-let minorv = "minorv";
-let minorV = "minorV";
-let minorVI = "minorVI";
-let minorVII = "minorVII";
-let minorvii = "minorvii";
+const minori = "minori";
+const minorii = "minorii";
+const minorIII = "minorIII";
+const minoriv = "minoriv";
+const minorv = "minorv";
+const minorV = "minorV";
+const minorVI = "minorVI";
+const minorVII = "minorVII";
+const minorvii = "minorvii";
 
 //Determines what function the chord can fulfill based on Roman Numerals
 switch (chordQuality) {
@@ -445,12 +507,24 @@ case "dominant 7":
 case "minor":
 case "minor 7":
     whatThisChordCanBe.push(minori);
+    whatThisChordCanBe.push(minoriv);
+    whatThisChordCanBe.push(minorv);
+
     whatThisChordCanBe.push(majorii);
     whatThisChordCanBe.push(majoriii);
     whatThisChordCanBe.push(majorvi);
-    whatThisChordCanBe.push(minoriv);
-    whatThisChordCanBe.push(minorv);
     break;
+case "minor 9":
+    whatThisChordCanBe.push(minori);
+    whatThisChordCanBe.push(minoriv);
+    whatThisChordCanBe.push(majorii);
+    whatThisChordCanBe.push(majorvi);
+    break;
+case "9":
+        whatThisChordCanBe.push(majorV);
+    break;
+    case "7b9":
+    whatThisChordCanBe.push(minorV);
 }
 
 let rootCalculation = fromLowestUpToRoot + indexOfLowestNote;
@@ -471,8 +545,14 @@ let chosenArrayIndex;
 
 for (let q = 0; q < whatThisChordCanBe.length; q++) {
     let chromaticLoop = 0;
+    if (whatThisChordCanBe[q].includes("minor") || whatThisChordCanBe[q].includes("major")) {
     majorOrMinor = whatThisChordCanBe[q].slice(0, 5);
     romanNumeral = whatThisChordCanBe[q].slice(5);
+    }
+    if (whatThisChordCanBe[q].includes("augmented 6")) {
+
+
+}
 
     if (majorRomanNumerals.includes(whatThisChordCanBe[q])) {
         chosenArrayIndex = majorRomanNumerals.indexOf(whatThisChordCanBe[q]);
