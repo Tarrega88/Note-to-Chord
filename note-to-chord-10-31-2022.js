@@ -128,7 +128,6 @@ let rootPosition;
 
 let inversionChecker = Array.from(indexArray);
 
-
 function determineChordQuality() {
     for (let i = 0; i < indexArray.length; i++) {
         inversionChecker = Array.from(indexArray);
@@ -225,7 +224,7 @@ function determineChordQuality() {
             case "0,3,6,9":
                 rootPosition = "0,3,6,9";
                 chordQuality = "full diminished";
-                group = 2;
+                group = 0;
                 specialCase = true;
                 break;
             //HALF DIMINISHED 7 AND M7b5
@@ -240,7 +239,7 @@ function determineChordQuality() {
             case "0,4,8":
                 rootPosition = "0,4,8";
                 chordQuality = "augmented";
-                group = 1;
+                group = 0;
                 break;
         }
 
@@ -248,8 +247,6 @@ function determineChordQuality() {
 }
 
 determineChordQuality();
-
-
 
 let inversionNumber;
 function determineInversion() {
@@ -273,12 +270,21 @@ function determineInversion() {
 
 determineInversion();
 
-
 function findRootAndApplyInversionText() {
+    //group 0 is for symmetrical chords (full dim 7 and augmented)
+    if (group === 0) {
+        switch (inversionNumber) {
+            case 0:
+                fromLowestUpToRoot = fretArray[3];
+                position = "Root Position";
+                break;
+        }
+    }
+
     if (group === 1) {
         switch (inversionNumber) {
             case 0:
-                fromLowestUpToRoot = 0;
+                fromLowestUpToRoot = fretArray[0];
                 position = "Root Position";
                 break;
             case 1:
@@ -296,7 +302,7 @@ function findRootAndApplyInversionText() {
     if (group === 2) {
         switch (inversionNumber) {
             case 0:
-                fromLowestUpToRoot = 0;
+                fromLowestUpToRoot = fretArray[0];
                 position = "Root Position";
                 break;
             case 1:
@@ -317,7 +323,7 @@ function findRootAndApplyInversionText() {
     if (group === 3) {
         switch (inversionNumber) {
             case 0:
-                fromLowestUpToRoot = 0;
+                fromLowestUpToRoot = fretArray[0];
                 position = "Root Position";
                 break;
             case 1:
@@ -362,7 +368,6 @@ const minorVII = "minorVII";
 const fullDiminished = "full diminished";
 
 const augmented = "augmented";
-
 
 //Determines what function the chord can fulfill based on Roman Numerals
 
@@ -423,7 +428,6 @@ applyChordFunctions();
 
 let rootCalculation = fromLowestUpToRoot + indexOfLowestNote;
 
-
 if (rootCalculation >= 12) {
     rootCalculation = rootCalculation - 12;
 }
@@ -438,7 +442,6 @@ let intervalForKey1;
 let intervalForKey2;
 let chosenArrayIndex;
 let chosenArrayGroup = [];
-
 
 function findRelevantKeysAndSyncChordFunctionsToNotes() {
     for (let q = 0; q < whatThisChordCanBe.length; q++) {
