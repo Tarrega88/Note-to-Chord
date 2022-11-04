@@ -12,6 +12,9 @@ let startOver = false;
 let waitUntilStartOver = false;
 let additionalInfo = "";
 let stepsToFindRelatedChord = 0;
+let originalRoot = [];
+let aOrAn = "";
+
 
 const majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majorIV", "skip", "majorV", "skip", "majorvi", "skip", "majorvii"];
 const naturalMinorRomanNumerals = ["minori", "skip", "minorii", "minorIII", "skip", "minoriv", "skip", "minorv", "minorVI", "skip", "minorVII", "skip"];
@@ -142,6 +145,8 @@ let inversionChecker = Array.from(indexArray);
 
 let alternateChordQuality = [];
 
+let originalChordQuality = "";
+
 function determineChordQuality() {
     for (let i = 0; i < indexArray.length; i++) {
         inversionChecker = Array.from(indexArray);
@@ -237,6 +242,10 @@ function determineChordQuality() {
                 alternateChordQuality.push("tritone sub");
                 alternateStepsArray.push(0);
                 alternateGroup.push(2);
+
+                alternateChordQuality.push("V of V");
+                alternateStepsArray.push(0);
+                alternateGroup.push(2);
                 break;
             // French Augmented 6th
             case "0,4,6,10":
@@ -299,6 +308,7 @@ function determineChordQuality() {
         }
 
     }
+    originalChordQuality = chordQuality;
 }
 
 determineChordQuality();
@@ -557,9 +567,24 @@ function calculateRootNumberAndLetter() {
     }
 
     theRoot = chromaticArrayKey[rootCalculation];
-    chordOccursIn = `${theRoot} ${chordQuality} occurs in the key of:
+    if (originalRoot.length === 0) {
+        originalRoot.push(theRoot);
+    }
 
-`;
+    if (startOver === false) {
+        chordOccursIn = `${theRoot} ${chordQuality} occurs in the key of:
+`
+    }
+    if (startOver === true && alternateStepsAboveOriginal === 0) {
+        chordOccursIn = `${theRoot} ${originalChordQuality} can function as ${aOrAn} ${chordQuality} chord in the key of:
+`
+    }
+
+    if (startOver === true && alternateStepsAboveOriginal > 0) {
+        chordOccursIn = `${theRoot} ${chordQuality} shares the same notes as ${originalRoot[0]} ${originalChordQuality}.
+It occurs in the key of:
+`
+    }
 
 }
 calculateRootNumberAndLetter();
@@ -574,22 +599,20 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
         let chromaticLoop = 0;
         romanNumeral = "";
 
-        // console.log(whatThisChordCanBe)
-
         // if (!specialCase) {
         if (whatThisChordCanBe[q].includes("minor") || whatThisChordCanBe[q].includes("major")) {
             majorOrMinor = whatThisChordCanBe[q].slice(0, 5);
             romanNumeral = whatThisChordCanBe[q].slice(5);
             // }
         }
-        if (whatThisChordCanBe[q].includes("augmented 6th")) {//something;
+        if (whatThisChordCanBe[q] === ("augmented 6th")) {//something;
             stepsToFindRelatedChord = 7;
 
             majorOrMinor = "major and minor";
             romanNumeral = "augmented 6th";
         }
 
-        if (whatThisChordCanBe[q].includes("full diminished")) {
+        if (whatThisChordCanBe[q] === ("full diminished")) {
             majorOrMinor = "minor";
             romanNumeral = "vii";
         }
@@ -637,6 +660,12 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
                 i = 0;
             }
 
+            if (chordQuality[0].toLowerCase() === "a" || chordQuality[0].toLowerCase() === "e" || chordQuality[0].toLowerCase() === "i" || chordQuality[0].toLowerCase() === "o" || chordQuality[0].toLowerCase() === "u") {
+                aOrAn = "an";
+            } else {
+                aOrAn = "a";
+            }
+
             let temporaryKey = chromaticArrayKey[chromaticLoop];
             let findRelatedChordNumber = chromaticLoop + stepsToFindRelatedChord;
             if (findRelatedChordNumber > 11) {
@@ -664,7 +693,7 @@ In this case it's a tritone sub to the ${temporaryRelatedChord}7 chord.
 
             if (whatThisChordCanBe[q] === vofV && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
                 chordOccursIn += `The ${romanNumeral} chord functions as a dominant chord TO the original dominant chord.  It creates extra momentum and tension.
-In this case, it's a V of the ${temporaryRelatedChord}7 chord.
+In this case, it's the V of the ${temporaryRelatedChord}7 chord.
 Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major or minor`
             }
 
