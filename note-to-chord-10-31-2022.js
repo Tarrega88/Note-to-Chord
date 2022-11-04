@@ -13,7 +13,7 @@ let waitUntilStartOver = false;
 let additionalInfo = "";
 let stepsToFindRelatedChord = 0;
 
-const majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majorIV", "skip", "majorV", "augmented 6th", "majorvi", "skip", "majorvii"];
+const majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majorIV", "skip", "majorV", "skip", "majorvi", "skip", "majorvii"];
 const naturalMinorRomanNumerals = ["minori", "skip", "minorii", "minorIII", "skip", "minoriv", "skip", "minorv", "minorVI", "skip", "minorVII", "skip"];
 const harmonicMinorRomanNumerals = ["skip", "skip", "skip", "skip", "skip", "skip", "skip", "minorV", "skip", "skip", "skip", "skip"];
 const specialCases = ["skip", "tritone sub", "V of V", "skip", "skip", "skip", "skip", "skip", "augmented 6th", "skip", "skip", "full diminished"];
@@ -200,7 +200,10 @@ function determineChordQuality() {
                 alternateChordQuality.push("German Augmented 6th");
                 alternateStepsArray.push(0);
                 alternateGroup.push(2);
-                stepsToFindRelatedChord = 7;
+                //Tritone:
+                alternateChordQuality.push("tritone sub");
+                alternateStepsArray.push(0);
+                alternateGroup.push(2);
 
                 break;
             // 9 Chord
@@ -222,9 +225,12 @@ function determineChordQuality() {
                 rootPosition = "0,4,10";
                 chordQuality = "Italian Augmented 6th";
                 group = 1;
-                stepsToFindRelatedChord = 7;
                 hasAlternate = true;
                 alternateChordQuality.push("dominant 7");
+                alternateStepsArray.push(0);
+                alternateGroup.push(2);
+
+                alternateChordQuality.push("tritone sub");
                 alternateStepsArray.push(0);
                 alternateGroup.push(2);
                 break;
@@ -234,7 +240,6 @@ function determineChordQuality() {
                 chordQuality = "French Augmented 6th";
                 group = 2;
                 hasAlternate = true;
-                stepsToFindRelatedChord = 7;
 
                 break;
             //MAJOR 7
@@ -452,6 +457,7 @@ const fullDiminished = "full diminished";
 
 const augmented = "augmented";
 const augmented6th = "augmented 6th"
+const tritoneSub = "tritone sub";
 
 //Determines what function the chord can fulfill based on Roman Numerals
 
@@ -515,6 +521,9 @@ function applyChordFunctions() {
         case "German Augmented 6th":
             whatThisChordCanBe.push(augmented6th)
             break;
+        case "tritone sub":
+            whatThisChordCanBe.push(tritoneSub);
+            break;
     }
 
 }
@@ -551,6 +560,7 @@ let chosenArrayGroup = [];
 function findRelevantKeysAndSyncChordFunctionsToNotes() {
     for (let q = 0; q < whatThisChordCanBe.length; q++) {
         let chromaticLoop = 0;
+        romanNumeral = "";
 
         // console.log(whatThisChordCanBe)
 
@@ -561,6 +571,8 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
             // }
         }
         if (whatThisChordCanBe[q].includes("augmented 6th")) {//something;
+            stepsToFindRelatedChord = 7;
+
             majorOrMinor = "major and minor";
             romanNumeral = "augmented 6th";
         }
@@ -568,6 +580,11 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
         if (whatThisChordCanBe[q].includes("full diminished")) {
             majorOrMinor = "minor";
             romanNumeral = "vii";
+        }
+
+        if (whatThisChordCanBe[q] === "tritone sub") {
+            majorOrMinor = "major and minor";
+            romanNumeral = "tritoneSub"
         }
 
         if (majorRomanNumerals.includes(whatThisChordCanBe[q])) {
@@ -582,9 +599,9 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
             chosenArrayIndex = harmonicMinorRomanNumerals.indexOf(whatThisChordCanBe[q]);
         }
         if (specialCases.includes(whatThisChordCanBe[q])) {
-            if (whatThisChordCanBe[q] === fullDiminished) {
-                chosenArrayIndex = specialCases.indexOf(whatThisChordCanBe[q]);
-            }
+            // if (whatThisChordCanBe[q] === fullDiminished) {
+            chosenArrayIndex = specialCases.indexOf(whatThisChordCanBe[q]);
+            // }
         }
 
         intervalForKey1 = rootCalculation - chosenArrayIndex;
