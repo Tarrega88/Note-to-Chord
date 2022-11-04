@@ -10,11 +10,13 @@ let indexOfRoot = 0;
 let specialCase = false;
 let startOver = false;
 let waitUntilStartOver = false;
+let additionalInfo = "";
+let stepsToFindRelatedChord = 0;
 
-const majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majorIV", "skip", "majorV", "skip", "majorvi", "skip", "majorvii"];
+const majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majorIV", "skip", "majorV", "augmented 6th", "majorvi", "skip", "majorvii"];
 const naturalMinorRomanNumerals = ["minori", "skip", "minorii", "minorIII", "skip", "minoriv", "skip", "minorv", "minorVI", "skip", "minorVII", "skip"];
 const harmonicMinorRomanNumerals = ["skip", "skip", "skip", "skip", "skip", "skip", "skip", "minorV", "skip", "skip", "skip", "skip"];
-const specialCases = ["skip", "tritone sub", "V of V", "skip", "skip", "skip", "skip", "skip", "augmented 6", "skip", "skip", "full diminished"];
+const specialCases = ["skip", "tritone sub", "V of V", "skip", "skip", "skip", "skip", "skip", "augmented 6th", "skip", "skip", "full diminished"];
 //will fill later;
 
 const enharmonicEquivalentsHigher = ["ABbb", "skip", "BCb", "CDbb", "skip", "DEbb", "skip", "EFb", "FGbb", "skip", "GAbb", "skip"];
@@ -123,7 +125,6 @@ let hasAlternate = false;
 let alternate = "";
 let alternateStepsAboveOriginal = 0;
 let alternateStepsArray = [];
-let alternateGroupDifference = 0;
 
 
 let fromLowestUpToRoot = 0;
@@ -162,14 +163,13 @@ function determineChordQuality() {
                 rootPosition = "0,3,7";
                 group = 1;
                 break;
-            // MINOR 7
+            // MINOR 7 and 6
             case "0,3,7,10":
                 chordQuality = "minor 7";
                 group = 2;
                 rootPosition = "0,3,7,10";
 
                 hasAlternate = true;
-                alternateGroupDifference = 2;
                 alternateChordQuality.push("6");
                 alternateStepsArray.push(3);
                 alternateGroup.push(4);
@@ -188,8 +188,6 @@ function determineChordQuality() {
                 chordQuality = "major";
                 group = 1;
                 break;
-            // MAJOR 6
-            //Covered in minor 7 alternates
 
             //DOMINANT 7
             case "0,4,7,10":
@@ -197,6 +195,13 @@ function determineChordQuality() {
                 chordQuality = "dominant 7";
                 group = 2;
                 hasAlternate = true;
+                //Alternates
+                //German Augmented 6th:
+                alternateChordQuality.push("German Augmented 6th");
+                alternateStepsArray.push(0);
+                alternateGroup.push(2);
+                stepsToFindRelatedChord = 7;
+
                 break;
             // 9 Chord
             case "0,2,4,7,10":
@@ -217,6 +222,11 @@ function determineChordQuality() {
                 rootPosition = "0,4,10";
                 chordQuality = "Italian Augmented 6th";
                 group = 1;
+                stepsToFindRelatedChord = 7;
+                hasAlternate = true;
+                alternateChordQuality.push("dominant 7");
+                alternateStepsArray.push(0);
+                alternateGroup.push(2);
                 break;
             // French Augmented 6th
             case "0,4,6,10":
@@ -224,6 +234,8 @@ function determineChordQuality() {
                 chordQuality = "French Augmented 6th";
                 group = 2;
                 hasAlternate = true;
+                stepsToFindRelatedChord = 7;
+
                 break;
             //MAJOR 7
             case "0,4,7,11":
@@ -439,6 +451,7 @@ const minorVII = "minorVII";
 const fullDiminished = "full diminished";
 
 const augmented = "augmented";
+const augmented6th = "augmented 6th"
 
 //Determines what function the chord can fulfill based on Roman Numerals
 
@@ -463,6 +476,7 @@ function applyChordFunctions() {
         case "dominant 7":
             whatThisChordCanBe.push(majorV);
             whatThisChordCanBe.push(minorV);
+            whatThisChordCanBe.push(minorVII);
             break;
         case "minor":
         case "minor 7":
@@ -495,7 +509,14 @@ function applyChordFunctions() {
             break;
         case "augmented":
             whatThisChordCanBe.push(augmented);
+            break;
+        case "French Augmented 6th":
+        case "Italian Augmented 6th":
+        case "German Augmented 6th":
+            whatThisChordCanBe.push(augmented6th)
+            break;
     }
+
 }
 applyChordFunctions();
 
@@ -533,13 +554,15 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
 
         // console.log(whatThisChordCanBe)
 
-        if (!specialCase) {
-            if (whatThisChordCanBe[q].includes("minor") || whatThisChordCanBe[q].includes("major")) {
-                majorOrMinor = whatThisChordCanBe[q].slice(0, 5);
-                romanNumeral = whatThisChordCanBe[q].slice(5);
-            }
+        // if (!specialCase) {
+        if (whatThisChordCanBe[q].includes("minor") || whatThisChordCanBe[q].includes("major")) {
+            majorOrMinor = whatThisChordCanBe[q].slice(0, 5);
+            romanNumeral = whatThisChordCanBe[q].slice(5);
+            // }
         }
-        if (whatThisChordCanBe[q].includes("augmented 6")) {//something;
+        if (whatThisChordCanBe[q].includes("augmented 6th")) {//something;
+            majorOrMinor = "major and minor";
+            romanNumeral = "augmented 6th";
         }
 
         if (whatThisChordCanBe[q].includes("full diminished")) {
@@ -580,6 +603,11 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
             }
 
             let temporaryKey = chromaticArrayKey[chromaticLoop];
+            let findRelatedChordNumber = chromaticLoop + stepsToFindRelatedChord;
+            if (findRelatedChordNumber > 11) {
+                findRelatedChordNumber = findRelatedChordNumber - 12;
+            }
+            let temporaryRelatedChord = chromaticArrayKey[findRelatedChordNumber];
             if (temporaryKey.length === 4) {
                 temporaryKey = temporaryKey.slice(0, 2) + "/" + temporaryKey.slice(2);
             }
@@ -588,6 +616,11 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
                 chordOccursIn += `${temporaryKey} ${majorOrMinor} as the ${romanNumeral} chord.
 `
             }
+            if (whatThisChordCanBe[q] === augmented6th && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
+                chordOccursIn += `The ${romanNumeral} chord typically precedes a dominant V chord, in this case the ${temporaryRelatedChord} chord.
+`
+            }
+
 
             chromaticLoop++;
         }
@@ -609,6 +642,7 @@ function logTheChord() {
 ${position}`)
     console.log(chordOccursIn);
 
+    console.log(additionalInfo);
 }
 if (waitUntilStartOver === false) {
     logTheChord();
