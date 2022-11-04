@@ -205,6 +205,10 @@ function determineChordQuality() {
                 alternateStepsArray.push(0);
                 alternateGroup.push(2);
 
+                alternateChordQuality.push("V of V");
+                alternateStepsArray.push(0);
+                alternateGroup.push(2);
+
                 break;
             // 9 Chord
             case "0,2,4,7,10":
@@ -276,6 +280,9 @@ function determineChordQuality() {
                 alternate = "minor 7 b 5"
                 hasAlternate = true;
                 group = 2;
+
+                alternateChordQuality.push("m7b5");
+                alternateStepsArray.push(0);
                 break;
             //AUGMENTED
             case "0,4,8":
@@ -458,6 +465,8 @@ const fullDiminished = "full diminished";
 const augmented = "augmented";
 const augmented6th = "augmented 6th"
 const tritoneSub = "tritone sub";
+const VofV = "V of V";
+const m7b5 = "m7b5";
 
 //Determines what function the chord can fulfill based on Roman Numerals
 
@@ -466,17 +475,17 @@ function applyChordFunctions() {
     switch (chordQuality) {
         case "major":
             whatThisChordCanBe.push(majorI);
+            whatThisChordCanBe.push(minorIII);
             whatThisChordCanBe.push(majorIV);
             whatThisChordCanBe.push(majorV);
-            whatThisChordCanBe.push(minorIII);
             whatThisChordCanBe.push(minorVI);
             whatThisChordCanBe.push(minorVII);
             break;
         case "major 7":
         case "6":
             whatThisChordCanBe.push(majorI);
-            whatThisChordCanBe.push(majorIV);
             whatThisChordCanBe.push(minorIII);
+            whatThisChordCanBe.push(majorIV);
             whatThisChordCanBe.push(minorVI);
             break;
         case "dominant 7":
@@ -487,17 +496,16 @@ function applyChordFunctions() {
         case "minor":
         case "minor 7":
             whatThisChordCanBe.push(minori);
-            whatThisChordCanBe.push(minoriv);
-            whatThisChordCanBe.push(minorv);
-
             whatThisChordCanBe.push(majorii);
             whatThisChordCanBe.push(majoriii);
+            whatThisChordCanBe.push(minoriv);
+            whatThisChordCanBe.push(minorv);
             whatThisChordCanBe.push(majorvi);
             break;
         case "minor 9":
             whatThisChordCanBe.push(minori);
-            whatThisChordCanBe.push(minoriv);
             whatThisChordCanBe.push(majorii);
+            whatThisChordCanBe.push(minoriv);
             whatThisChordCanBe.push(majorvi);
             break;
         case "9":
@@ -507,6 +515,7 @@ function applyChordFunctions() {
             whatThisChordCanBe.push(minorV);
             break;
         case "half diminished 7":
+        case "m7b5":
             whatThisChordCanBe.push(majorvii);
             whatThisChordCanBe.push(minorii);
             break;
@@ -523,6 +532,9 @@ function applyChordFunctions() {
             break;
         case "tritone sub":
             whatThisChordCanBe.push(tritoneSub);
+            break;
+        case "V of V":
+            whatThisChordCanBe.push(VofV);
             break;
     }
 
@@ -585,6 +597,12 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
         if (whatThisChordCanBe[q] === "tritone sub") {
             majorOrMinor = "major and minor";
             romanNumeral = "tritoneSub"
+            stepsToFindRelatedChord = 7;
+        }
+        if (whatThisChordCanBe[q] === "V of V") {
+            majorOrMinor = "major and minor";
+            romanNumeral = "V of V";
+            stepsToFindRelatedChord = 7;
         }
 
         if (majorRomanNumerals.includes(whatThisChordCanBe[q])) {
@@ -636,6 +654,18 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
             if (whatThisChordCanBe[q] === augmented6th && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
                 chordOccursIn += `The ${romanNumeral} chord typically precedes a dominant V chord, in this case the ${temporaryRelatedChord} chord.
 `
+            }
+
+            if (whatThisChordCanBe[q] === tritoneSub && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
+                chordOccursIn += `The ${romanNumeral} chord functions as an alternative dominant V7 chord since it shares the 3rd and 7th note of that chord, but flipped.
+In this case it's a tritone sub to the ${temporaryRelatedChord}7 chord.
+`
+            }
+
+            if (whatThisChordCanBe[q] === VofV && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
+                chordOccursIn += `The ${romanNumeral} chord functions as a dominant chord TO the original dominant chord.  It creates extra momentum and tension.
+In this case, it's a V of the ${temporaryRelatedChord}7 chord.
+Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major or minor`
             }
 
 
