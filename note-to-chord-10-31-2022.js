@@ -465,7 +465,7 @@ const fullDiminished = "full diminished";
 const augmented = "augmented";
 const augmented6th = "augmented 6th"
 const tritoneSub = "tritone sub";
-const VofV = "V of V";
+const vofV = "V of V";
 const m7b5 = "m7b5";
 
 //Determines what function the chord can fulfill based on Roman Numerals
@@ -534,7 +534,7 @@ function applyChordFunctions() {
             whatThisChordCanBe.push(tritoneSub);
             break;
         case "V of V":
-            whatThisChordCanBe.push(VofV);
+            whatThisChordCanBe.push(vofV);
             break;
     }
 
@@ -662,7 +662,7 @@ In this case it's a tritone sub to the ${temporaryRelatedChord}7 chord.
 `
             }
 
-            if (whatThisChordCanBe[q] === VofV && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
+            if (whatThisChordCanBe[q] === vofV && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
                 chordOccursIn += `The ${romanNumeral} chord functions as a dominant chord TO the original dominant chord.  It creates extra momentum and tension.
 In this case, it's a V of the ${temporaryRelatedChord}7 chord.
 Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major or minor`
