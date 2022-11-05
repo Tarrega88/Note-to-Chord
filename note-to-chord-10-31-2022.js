@@ -33,7 +33,7 @@ const melodicMinorRN = ["melodic minori", "skip", "melodic minorii", "melodic mi
 
 const melodicMinorAlternateRN = ["skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "melodicMinorVII"];
 
-const specialCases = ["skip", "tritone sub", "V of V", "skip", "skip", "skip", "skip", "skip", "augmented 6th", "skip", "skip", "full diminished"];
+const specialCases = ["skip", "tritone sub", "V of V", "skip", "skip", "skip", "skip", "skip", "augmented 6th", "skip", "skip", "skip"];
 
 const enharmonicEquivalentsHigher = ["ABbb", "skip", "BCb", "CDbb", "skip", "DEbb", "skip", "EFb", "FGbb", "skip", "GAbb", "skip"];
 const enharmonicEquivalentsLower = ["AGx", "skip", "BAx", "CB#", "skip", "DCx", "skip", "EDx", "FE#", "skip", "GFx", "skip"];
@@ -281,6 +281,12 @@ function determineChordQuality() {
             case "0,4,7,11":
                 rootPosition = "0,4,7,11";
                 chordQuality = "major 7";
+                group = 2;
+                break;
+            //MAJOR 7 #5
+            case "0,4,8,11":
+                rootPosition = "0,4,8,11";
+                chordQuality = "maj7 #5";
                 group = 2;
                 break;
             //DIMINISHED
@@ -578,11 +584,13 @@ const harmonicMajorV = "harmonic majorV";
 const harmonicMajorVI = "harmonic majorVI";
 const harmonicMajorvii = "harmonic major vii";
 
+const harmonicMajorvi = "harmonic majorvi"
+const harmonicMajorIII = "harmonic majorIII";
 //const melodicMinorRN = "melodic minorV", "skip", "melodic minorvi", "skip", "melodic minorvii"];
 //melodic minor: m maj7, m7, maj7#5, 7, 7, m7b5, m7b5/7alt;
 const melodicMinori = "melodic minori";
 const melodicMinorii = "melodic minorii";
-const melodicMinorIII = "melodic minoriii";
+const melodicMinorIII = "melodic minorIII";
 const melodicMinorIV = "melodic minorIV";
 const melodicMinorV = "melodic minorV";
 const melodicMinorvi = "melodic minorvi";
@@ -613,11 +621,24 @@ function applyChordFunctions() {
             whatThisChordCanBe.push(minorIII);
             whatThisChordCanBe.push(majorIV);
             whatThisChordCanBe.push(minorVI);
+            whatThisChordCanBe.push(harmonicMajorI);
+            whatThisChordCanBe.push(harmonicMinorVI);
+            break;
+        case "maj7 #5":
+            whatThisChordCanBe.push(harmonicMinorIII);
+            whatThisChordCanBe.push(melodicMinorIII);
+            whatThisChordCanBe.push(harmonicMajorVI);
             break;
         case "dominant 7":
             whatThisChordCanBe.push(majorV);
-            whatThisChordCanBe.push(minorV);
+            whatThisChordCanBe.push(harmonicMinorV);
+            whatThisChordCanBe.push(melodicMinorV);
+            whatThisChordCanBe.push(harmonicMajorV);
+
             whatThisChordCanBe.push(minorVII);
+            whatThisChordCanBe.push(harmonicMajorIII);
+            whatThisChordCanBe.push(melodicMinorIV);
+
             break;
         case "minor":
         case "minor 7":
@@ -627,6 +648,10 @@ function applyChordFunctions() {
             whatThisChordCanBe.push(minoriv);
             whatThisChordCanBe.push(minorv);
             whatThisChordCanBe.push(majorvi);
+
+            whatThisChordCanBe.push(melodicMinorii);
+            whatThisChordCanBe.push(harmonicMajoriii);
+            whatThisChordCanBe.push(harmonicMinoriv);
             break;
         case "minor 9":
             whatThisChordCanBe.push(minori);
@@ -645,8 +670,14 @@ function applyChordFunctions() {
         case "m7b5":
             whatThisChordCanBe.push(majorvii);
             whatThisChordCanBe.push(minorii);
+            whatThisChordCanBe.push(melodicMinorvi);
+            whatThisChordCanBe.push(melodicMinorvii);
+            whatThisChordCanBe.push(harmonicMajorii);
             break;
         case "full diminished":
+            whatThisChordCanBe.push(harmonicMinorvii);
+            whatThisChordCanBe.push(harmonicMajorvii);
+            whatThisChordCanBe.push(harmonicMajorvi)
             whatThisChordCanBe.push(fullDiminished);
             break;
         case "augmented":
@@ -740,10 +771,10 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
             romanNumeral = "augmented 6th";
         }
 
-        if (whatThisChordCanBe[q] === "full diminished") {
-            majorOrMinor = "minor";
-            romanNumeral = "vii";
-        }
+        // if (whatThisChordCanBe[q] === "full diminished") {
+        //     majorOrMinor = "minor";
+        //     romanNumeral = "vii";
+        // }
 
         if (whatThisChordCanBe[q] === "tritone sub") {
             majorOrMinor = "major and minor";
