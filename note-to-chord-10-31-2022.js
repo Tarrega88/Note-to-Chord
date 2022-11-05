@@ -15,19 +15,23 @@ let stepsToFindRelatedChord = 0;
 let originalRoot = [];
 let aOrAn = "";
 
-
 const majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majorIV", "skip", "majorV", "skip", "majorvi", "skip", "majorvii"];
 //maj7, m7, m7, maj7, 7, m7, m7b5;
 const naturalMinorRomanNumerals = ["minori", "skip", "minorii", "minorIII", "skip", "minoriv", "skip", "minorv", "minorVI", "skip", "minorVII", "skip"];
+//m7, m7b5, maj7, m7, m7, maj7, 7;
 
+const harmonicMinorRomanNumerals = ["harmonic minori", "skip", "harmonic minorii", "harmonic minorIII", "skip", "harmonic minoriv", "skip", "minorV", "harmonic minorVI", "skip", "skip", "harmonic minorvii"];
+//harmonic minor: i:m maj7, ii:m7b5, III:maj7#5, iv:m7, V:7, VI:maj7, vii:dim7
 
-const harmonicMinorRomanNumerals = ["skip", "skip", "skip", "skip", "skip", "skip", "skip", "minorV", "skip", "skip", "skip", "skip"];
-//harmonic minor: m maj7, m7b5, maj7#5, m7, 7, maj7, dim7
-const harmonicMajorRN = ["I", "skip", "ii", "skip", "iii", "iv", "skip", "V", "VI", "skip", "skip", "vii"];
-//harmonicMajor: Maj7, m7b5, m7/7, m maj7, 7, maj7#5/dim7, dim7;
+const harmonicMajorRN = ["harmonic majorI", "skip", "harmonic majorii", "skip", "harmonic majoriii", "harmonic majoriv", "skip", "harmonic majorV", "harmonic majorVI", "skip", "skip", "harmonic majorvii"];
+//harmonicMajor: I:maj7, ii:m7b5, iii:m7/7, iv:m maj7, V:7, VI:maj7#5/dim7, vii:dim7;
 
-const melodicMinorRN = ["meli", "skip", "melii", "melIII", "skip", "melIV", "skip", "melV", "skip", "melvi", "skip", "melvii"];
-//melodic minor: m maj7, m7, maj7#5, 7, 7, m7b5, m7b5/7alt;
+const harmonicMajorAlternateRN = ["skip", "skip", "skip", "skip", "harmonic majorIII", "skip", "skip", "skip", "harmonic majorvi", "skip", "skip", "skip"];
+
+const melodicMinorRN = ["melodic minori", "skip", "melodic minorii", "melodic minorIII", "skip", "melodic minorIV", "skip", "melodic minorV", "skip", "melodic minorvi", "skip", "melodic minorvii"];
+//melodic minor: i:m maj7, ii:m7, III:maj7#5, IV:7, V:7, vi:m7b5, vii:m7b5/7alt;
+
+const melodicMinorAlternateRN = ["skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "melodicMinorVII"];
 
 const specialCases = ["skip", "tritone sub", "V of V", "skip", "skip", "skip", "skip", "skip", "augmented 6th", "skip", "skip", "full diminished"];
 
@@ -138,13 +142,11 @@ let alternate = "";
 let alternateStepsAboveOriginal = 0;
 let alternateStepsArray = [];
 
-
 let fromLowestUpToRoot = 0;
 let fromLowestUpToRootAlternate = 0;
 let group = 0;
 let alternateGroup = [];
 let chordFunctions = [];
-
 
 let fretString = fretArray.join(",");
 
@@ -536,6 +538,7 @@ function findRootAndApplyInversionText() {
 findRootAndApplyInversionText();
 
 let whatThisChordCanBe = [];
+//major
 const majorI = "majorI";
 const majorii = "majorii";
 const majoriii = "majoriii";
@@ -544,6 +547,7 @@ const majorV = "majorV";
 const majorvi = "majorvi";
 const majorvii = "majorvii";
 
+//natural minor
 const minori = "minori";
 const minorii = "minorii";
 const minorIII = "minorIII";
@@ -554,6 +558,37 @@ const minorVI = "minorVI";
 const minorVII = "minorVII";
 const fullDiminished = "full diminished";
 
+//harmonic minor
+//harmonic minor: m maj7, m7b5, maj7#5, m7, 7, maj7, dim7
+const harmonicMinori = "harmonic minori";
+const harmonicMinorii = "harmonic minorii";
+const harmonicMinorIII = "harmonic minorIII";
+const harmonicMinoriv = "harmonic minoriv";
+const harmonicMinorV = "harmonic minorV";
+const harmonicMinorVI = "harmonic minorVI";
+const harmonicMinorvii = "harmonic minorvii";
+
+//harmonic major
+//harmonicMajor: maj7, m7b5, m7/7, m maj7, 7, maj7#5/dim7, dim7;
+const harmonicMajorI = "harmonic majorI";
+const harmonicMajorii = "harmonic majorii";
+const harmonicMajoriii = "harmonic majoriii";
+const harmonicMajoriv = "harmonic majoriv";
+const harmonicMajorV = "harmonic majorV";
+const harmonicMajorVI = "harmonic majorVI";
+const harmonicMajorvii = "harmonic major vii";
+
+//const melodicMinorRN = "melodic minorV", "skip", "melodic minorvi", "skip", "melodic minorvii"];
+//melodic minor: m maj7, m7, maj7#5, 7, 7, m7b5, m7b5/7alt;
+const melodicMinori = "melodic minori";
+const melodicMinorii = "melodic minorii";
+const melodicMinorIII = "melodic minoriii";
+const melodicMinorIV = "melodic minorIV";
+const melodicMinorV = "melodic minorV";
+const melodicMinorvi = "melodic minorvi";
+const melodicMinorvii = "melodic minorvii";
+
+//special cases
 const augmented = "augmented";
 const augmented6th = "augmented 6th"
 const tritoneSub = "tritone sub";
@@ -629,18 +664,18 @@ function applyChordFunctions() {
             whatThisChordCanBe.push(vofV);
             break;
         case "m maj7":
-            whatThisChordCanBe.push(minori);
+            whatThisChordCanBe.push(melodicMinori);
+            whatThisChordCanBe.push(harmonicMinori);
+            whatThisChordCanBe.push(harmonicMajoriv);
             break;
     }
 
 }
 applyChordFunctions();
 
-
 let rootCalculation;
 let theRoot;
 let chordOccursIn = "";
-
 
 function calculateRootNumberAndLetter() {
     rootCalculation = fromLowestUpToRoot + indexOfLowestNote;
@@ -678,26 +713,34 @@ let intervalForKey1;
 let intervalForKey2;
 let chosenArrayIndex;
 let chosenArrayGroup = [];
+let specificArray;
 
 function findRelevantKeysAndSyncChordFunctionsToNotes() {
     for (let q = 0; q < whatThisChordCanBe.length; q++) {
         let chromaticLoop = 0;
         romanNumeral = "";
 
-        // if (!specialCase) {
-        if (whatThisChordCanBe[q].includes("minor") || whatThisChordCanBe[q].includes("major")) {
+        if (whatThisChordCanBe[q].slice(0, 5) === "minor" || whatThisChordCanBe[q].slice(0, 5) === "major") {
             majorOrMinor = whatThisChordCanBe[q].slice(0, 5);
             romanNumeral = whatThisChordCanBe[q].slice(5);
-            // }
         }
-        if (whatThisChordCanBe[q] === ("augmented 6th")) {//something;
-            stepsToFindRelatedChord = 7;
+        if (whatThisChordCanBe[q].includes("harmonic minor") || whatThisChordCanBe[q].includes("harmonic major")) {
+            majorOrMinor = whatThisChordCanBe[q].slice(0, 14);
+            romanNumeral = whatThisChordCanBe[q].slice(14);
+        }
 
+        if (whatThisChordCanBe[q].includes("melodic minor")) {
+            majorOrMinor = whatThisChordCanBe[q].slice(0, 13);
+            romanNumeral = whatThisChordCanBe[q].slice(13);
+        }
+
+        if (whatThisChordCanBe[q] === "augmented 6th") {
+            stepsToFindRelatedChord = 7;
             majorOrMinor = "major and minor";
             romanNumeral = "augmented 6th";
         }
 
-        if (whatThisChordCanBe[q] === ("full diminished")) {
+        if (whatThisChordCanBe[q] === "full diminished") {
             majorOrMinor = "minor";
             romanNumeral = "vii";
         }
@@ -725,9 +768,23 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
             chosenArrayIndex = harmonicMinorRomanNumerals.indexOf(whatThisChordCanBe[q]);
         }
         if (specialCases.includes(whatThisChordCanBe[q])) {
-            // if (whatThisChordCanBe[q] === fullDiminished) {
             chosenArrayIndex = specialCases.indexOf(whatThisChordCanBe[q]);
-            // }
+        }
+
+        if (melodicMinorRN.includes(whatThisChordCanBe[q])) {
+            chosenArrayIndex = melodicMinorRN.indexOf(whatThisChordCanBe[q]);
+        }
+
+        if (melodicMinorAlternateRN.includes(whatThisChordCanBe[q])) {
+            chosenArrayIndex = melodicMinorAlternateRN.indexOf(whatThisChordCanBe[q]);
+        }
+
+        if (harmonicMajorRN.includes(whatThisChordCanBe[q])) {
+            chosenArrayIndex = harmonicMajorRN.indexOf(whatThisChordCanBe[q]);
+        }
+
+        if (harmonicMajorAlternateRN.includes(whatThisChordCanBe[q])) {
+            chosenArrayIndex = harmonicMajorAlternateRN.indexOf(whatThisChordCanBe[q]);
         }
 
         intervalForKey1 = rootCalculation - chosenArrayIndex;
@@ -782,14 +839,12 @@ In this case, it's the V of the ${temporaryRelatedChord}7 chord.
 Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major or minor`
             }
 
-
             chromaticLoop++;
         }
     }
 }
 
 findRelevantKeysAndSyncChordFunctionsToNotes();
-
 
 function logTheChord() {
 
