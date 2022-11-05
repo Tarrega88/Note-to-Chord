@@ -17,10 +17,19 @@ let aOrAn = "";
 
 
 const majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majorIV", "skip", "majorV", "skip", "majorvi", "skip", "majorvii"];
+//maj7, m7, m7, maj7, 7, m7, m7b5;
 const naturalMinorRomanNumerals = ["minori", "skip", "minorii", "minorIII", "skip", "minoriv", "skip", "minorv", "minorVI", "skip", "minorVII", "skip"];
+
+
 const harmonicMinorRomanNumerals = ["skip", "skip", "skip", "skip", "skip", "skip", "skip", "minorV", "skip", "skip", "skip", "skip"];
+//harmonic minor: m maj7, m7b5, maj7#5, m7, 7, maj7, dim7
+const harmonicMajorRN = ["I", "skip", "ii", "skip", "iii", "iv", "skip", "V", "VI", "skip", "skip", "vii"];
+//harmonicMajor: Maj7, m7b5, m7/7, m maj7, 7, maj7#5/dim7, dim7;
+
+const melodicMinorRN = ["meli", "skip", "melii", "melIII", "skip", "melIV", "skip", "melV", "skip", "melvi", "skip", "melvii"];
+//melodic minor: m maj7, m7, maj7#5, 7, 7, m7b5, m7b5/7alt;
+
 const specialCases = ["skip", "tritone sub", "V of V", "skip", "skip", "skip", "skip", "skip", "augmented 6th", "skip", "skip", "full diminished"];
-//will fill later;
 
 const enharmonicEquivalentsHigher = ["ABbb", "skip", "BCb", "CDbb", "skip", "DEbb", "skip", "EFb", "FGbb", "skip", "GAbb", "skip"];
 const enharmonicEquivalentsLower = ["AGx", "skip", "BAx", "CB#", "skip", "DCx", "skip", "EDx", "FE#", "skip", "GFx", "skip"];
@@ -180,6 +189,13 @@ function determineChordQuality() {
                 alternateGroup.push(4);
 
                 break;
+
+            //MINOR MAJ7
+            case "0,3,7,11":
+                chordQuality = "m maj7";
+                group = 2;
+                rootPosition = "0,3,7,11";
+                break;
             //MINOR 9TH
             case "0,2,3,7,10":
                 rootPosition = "0,2,3,7,10"
@@ -221,7 +237,11 @@ function determineChordQuality() {
                 chordQuality = "9";
                 group = 3;
                 break;
-
+            case "0,2,4,5,7,9,10":
+                rootPosition = "0,2,4,5,7,9,10";
+                chordQuality = "13";
+                group = 5;
+                break;
             // 7b9 Chord
             case "0,1,4,7,10":
                 rootPosition = "0,1,4,7,10";
@@ -233,25 +253,25 @@ function determineChordQuality() {
             case "0,4,10":
                 rootPosition = "0,4,10";
                 chordQuality = "Italian Augmented 6th";
-                group = 1;
+                group = 6;
                 hasAlternate = true;
                 alternateChordQuality.push("dominant 7");
                 alternateStepsArray.push(0);
-                alternateGroup.push(2);
+                alternateGroup.push(6);
 
                 alternateChordQuality.push("tritone sub");
                 alternateStepsArray.push(0);
-                alternateGroup.push(2);
+                alternateGroup.push(6);
 
                 alternateChordQuality.push("V of V");
                 alternateStepsArray.push(0);
-                alternateGroup.push(2);
+                alternateGroup.push(6);
                 break;
             // French Augmented 6th
             case "0,4,6,10":
                 rootPosition = "0,4,6,10";
                 chordQuality = "French Augmented 6th";
-                group = 2;
+                group = 6;
                 hasAlternate = true;
 
                 break;
@@ -351,6 +371,7 @@ function findRootAndApplyInversionText() {
 
     }
     if (group === 1) {
+        //triads like major and minor
         function group1() {
 
             switch (inversionNumber) {
@@ -373,6 +394,7 @@ function findRootAndApplyInversionText() {
 
     }
     if (group === 2) {
+        //7 chords
         function group2() {
             switch (inversionNumber) {
                 case 0:
@@ -398,6 +420,7 @@ function findRootAndApplyInversionText() {
     }
 
     if (group === 3) {
+        //9 chords
         function group3() {
             switch (inversionNumber) {
                 case 0:
@@ -425,6 +448,7 @@ function findRootAndApplyInversionText() {
         group3();
     }
     if (group === 4) {
+        //for 6 chords, since they share the same notes as m7 chords but on different root.  may work for others- will have to check
         function group4() {
             switch (inversionNumber) {
                 case 0:
@@ -446,6 +470,64 @@ function findRootAndApplyInversionText() {
             }
         }
         group4();
+
+    }
+    if (group === 5) {
+        //13 chords
+        function group5() {
+            switch (inversionNumber) {
+                case 0:
+                    fromLowestUpToRoot = fretArray[0];
+                    position = "Root Position";
+                    break;
+                case 1:
+                    fromLowestUpToRoot = fretArray[1];
+                    position = "3rd Inversion";
+                    break;
+                case 2:
+                    fromLowestUpToRoot = fretArray[2];
+                    position = "6th Inversion (13th in bass)";
+                    break;
+                case 3:
+                    fromLowestUpToRoot = fretArray[3];
+                    position = "2nd Inversion";
+                    break;
+                case 4:
+                    fromLowestUpToRoot = fretArray[4];
+                    position = "5th Inversion (11th in bass)";
+                    break;
+                case 5:
+                    fromLowestUpToRoot = fretArray[5];
+                    position = "1st Inversion";
+                    break;
+                case 6:
+                    fromLowestUpToRoot = fretArray[6];
+                    position = "4th Inversion (9th in bass)";
+                    break;
+            }
+        }
+        group5();
+
+    }
+    if (group === 6) {
+        //7 chords with omitted 5th (and augmented 6th chords)
+        function group6() {
+            switch (inversionNumber) {
+                case 0:
+                    fromLowestUpToRoot = fretArray[0];
+                    position = "Root Position";
+                    break;
+                case 1:
+                    fromLowestUpToRoot = fretArray[1];
+                    position = "3rd Inversion";
+                    break;
+                case 2:
+                    fromLowestUpToRoot = fretArray[2];
+                    position = "1st inversion";
+                    break;
+            }
+        }
+        group6();
 
     }
 
@@ -476,7 +558,6 @@ const augmented = "augmented";
 const augmented6th = "augmented 6th"
 const tritoneSub = "tritone sub";
 const vofV = "V of V";
-const m7b5 = "m7b5";
 
 //Determines what function the chord can fulfill based on Roman Numerals
 
@@ -519,6 +600,7 @@ function applyChordFunctions() {
             whatThisChordCanBe.push(majorvi);
             break;
         case "9":
+        case "13":
             whatThisChordCanBe.push(majorV);
             break;
         case "7b9":
@@ -545,6 +627,9 @@ function applyChordFunctions() {
             break;
         case "V of V":
             whatThisChordCanBe.push(vofV);
+            break;
+        case "m maj7":
+            whatThisChordCanBe.push(minori);
             break;
     }
 
