@@ -1,4 +1,5 @@
 let chordArray = [];
+let unalteredNoteInput = [];
 let indexArray = [];
 
 let root = "";
@@ -151,7 +152,7 @@ function whatAreTheNotes() {
     for (let i = 0; i < Number(noteNumber); i++) {
         let chordNotes = prompt(`What's note number ${i + 1}?`);
         chordNotes = chordNotes[0].toUpperCase() + chordNotes.slice(1, chordNotes.length);
-        // console.log(chordNotes)
+        unalteredNoteInput.push(chordNotes);
         for (let j = 0; j < chromaticArrayKey.length; j++) {
             if (chromaticArrayKey[j].slice(2) === chordNotes || chromaticArrayKey[j].slice(0, 2) === chordNotes || chromaticArrayKey[j] === chordNotes) {
                 if (!chordArray.includes(chordNotes)) {
@@ -167,6 +168,7 @@ function whatAreTheNotes() {
 
         }
     }
+    unalteredNoteInput = unalteredNoteInput.join(" ");
     runAfterInput();
 }
 
@@ -176,10 +178,9 @@ function whatAreTheGuitarNotes() {
         let chordNotes = guitarNotes[i];
         if (typeof guitarArray[i] === "number") {
             chordNotes = chordNotes[0].toUpperCase() + chordNotes.slice(1, chordNotes.length);
-            // console.log(chordNotes)
+            unalteredNoteInput.push(chordNotes);
             for (let j = 0; j < chromaticArrayKey.length; j++) {
                 if (chromaticArrayKey[j].slice(2) === chordNotes || chromaticArrayKey[j].slice(0, 2) === chordNotes || chromaticArrayKey[j] === chordNotes) {
-                    // console.log(chordNotes)
                     if (!chordArray.includes(chordNotes)) {
                         chordArray.push(chordNotes);
                         indexArray.push(j);
@@ -196,6 +197,7 @@ function whatAreTheGuitarNotes() {
             }
         }
     }
+    unalteredNoteInput = unalteredNoteInput.join(",").replace(/,/g, " ").trim();
     runAfterInput();
 }
 
@@ -983,7 +985,10 @@ Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major
         } else {
             console.log(`${theRoot} ${chordQuality} / ${lowestNote}`);
         }
-        console.log(`Notes: ${chordArray.join(" ")}`)
+        console.log(`Notes: ${chordArray.join(" ")}`);
+        if (unalteredNoteInput !== chordArray.join(" ")) {
+            console.log(`Input Notes: ${unalteredNoteInput}`)
+        }
         console.log(`${theRoot} ${chordQuality}
 ${position}`)
         console.log(chordOccursIn);
