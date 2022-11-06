@@ -26,3 +26,11 @@ It understands chords that are spelled with the same notes but may be named some
 It displays what keys these chords can appear in and what quality of Roman Numeral they take in that key.  
 It displays other chord functions as well, such as V of Vs, all types of augmented 6th chords, and tritone substitutions.  
 The only thing required for the program to understand a chord is that its root position is in the logic; all inversions are figured out in the logic; the chord must have A as the root.
+
+Update 11/5/2022: It was becoming apparent that manually inputting chord functions was starting to become a time sync, so I reworked the logic to allow the program to figure out what scale and function the chord can belong to in each key- this removes the requirement of manually inputting a ton of chord functions for each chord type.  
+
+Next, I'm going to add diminished and whole tone scales, and after that I'll add more chord types.
+
+The new logic will enable a very easy transition into displaying which chords are playable over the resultant chord.
+
+With this change, symmetrical chords are being displayed in a way that's technically true but also suggests some outside of the box functions- I'm going to think about how to make this clear.
