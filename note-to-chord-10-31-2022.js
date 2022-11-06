@@ -783,17 +783,10 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
             chosenArrayIndex = melodicMinorRN.indexOf(whatThisChordCanBe[q]);
         }
 
-        if (melodicMinorAlternateRN.includes(whatThisChordCanBe[q])) {
-            chosenArrayIndex = melodicMinorAlternateRN.indexOf(whatThisChordCanBe[q]);
-        }
-
         if (harmonicMajorRN.includes(whatThisChordCanBe[q])) {
             chosenArrayIndex = harmonicMajorRN.indexOf(whatThisChordCanBe[q]);
         }
 
-        if (harmonicMajorAlternateRN.includes(whatThisChordCanBe[q])) {
-            chosenArrayIndex = harmonicMajorAlternateRN.indexOf(whatThisChordCanBe[q]);
-        }
         // }
         function makeRomanNumeralsAndKeysLookNice() {
             if (basicChordQuality === "major") {
