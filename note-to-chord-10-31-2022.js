@@ -154,8 +154,10 @@ function whatAreTheNotes() {
         // console.log(chordNotes)
         for (let j = 0; j < chromaticArrayKey.length; j++) {
             if (chromaticArrayKey[j].slice(2) === chordNotes || chromaticArrayKey[j].slice(0, 2) === chordNotes || chromaticArrayKey[j] === chordNotes) {
-                chordArray.push(chordNotes);
-                indexArray.push(j);
+                if (!chordArray.includes(chordNotes)) {
+                    chordArray.push(chordNotes);
+                    indexArray.push(j);
+                }
             }
             if (enharmonicEquivalentsHigher[j].slice(1) === chordNotes || enharmonicEquivalentsLower[j].slice(1) === chordNotes) {
 
