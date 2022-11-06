@@ -17,7 +17,7 @@ let aOrAn = "";
 
 let basicChordQuality = "";
 
-const majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majoriv", "skip", "majorv", "skip", "majorvi", "skip", "majorvii"];
+const majorRomanNumerals = ["majori", "skip", "majorii", "skip", "majoriii", "majoriv", "skip", "majorv", "skip", "majorvi", "skip", "majorvii"];
 //maj7, m7, m7, maj7, 7, m7, m7b5;
 const naturalMinorRomanNumerals = ["minori", "skip", "minorii", "minoriii", "skip", "minoriv", "skip", "minorv", "minorvi", "skip", "minorvii", "skip"];
 //m7, m7b5, maj7, m7, m7, maj7, 7;
@@ -611,7 +611,6 @@ findRootAndApplyInversionText();
 function setIndexArrayToRootPosition() {
 
     indexArray = rootPosition.split(",");
-    console.log(rootPosition)
     for (let i = 0; i < chordArray.length; i++) {
         indexArray[i] = Number(indexArray[i]);
     }
@@ -685,6 +684,7 @@ applySpecialFunctions();
 let rootCalculation;
 let theRoot;
 let chordOccursIn = "";
+let chordOccursInArray = [];
 
 function calculateRootNumberAndLetter() {
     rootCalculation = fromLowestUpToRoot + indexOfLowestNote;
@@ -701,7 +701,7 @@ function calculateRootNumberAndLetter() {
     }
 
     if (startOver === false) {
-        chordOccursIn = `${theRoot} ${chordQuality} occurs in the key of:
+        chordOccursIn = `${theRoot} ${chordQuality} occurs as a:
 `
     }
     if (startOver === true && alternateStepsAboveOriginal === 0) {
@@ -838,24 +838,15 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
                 temporaryKey = temporaryKey.slice(0, 2) + "/" + temporaryKey.slice(2);
             }
 
-            const reductionOptions = ["major", "harmonic major", "minor", "melodic minor", "harmonic minor", "major and harmonic minor", "melodic minor and harmonic major", "major and harmonic minor and melodic minor"]
-            // const majorOptions = ["major", "harmonic major"];
             let concatting = false;
 
             if (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2) {
-                for (let j = 0; j < reductionOptions.length; j++) {
-                    if (chordOccursIn.includes(`${temporaryKey} ${reductionOptions[j]} as the ${romanNumeral} chord.`) && !reductionOptions[j].includes(majorOrMinor)) {
-                        chordOccursIn = chordOccursIn.replace(`${temporaryKey} ${reductionOptions[j]} as the ${romanNumeral} chord.`, `${temporaryKey} ${reductionOptions[j]} and ${majorOrMinor} as the ${romanNumeral} chord.`)
-                        concatting = true;
-                    }
-                }
 
-                if (concatting === false) {
-                    chordOccursIn += `${temporaryKey} ${majorOrMinor} as the ${romanNumeral} chord.
-`
-                }
-                concatting = false;
+                chordOccursInArray.push(`${romanNumeral} chord in the key of ${temporaryKey} ${majorOrMinor}.
+`);
+
             }
+            chordOccursInArray.sort();
 
             if (whatThisChordCanBe[q] === augmented6th && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
                 chordOccursIn += `The ${romanNumeral} chord typically precedes a dominant V chord, in this case the ${temporaryRelatedChord} chord.
@@ -881,8 +872,9 @@ Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major
 
 findRelevantKeysAndSyncChordFunctionsToNotes();
 
-function logTheChord() {
 
+function logTheChord() {
+    chordOccursIn += chordOccursInArray.join(" ");
     if (theRoot === lowestNote) {
         console.log(`Root: ${theRoot}`)
     } else {
