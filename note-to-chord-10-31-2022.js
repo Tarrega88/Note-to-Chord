@@ -17,20 +17,20 @@ let aOrAn = "";
 
 let basicChordQuality = "";
 
-const majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majorIV", "skip", "majorV", "skip", "majorvi", "skip", "majorvii"];
+const majorRomanNumerals = ["majorI", "skip", "majorii", "skip", "majoriii", "majoriv", "skip", "majorv", "skip", "majorvi", "skip", "majorvii"];
 //maj7, m7, m7, maj7, 7, m7, m7b5;
-const naturalMinorRomanNumerals = ["minori", "skip", "minorii", "minorIII", "skip", "minoriv", "skip", "minorv", "minorVI", "skip", "minorVII", "skip"];
+const naturalMinorRomanNumerals = ["minori", "skip", "minorii", "minoriii", "skip", "minoriv", "skip", "minorv", "minorvi", "skip", "minorvii", "skip"];
 //m7, m7b5, maj7, m7, m7, maj7, 7;
 
-const harmonicMinorRomanNumerals = ["harmonic_minori", "skip", "harmonic_minorii", "harmonic_minorIII", "skip", "harmonic_minoriv", "skip", "harmonic_minorV", "harmonic_minorVI", "skip", "skip", "harmonic_minorvii"];
+const harmonicMinorRomanNumerals = ["harmonic_minori", "skip", "harmonic_minorii", "harmonic_minoriii", "skip", "harmonic_minoriv", "skip", "harmonic_minorv", "harmonic_minorvi", "skip", "skip", "harmonic_minorvii"];
 //harmonic minor: i:m maj7, ii:m7b5, III:maj7#5, iv:m7, V:7, VI:maj7, vii:dim7
 
-const harmonicMajorRN = ["harmonic_majorI", "skip", "harmonic_majorii", "skip", "harmonic_majoriii", "harmonic_majorIV", "skip", "harmonic_majorV", "harmonic_majorvi", "skip", "skip", "harmonic_majorvii"];
+const harmonicMajorRN = ["harmonic_majori", "skip", "harmonic_majorii", "skip", "harmonic_majoriii", "harmonic_majoriv", "skip", "harmonic_majorv", "harmonic_majorvi", "skip", "skip", "harmonic_majorvii"];
 //harmonicMajor: I:maj7, ii:m7b5, iii:m7/7, iv:m maj7, V:7, VI:maj7#5/dim7, vii:dim7;
 
 // const harmonicMajorAlternateRN = ["skip", "skip", "skip", "skip", "harmonic_majorIII", "skip", "skip", "skip", "harmonic_majorvi", "skip", "skip", "skip"];
 
-const melodicMinorRN = ["melodic_minori", "skip", "melodic_minorii", "melodic_minorIII", "skip", "melodic_minorIV", "skip", "melodic_minorV", "skip", "melodic_minorvi", "skip", "melodic_minorvii"];
+const melodicMinorRN = ["melodic_minori", "skip", "melodic_minorii", "melodic_minoriii", "skip", "melodic_minoriv", "skip", "melodic_minorv", "skip", "melodic_minorvi", "skip", "melodic_minorvii"];
 //melodic minor: i:m maj7, ii:m7, III:maj7#5, IV:7, V:7, vi:m7b5, vii:m7b5/7alt;
 
 // const melodicMinorAlternateRN = ["skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "skip", "melodic_minorVII"];
@@ -43,43 +43,43 @@ const enharmonicEquivalentsLower = ["AGx", "skip", "BAx", "CB#", "skip", "DCx", 
 const chromaticArrayKey = ["A", "A#Bb", "B", "C", "C#Db", "D", "D#Eb", "E", "F", "F#Gb", "G", "G#Ab"];
 
 scales = {
-    majorI: [0, 2, 4, 5, 7, 9, 11],
+    majori: [0, 2, 4, 5, 7, 9, 11],
     majorii: [0, 2, 3, 5, 7, 9, 10],
     majoriii: [0, 1, 3, 5, 7, 8, 10],
-    majorIV: [0, 2, 4, 6, 7, 9, 11],
-    majorV: [0, 2, 4, 5, 7, 9, 10],
+    majoriv: [0, 2, 4, 6, 7, 9, 11],
+    majorv: [0, 2, 4, 5, 7, 9, 10],
     majorvi: [0, 2, 3, 5, 7, 8, 10],
     majorvii: [0, 1, 3, 5, 6, 8, 10],
 
     minori: [0, 2, 3, 5, 7, 8, 10],
     minorii: [0, 1, 3, 5, 6, 8, 10],
-    minorIII: [0, 2, 4, 5, 7, 9, 11],
+    minoriii: [0, 2, 4, 5, 7, 9, 11],
     minoriv: [0, 2, 3, 5, 7, 9, 10],
     minorv: [0, 1, 3, 5, 7, 8, 10],
-    minorVI: [0, 2, 4, 6, 7, 9, 11],
-    minorVII: [0, 2, 4, 5, 7, 9, 10],
+    minorvi: [0, 2, 4, 6, 7, 9, 11],
+    minorvii: [0, 2, 4, 5, 7, 9, 10],
 
     harmonic_minori: [0, 2, 3, 5, 7, 8, 11],
     harmonic_minorii: [0, 1, 3, 5, 6, 9, 10],
-    harmonic_minorIII: [0, 2, 4, 5, 8, 9, 11],
+    harmonic_minoriii: [0, 2, 4, 5, 8, 9, 11],
     harmonic_minoriv: [0, 2, 3, 6, 7, 9, 10],
-    harmonic_minorV: [0, 1, 4, 5, 7, 8, 10],
-    harmonic_minorVI: [0, 3, 4, 6, 7, 9, 11],
+    harmonic_minorv: [0, 1, 4, 5, 7, 8, 10],
+    harmonic_minorvi: [0, 3, 4, 6, 7, 9, 11],
     harmonic_minorvii: [0, 1, 3, 4, 6, 8, 9],
 
     melodic_minori: [0, 2, 3, 5, 7, 9, 11],
     melodic_minorii: [0, 1, 3, 5, 7, 9, 10],
-    melodic_minorIII: [0, 2, 4, 6, 8, 9, 11],
-    melodic_minorIV: [0, 2, 4, 6, 7, 9, 10],
-    melodic_minorV: [0, 2, 4, 5, 7, 8, 10],
+    melodic_minoriii: [0, 2, 4, 6, 8, 9, 11],
+    melodic_minoriv: [0, 2, 4, 6, 7, 9, 10],
+    melodic_minorv: [0, 2, 4, 5, 7, 8, 10],
     melodic_minorvi: [0, 2, 3, 5, 6, 8, 10],
     melodic_minorvii: [0, 1, 3, 4, 6, 8, 10],
 
-    harmonic_majorI: [0, 2, 4, 5, 7, 8, 11],
+    harmonic_majori: [0, 2, 4, 5, 7, 8, 11],
     harmonic_majorii: [0, 2, 3, 5, 6, 9, 10],
     harmonic_majoriii: [0, 1, 3, 4, 7, 8, 10],
-    harmonic_majorIV: [0, 2, 3, 6, 7, 9, 11],
-    harmonic_majorV: [0, 1, 4, 5, 7, 9, 10],
+    harmonic_majoriv: [0, 2, 3, 6, 7, 9, 11],
+    harmonic_majorv: [0, 1, 4, 5, 7, 9, 10],
     harmonic_majorvi: [0, 3, 4, 6, 8, 9, 11],
     harmonic_majorvii: [0, 1, 3, 5, 6, 8, 9],
 
@@ -108,9 +108,6 @@ whatAreTheNotes();
 
 const uniqueChordArray = [...new Set(chordArray)];
 const sortedChordArray = [...new Set(chordArray)].sort();
-
-// console.log(uniqueChordArray)
-// console.log(sortedChordArray)
 
 indexArray = [...new Set(indexArray)];
 let fretArray = indexArray.sort((a, b) => a - b);
@@ -611,6 +608,18 @@ function findRootAndApplyInversionText() {
 
 findRootAndApplyInversionText();
 
+function setIndexArrayToRootPosition() {
+
+    indexArray = rootPosition.split(",");
+    console.log(rootPosition)
+    for (let i = 0; i < chordArray.length; i++) {
+        indexArray[i] = Number(indexArray[i]);
+    }
+
+}
+
+setIndexArrayToRootPosition();
+
 let whatThisChordCanBe = [];
 
 //harmonic minor
@@ -836,9 +845,23 @@ function findRelevantKeysAndSyncChordFunctionsToNotes() {
                 temporaryKey = temporaryKey.slice(0, 2) + "/" + temporaryKey.slice(2);
             }
 
+            const reductionOptions = ["major", "harmonic major", "minor", "melodic minor", "harmonic minor", "major and harmonic minor", "melodic minor and harmonic major", "major and harmonic minor and melodic minor"]
+            // const majorOptions = ["major", "harmonic major"];
+            let concatting = false;
+
             if (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2) {
-                chordOccursIn += `${temporaryKey} ${majorOrMinor} as the ${romanNumeral} chord.
+                for (let j = 0; j < reductionOptions.length; j++) {
+                    if (chordOccursIn.includes(`${temporaryKey} ${reductionOptions[j]} as the ${romanNumeral} chord.`) && !reductionOptions[j].includes(majorOrMinor)) {
+                        chordOccursIn = chordOccursIn.replace(`${temporaryKey} ${reductionOptions[j]} as the ${romanNumeral} chord.`, `${temporaryKey} ${reductionOptions[j]} and ${majorOrMinor} as the ${romanNumeral} chord.`)
+                        concatting = true;
+                    }
+                }
+
+                if (concatting === false) {
+                    chordOccursIn += `${temporaryKey} ${majorOrMinor} as the ${romanNumeral} chord.
 `
+                }
+                concatting = false;
             }
 
             if (whatThisChordCanBe[q] === augmented6th && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
