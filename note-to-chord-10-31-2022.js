@@ -664,31 +664,29 @@ function runAfterInput() {
 
     function findRoot() {
         if (group === "allChordGroup") {
-            function allChordGroup() {
 
-                switch (inversionNumber) {
-                    case 0:
-                        fromLowestUpToRoot = fretArray[0];
-                        break;
-                    case 1:
-                        fromLowestUpToRoot = fretArray[1];
-                        break;
-                    case 2:
-                        fromLowestUpToRoot = fretArray[2];
-                        break;
-                    case 3:
-                        fromLowestUpToRoot = fretArray[3];
-                        break;
-                    case 4:
-                        fromLowestUpToRoot = fretArray[4];
-                        break;
-                    case 5:
-                        fromLowestUpToRoot = fretArray[5];
-                        break;
-                    case 6:
-                        fromLowestUpToRoot = fretArray[6];
-                        break;
-                }
+            switch (inversionNumber) {
+                case 0:
+                    fromLowestUpToRoot = fretArray[0];
+                    break;
+                case 1:
+                    fromLowestUpToRoot = fretArray[1];
+                    break;
+                case 2:
+                    fromLowestUpToRoot = fretArray[2];
+                    break;
+                case 3:
+                    fromLowestUpToRoot = fretArray[3];
+                    break;
+                case 4:
+                    fromLowestUpToRoot = fretArray[4];
+                    break;
+                case 5:
+                    fromLowestUpToRoot = fretArray[5];
+                    break;
+                case 6:
+                    fromLowestUpToRoot = fretArray[6];
+                    break;
             }
         }
     }
@@ -999,7 +997,7 @@ ${position}`)
             chordQuality = alternateChordQuality[i];
             indexArray = altRootPosition[i].split(",");
             rootPosition = altRootPosition[i];
-            determineInversion();
+            // determineInversion();
             findRoot();
             fromLowestUpToRoot = fromLowestUpToRoot + alternateStepsArray[i];
             applyInversionText();
