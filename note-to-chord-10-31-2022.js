@@ -15,6 +15,7 @@ let stepsToFindRelatedChord = 0;
 let originalRoot = [];
 let aOrAn = "";
 let guitarArray = [];
+let isAChord = false;
 
 let guitarNotes = [];
 
@@ -310,6 +311,7 @@ function runAfterInput() {
                     rootPosition = "0,3,7";
                     group = 1;
                     basicChordQuality = "minor";
+                    isAChord = true;
                     break;
                 // MINOR 7 and 6
                 case "0,3,7,10":
@@ -317,6 +319,7 @@ function runAfterInput() {
                     group = 2;
                     rootPosition = "0,3,7,10";
                     basicChordQuality = "minor";
+                    isAChord = true;
 
                     hasAlternate = true;
 
@@ -334,12 +337,14 @@ function runAfterInput() {
                     group = 2;
                     rootPosition = "0,3,7,11";
                     basicChordQuality = "minor";
+                    isAChord = true;
                     break;
                 //MINOR 9TH
                 case "0,2,3,7,10":
                     rootPosition = "0,2,3,7,10"
                     chordQuality = "minor 9";
                     group = 3;
+                    isAChord = true;
                     break;
 
                 //MAJOR
@@ -348,8 +353,15 @@ function runAfterInput() {
                     chordQuality = "major";
                     group = 1;
                     basicChordQuality = "major";
+                    isAChord = true;
                     break;
-
+                case "0,2,4,7,9":
+                    rootPosition = "0,2,4,7,9";
+                    chordQuality = "6/9";
+                    // group = needsGroup
+                    basicChordQuality = "major";
+                    isAChord = true;
+                    break;
                 //DOMINANT 7
                 case "0,4,7,10":
                     rootPosition = "0,4,7,10";
@@ -357,6 +369,7 @@ function runAfterInput() {
                     group = 2;
                     // hasAlternate = true;
                     basicChordQuality = "major";
+                    isAChord = true;
                     //Alternates
                     //German Augmented 6th:
                     // alternateChordQuality.push("German Augmented 6th");
@@ -379,6 +392,7 @@ function runAfterInput() {
                     position = "Half-Symmetrical"
                     basicChordQuality = "diminished";
                     altBasicChordQuality = "diminished";
+                    isAChord = true;
 
                     waitUntilStartOver = true;
                     hasAlternate = true;
@@ -393,6 +407,7 @@ function runAfterInput() {
                     chordQuality = "7#9";
                     group = 3;
                     basicChordQuality = "major";
+                    isAChord = true;
                     break;
                 // 9 Chord
                 case "0,2,4,7,10":
@@ -400,6 +415,7 @@ function runAfterInput() {
                     chordQuality = "9";
                     group = 3;
                     basicChordQuality = "major";
+                    isAChord = true;
                     break;
                 //11 chord
                 case "0,2,4,5,7,10":
@@ -407,6 +423,7 @@ function runAfterInput() {
                     chordQuality = "11WIP";
                     group = fillthisin;
                     basicChordQuality = "major";
+                    isAChord = true;
                     break;
                 //13 chord
                 case "0,2,4,5,7,9,10":
@@ -414,6 +431,7 @@ function runAfterInput() {
                     chordQuality = "13";
                     group = 5;
                     basicChordQuality = "major";
+                    isAChord = true;
                     break;
                 // 7b9 Chord
                 case "0,1,4,7,10":
@@ -421,6 +439,7 @@ function runAfterInput() {
                     chordQuality = "7b9";
                     group = 3;
                     basicChordQuality = "major";
+                    isAChord = true;
                     break;
                 //AUGMENTED 6TH CHORDS
                 // Italian Augmented 6th:
@@ -429,6 +448,7 @@ function runAfterInput() {
                     chordQuality = "dominant 7";
                     group = 6;
                     basicChordQuality = "major";
+                    isAChord = true;
 
                     // rootPosition = "0,4,10";
                     // chordQuality = "Italian Augmented 6th";
@@ -463,6 +483,7 @@ function runAfterInput() {
                     chordQuality = "major 7";
                     group = 2;
                     basicChordQuality = "major";
+                    isAChord = true;
                     break;
                 //MAJOR 7 #5
                 case "0,4,8,11":
@@ -470,6 +491,7 @@ function runAfterInput() {
                     chordQuality = "maj7 #5";
                     group = 2;
                     basicChordQuality = "augmented";
+                    isAChord = true;
                     break;
                 //DIMINISHED
                 case "0,3,6":
@@ -477,6 +499,7 @@ function runAfterInput() {
                     chordQuality = "diminished";
                     group = 1;
                     basicChordQuality = "diminished";
+                    isAChord = true;
                     break;
                 //FULL DIMINISHED 7
                 case "0,3,6,9":
@@ -484,6 +507,7 @@ function runAfterInput() {
                     chordQuality = "full diminished";
                     basicChordQuality = "diminished";
                     position = "Symmetrical";
+                    isAChord = true;
                     hasAlternate = true;
                     waitUntilStartOver = true;
                     altRootPosition = rootPosition;
@@ -501,6 +525,7 @@ function runAfterInput() {
                     hasAlternate = true;
                     basicChordQuality = "diminished";
                     group = 2;
+                    isAChord = true;
 
                     alternateChordQuality.push("m7b5");
                     alternateStepsArray.push(0);
@@ -511,6 +536,7 @@ function runAfterInput() {
                     chordQuality = "diminished major 7";
                     group = 2;
                     basicChordQuality = "diminished";
+                    isAChord = true;
                     break;
                 //AUGMENTED
                 case "0,4,8":
@@ -518,6 +544,7 @@ function runAfterInput() {
                     chordQuality = "augmented";
                     basicChordQuality = "augmented";
                     position = "Symmetrical";
+                    isAChord = true;
                     hasAlternate = true;
                     altRootPosition = rootPosition;
                     alternateChordQuality.push("augmented");
@@ -530,9 +557,16 @@ function runAfterInput() {
 
         }
         originalChordQuality = chordQuality;
+        if (!isAChord) {
+            rootPosition = indexArray.toString();
+            chordQuality = "Unknown Chord Type";
+            basicChordQuality = "major";
+        }
     }
 
     determineChordQuality();
+
+
 
     let inversionNumber;
     function determineInversion() {
