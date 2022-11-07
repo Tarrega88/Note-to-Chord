@@ -8,7 +8,7 @@ Purpose of this project: Offer a robut musical tool that offers useful informati
 Large Goals:
 
 Stage 1 Goal (current) : Develop general logic that takes in musical notes and displays what chord those notes form.  
-Stage 2 Goal: Add in ability to enter in guitar fret notes instead of musical notes as input  
+Stage 2 Goal: (current) Add in ability to enter in guitar fret notes instead of musical notes as input  
 Stage 3 Goal: Bring this over to a more user friendly interface  
 Stage 4 Goal: Hook it up to a website  
 
