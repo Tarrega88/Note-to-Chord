@@ -16,6 +16,7 @@ let originalRoot = [];
 let aOrAn = "";
 let guitarArray = [];
 let isAChord = false;
+let completeUnalteredNoteInput = [];
 
 let guitarNotes = [];
 
@@ -158,6 +159,8 @@ function whatAreTheNotes() {
 
         }
     }
+    completeUnalteredNoteInput = Array.from(unalteredNoteInput);
+
     unalteredNoteInput = unalteredNoteInput.join(" ");
     runAfterInput();
 }
@@ -568,6 +571,8 @@ function runAfterInput() {
                     chordQuality = "full diminished";
                     basicChordQuality = "diminished";
                     position = "Symmetrical";
+                    group = "allChordGroup"
+                    alternateGroup.push("allChordGroup")
                     isAChord = true;
                     hasAlternate = true;
                     waitUntilStartOver = true;
@@ -664,7 +669,6 @@ function runAfterInput() {
 
     function findRoot() {
         if (group === "allChordGroup") {
-
             switch (inversionNumber) {
                 case 0:
                     fromLowestUpToRoot = fretArray[0];
@@ -688,15 +692,17 @@ function runAfterInput() {
                     fromLowestUpToRoot = fretArray[6];
                     break;
             }
+
         }
     }
 
     findRoot();
-
     function applyInversionText() {
         if (group === "allChordGroup") {
+            fromLowestUpToRoot = fromLowestUpToRoot % 12
             switch (fromLowestUpToRoot) {
                 case 0:
+                case 12:
                     position = "Root Position";
                     break;
                 case 1:
@@ -704,7 +710,11 @@ function runAfterInput() {
                     position = "3rd Inversion";
                     break;
                 case 3:
-                    position = "6th Inversion (13th in Bass)";
+                    if (chordQuality === "6") {
+                        position = "6th Inversion (6th In Bass)"
+                    } else {
+                        position = "6th Inversion (13th in Bass)";
+                    }
                     break;
                 case 4:
                     position = "2nd Inversion (Sharp 5th in Bass)"
@@ -967,9 +977,12 @@ Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major
     findRelevantKeysAndSyncChordFunctionsToNotes();
 
     function logTheChord() {
+        if (theRoot[1] === "#" || theRoot[1] === "b") {
+            theRoot = theRoot.replace(theRoot[1], theRoot[1] + "/")
+        }
         chordOccursIn += chordOccursInArray.join(" ");
-        if (theRoot === lowestNote) {
-            console.log(`Root: ${theRoot}`)
+        if (theRoot[0] === lowestNote || theRoot[0] + theRoot[1] === lowestNote) {
+            console.log(`${theRoot} ${chordQuality}`)
         } else {
             console.log(`${theRoot} ${chordQuality} / ${lowestNote}`);
         }
