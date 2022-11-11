@@ -3,7 +3,6 @@ let unalteredNoteInput = [];
 let indexArray = [];
 
 let indexOfRoot = 0;
-let specialCase = false;
 let startOver = false;
 let waitUntilStartOver = false;
 let aOrAn = "";
@@ -919,7 +918,7 @@ ${appliedInversionText}`)
             const altRootNumber = calculateRootNumber(fromLowestUpToRoot);
             const altRootLetter = calculateRootLetter(altRootNumber);
             addToChordOccursIn(altRootLetter, savedOriginalRoot);
-            findRelevantKeysAndSyncChordFunctionsToNotes(altRootLetter, rootNumber);
+            findRelevantKeysAndSyncChordFunctionsToNotes(altRootLetter, altRootNumber);
             logTheChord(altRootLetter);
         }
     }
