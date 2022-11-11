@@ -2,7 +2,6 @@ let chordArray = [];
 let unalteredNoteInput = [];
 let indexArray = [];
 
-let indexOfRoot = 0;
 let startOver = false;
 let waitUntilStartOver = false;
 let aOrAn = "";
@@ -13,7 +12,6 @@ let altBasicChordQuality = [];
 
 let chordQuality = "";
 let hasAlternate = false;
-let alternateStepsAboveOriginal = 0;
 let alternateStepsArray = [];
 
 let rootPosition;
@@ -246,22 +244,24 @@ function runAfterInput() {
 
     lowerTheChordUntilA();
     function findIndexOfRoot() {
+        let indexOfRoot = 0;
         for (let i = 0; i < fretArray.length; i++) {
             if (alteredIndexOfLowestNote === fretArray[i]) {
                 indexOfRoot = i;
             }
         }
+        return indexOfRoot;
     }
 
-    findIndexOfRoot();
+    const foundIndexOfRoot = findIndexOfRoot();
 
-    function forceRootIntoPositiveValue() {
+    function forceRootIntoPositiveValue(indexOfRoot) {
         for (let i = 0; i < indexOfRoot; i++) {
             fretArray[i] = fretArray[i] + 12;
         }
     }
 
-    forceRootIntoPositiveValue();
+    forceRootIntoPositiveValue(foundIndexOfRoot);
 
     fretArray = fretArray.sort((a, b) => a - b);
 
@@ -719,7 +719,7 @@ function runAfterInput() {
 
     const savedOriginalRoot = saveOriginalRoot(rootLetter);
 
-    function addToChordOccursIn(theRoot, originalRoot, originalChordQuality) {
+    function addToChordOccursIn(theRoot, originalRoot, originalChordQuality, alternateStepsAboveOriginal) {
         if (startOver === false) {
             chordOccursIn = `${theRoot} ${chordQuality} occurs as a:
 `
@@ -829,7 +829,6 @@ It occurs as a:
             }
 
             intervalForKey2 = intervalForKey1 + 12;
-
             //Logic for determining which keys this chord occurs in.
             for (let i = rootCalculation; chromaticLoop < 12; i++) {
                 if (i >= 12) {
@@ -910,7 +909,7 @@ ${appliedInversionText}`)
     function altLog() {
         for (let i = 0; i < alternateChordQuality.length; i++) {
             basicChordQuality = altBasicChordQuality[i];
-            alternateStepsAboveOriginal = alternateStepsArray[i];
+            let alternateStepsAboveOriginal = alternateStepsArray[i];
             chordQuality = alternateChordQuality[i];
             indexArray = altRootPosition[i].split(",");
             rootPosition = altRootPosition[i];
@@ -921,7 +920,7 @@ ${appliedInversionText}`)
             applyChordFunctions();
             const altRootNumber = calculateRootNumber(fromLowestUpToRoot);
             const altRootLetter = calculateRootLetter(altRootNumber);
-            addToChordOccursIn(altRootLetter, savedOriginalRoot, savedOriginalChordQuality);
+            addToChordOccursIn(altRootLetter, savedOriginalRoot, savedOriginalChordQuality, alternateStepsAboveOriginal);
             findRelevantKeysAndSyncChordFunctionsToNotes(altRootLetter, altRootNumber);
             logTheChord(altRootLetter);
         }
