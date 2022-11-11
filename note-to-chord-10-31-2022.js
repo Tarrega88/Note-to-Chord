@@ -7,7 +7,6 @@ let specialCase = false;
 let startOver = false;
 let waitUntilStartOver = false;
 let additionalInfo = "";
-let stepsToFindRelatedChord = 0;
 let originalRoot = [];
 let aOrAn = "";
 let completeUnalteredNoteInput = [];
@@ -16,7 +15,6 @@ let basicChordQuality = "";
 let altBasicChordQuality = [];
 
 let chordQuality = "";
-let position = "";
 let hasAlternate = false;
 let alternateStepsAboveOriginal = 0;
 let alternateStepsArray = [];
@@ -31,7 +29,6 @@ let alternateChordQuality = [];
 let originalChordQuality = "";
 
 let rootCalculation;
-let theRoot;
 let chordOccursIn = "";
 let chordOccursInArray = [];
 
@@ -383,7 +380,6 @@ function runAfterInput() {
                 case "0,4,6,10":
                     rootPosition = "0,4,6,10";
                     chordQuality = "7b5";
-                    position = "Half-Symmetrical"
                     basicChordQuality = "diminished";
                     altBasicChordQuality.push("diminished");
                     isAChord = true;
@@ -499,7 +495,6 @@ function runAfterInput() {
                     rootPosition = "0,3,6,9";
                     chordQuality = "full diminished";
                     basicChordQuality = "diminished";
-                    position = "Symmetrical";
                     isAChord = true;
                     hasAlternate = true;
                     waitUntilStartOver = true;
@@ -542,7 +537,6 @@ function runAfterInput() {
                     rootPosition = "0,4,8";
                     chordQuality = "augmented";
                     basicChordQuality = "augmented";
-                    position = "Symmetrical";
                     isAChord = true;
                     hasAlternate = true;
                     altRootPosition.push(rootPosition);
@@ -618,6 +612,7 @@ function runAfterInput() {
 
     findRoot();
     function applyInversionText() {
+        let position = "";
         fromLowestUpToRoot = fromLowestUpToRoot % 12
         switch (fromLowestUpToRoot) {
             case 0:
@@ -655,8 +650,9 @@ function runAfterInput() {
                 position = "4th Inversion (9th in Bass)";
                 break;
         }
+        return position;
     }
-    applyInversionText();
+    const appliedInversionText = applyInversionText();
 
     function setIndexArrayToRootPosition() {
         if (startOver === false) {
@@ -698,18 +694,26 @@ function runAfterInput() {
     applyChordFunctions();
 
     //split calculateRootAndNumber into more specific functions soon
-    function calculateRootNumberAndLetter() {
+    function calculateRootNumber(fromLowestUpToRoot) {
         chordOccursInArray = [];
         rootCalculation = fromLowestUpToRoot + indexOfLowestNote;
         if (rootCalculation >= 12) {
             rootCalculation = rootCalculation - 12;
         }
+        return rootCalculation;
+    }
+    const rootNumber = calculateRootNumber(fromLowestUpToRoot);
 
-        theRoot = chromaticArrayKey[rootCalculation];
+    function calculateRootLetter() {
+        let theRoot = chromaticArrayKey[rootCalculation];
         if (originalRoot.length === 0) {
             originalRoot.push(theRoot);
         }
+        return theRoot;
+    }
+    const rootLetter = calculateRootLetter(rootNumber);
 
+    function addToChordOccursIn(theRoot) {
         if (startOver === false) {
             chordOccursIn = `${theRoot} ${chordQuality} occurs as a:
 `
@@ -726,15 +730,16 @@ It occurs as a:
         }
 
     }
-    calculateRootNumberAndLetter();
+    const logInitiate = addToChordOccursIn(rootLetter);
 
     //should split findRelevantKeysAndSyncChordFunctionsToNotes into more specific functions soon
-    function findRelevantKeysAndSyncChordFunctionsToNotes() {
+    function findRelevantKeysAndSyncChordFunctionsToNotes(theRoot) {
         let intervalForKey1;
         let intervalForKey2;
         let chosenArrayIndex;
         let romanNumeral = "";
         let majorOrMinor = "";
+        let stepsToFindRelatedChord = 0;
         for (let q = 0; q < whatThisChordCanBe.length; q++) {
             let chromaticLoop = 0;
             romanNumeral = "";
@@ -871,9 +876,9 @@ Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major
         }
     }
 
-    findRelevantKeysAndSyncChordFunctionsToNotes();
+    findRelevantKeysAndSyncChordFunctionsToNotes(rootLetter);
 
-    function logTheChord() {
+    function logTheChord(theRoot) {
         if (theRoot[1] === "#" || theRoot[1] === "b") {
             theRoot = theRoot.replace(theRoot[1], theRoot[1] + "/")
         }
@@ -888,18 +893,17 @@ Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major
             console.log(`Input Notes: ${unalteredNoteInput}`)
         }
         console.log(`${theRoot} ${chordQuality}
-${position}`)
+${appliedInversionText}`)
         console.log(chordOccursIn);
 
         console.log(additionalInfo);
     }
     if (waitUntilStartOver === false) {
-        logTheChord();
+        logTheChord(rootLetter);
         chordOccursIn = "";
     }
 
-    if (hasAlternate === true) {
-        startOver = true;
+    function altLog() {
         for (let i = 0; i < alternateChordQuality.length; i++) {
             basicChordQuality = altBasicChordQuality[i];
             alternateStepsAboveOriginal = alternateStepsArray[i];
@@ -911,9 +915,15 @@ ${position}`)
             applyInversionText();
             setIndexArrayToRootPosition();
             applyChordFunctions();
-            calculateRootNumberAndLetter();
-            findRelevantKeysAndSyncChordFunctionsToNotes();
-            logTheChord();
+            const altRootNumber = calculateRootNumber(fromLowestUpToRoot);
+            const altRootLetter = calculateRootLetter(altRootNumber);
+            addToChordOccursIn(altRootLetter);
+            findRelevantKeysAndSyncChordFunctionsToNotes(altRootLetter);
+            logTheChord(altRootLetter);
         }
+    }
+    if (hasAlternate === true) {
+        startOver = true;
+        altLog();
     }
 }
