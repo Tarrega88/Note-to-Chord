@@ -17,8 +17,6 @@ let hasAlternate = false;
 let alternateStepsAboveOriginal = 0;
 let alternateStepsArray = [];
 
-let fromLowestUpToRoot = 0;
-
 let rootPosition;
 let altRootPosition = [];
 
@@ -581,6 +579,7 @@ function runAfterInput() {
     determineInversion();
 
     function findRoot() {
+        let fromLowestUpToRoot;
         switch (inversionNumber) {
             case 0:
                 fromLowestUpToRoot = fretArray[0];
@@ -605,10 +604,13 @@ function runAfterInput() {
                 break;
         }
 
+        return fromLowestUpToRoot;
+
     }
 
-    findRoot();
-    function applyInversionText() {
+    const foundRoot = findRoot();
+
+    function applyInversionText(fromLowestUpToRoot) {
         let position = "";
         fromLowestUpToRoot = fromLowestUpToRoot % 12
         switch (fromLowestUpToRoot) {
@@ -649,7 +651,7 @@ function runAfterInput() {
         }
         return position;
     }
-    const appliedInversionText = applyInversionText();
+    const appliedInversionText = applyInversionText(foundRoot);
 
     function setIndexArrayToRootPosition() {
         if (startOver === false) {
@@ -699,7 +701,7 @@ function runAfterInput() {
         }
         return rootCalculation;
     }
-    const rootNumber = calculateRootNumber(fromLowestUpToRoot);
+    const rootNumber = calculateRootNumber(foundRoot);
 
     function calculateRootLetter(rootCalculation) {
         let theRoot = chromaticArrayKey[rootCalculation];
@@ -910,7 +912,7 @@ ${appliedInversionText}`)
             indexArray = altRootPosition[i].split(",");
             rootPosition = altRootPosition[i];
             findRoot();
-            fromLowestUpToRoot = fromLowestUpToRoot + alternateStepsArray[i];
+            let fromLowestUpToRoot = foundRoot + alternateStepsArray[i];
             applyInversionText();
             setIndexArrayToRootPosition();
             applyChordFunctions();
@@ -921,8 +923,12 @@ ${appliedInversionText}`)
             logTheChord(altRootLetter);
         }
     }
-    if (hasAlternate === true) {
-        startOver = true;
-        altLog();
+
+    function determineRestart() {
+        if (hasAlternate === true) {
+            startOver = true;
+            altLog();
+        }
     }
+    determineRestart();
 }
