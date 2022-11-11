@@ -21,8 +21,6 @@ let altRootPosition = [];
 
 let alternateChordQuality = [];
 
-let originalChordQuality = "";
-
 let chordOccursIn = "";
 let chordOccursInArray = [];
 
@@ -548,11 +546,17 @@ function runAfterInput() {
             chordQuality = "Unknown Chord Type";
             basicChordQuality = "major";
         }
-        originalChordQuality = chordQuality;
 
     }
 
     determineChordQuality();
+
+    function saveOriginalChordQuality() {
+        let originalChordQuality = chordQuality;
+        return originalChordQuality;
+    }
+
+    const savedOriginalChordQuality = saveOriginalChordQuality();
 
     let inversionNumber;
     function determineInversion() {
@@ -715,7 +719,7 @@ function runAfterInput() {
 
     const savedOriginalRoot = saveOriginalRoot(rootLetter);
 
-    function addToChordOccursIn(theRoot, originalRoot) {
+    function addToChordOccursIn(theRoot, originalRoot, originalChordQuality) {
         if (startOver === false) {
             chordOccursIn = `${theRoot} ${chordQuality} occurs as a:
 `
@@ -732,7 +736,7 @@ It occurs as a:
         }
 
     }
-    addToChordOccursIn(rootLetter, savedOriginalRoot);
+    addToChordOccursIn(rootLetter, savedOriginalRoot, savedOriginalChordQuality);
 
     //should split findRelevantKeysAndSyncChordFunctionsToNotes into more specific functions soon
     function findRelevantKeysAndSyncChordFunctionsToNotes(theRoot, rootCalculation) {
@@ -917,7 +921,7 @@ ${appliedInversionText}`)
             applyChordFunctions();
             const altRootNumber = calculateRootNumber(fromLowestUpToRoot);
             const altRootLetter = calculateRootLetter(altRootNumber);
-            addToChordOccursIn(altRootLetter, savedOriginalRoot);
+            addToChordOccursIn(altRootLetter, savedOriginalRoot, savedOriginalChordQuality);
             findRelevantKeysAndSyncChordFunctionsToNotes(altRootLetter, altRootNumber);
             logTheChord(altRootLetter);
         }
