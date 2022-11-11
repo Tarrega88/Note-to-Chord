@@ -2,10 +2,6 @@ let chordArray = [];
 let unalteredNoteInput = [];
 let indexArray = [];
 
-let root = "";
-let majorOrMinor = "";
-let romanNumeral = "";
-let extraInformation = "";
 let indexOfRoot = 0;
 let specialCase = false;
 let startOver = false;
@@ -14,14 +10,30 @@ let additionalInfo = "";
 let stepsToFindRelatedChord = 0;
 let originalRoot = [];
 let aOrAn = "";
-let guitarArray = [];
-let isAChord = false;
 let completeUnalteredNoteInput = [];
-
-let guitarNotes = [];
 
 let basicChordQuality = "";
 let altBasicChordQuality = [];
+
+let chordQuality = "";
+let position = "";
+let hasAlternate = false;
+let alternateStepsAboveOriginal = 0;
+let alternateStepsArray = [];
+
+let fromLowestUpToRoot = 0;
+
+let rootPosition;
+let altRootPosition = [];
+
+let alternateChordQuality = [];
+
+let originalChordQuality = "";
+
+let rootCalculation;
+let theRoot;
+let chordOccursIn = "";
+let chordOccursInArray = [];
 
 const majorRomanNumerals = ["majori", "skip", "majorii", "skip", "majoriii", "majoriv", "skip", "majorv", "skip", "majorvi", "skip", "majorvii"];
 //maj7, m7, m7, maj7, 7, m7, m7b5;
@@ -47,6 +59,8 @@ const chromaticArrayKey = ["A", "A#Bb", "B", "C", "C#Db", "D", "D#Eb", "E", "F",
 let firstPrompt = prompt("Enter 1 for Note Input or 2 for Guitar Fret Input", "");
 
 function guitarInput() {
+    let guitarNotes = [];
+    let guitarArray = [];
     guitarNotes.length = 6;
     for (let i = 6; i > 0; i--) {
         let guitarPrompt = prompt(`List the fret on the ${i} string.
@@ -92,10 +106,10 @@ Type anything besides a number to ignore that string.`, "");
     if (input1.toLowerCase().charCodeAt() >= 97 && input1.toLowerCase().charCodeAt() <= 103) {
         guitarNotes[5] = input1;
     }
-    whatAreTheGuitarNotes();
+    whatAreTheGuitarNotes(guitarNotes, guitarArray);
 }
 
-scales = {
+const scales = {
     majori: [0, 2, 4, 5, 7, 9, 11],
     majorii: [0, 2, 3, 5, 7, 9, 10],
     majoriii: [0, 1, 3, 5, 7, 8, 10],
@@ -165,7 +179,7 @@ function whatAreTheNotes() {
     runAfterInput();
 }
 
-function whatAreTheGuitarNotes() {
+function whatAreTheGuitarNotes(guitarNotes, guitarArray) {
     // guitarNotes = [... new Set(guitarNotes)];
     for (let i = 0; i < guitarNotes.length; i++) {
         let chordNotes = guitarNotes[i];
@@ -273,29 +287,10 @@ function runAfterInput() {
 
     moveChordDownToATake2();
 
-    let chordQuality = "";
-    let position = "";
-    let hasAlternate = false;
-    let alternateStepsAboveOriginal = 0;
-    let alternateStepsArray = [];
-
-    let fromLowestUpToRoot = 0;
-    let fromLowestUpToRootAlternate = 0;
-    let group = 0;
-    let alternateGroup = [];
-
-    let rootPosition;
-    let altRootPosition = [];
-
-    let inversionChecker = Array.from(indexArray);
-
-    let alternateChordQuality = [];
-
-    let originalChordQuality = "";
-
     function determineChordQuality() {
+        let isAChord = false;
         for (let i = 0; i < indexArray.length; i++) {
-            inversionChecker = Array.from(indexArray);
+            let inversionChecker = Array.from(indexArray);
             let valueToRemove = inversionChecker[i];
             for (let j = 0; j < indexArray.length; j++) {
                 inversionChecker[j] = inversionChecker[j] - valueToRemove;
@@ -319,14 +314,12 @@ function runAfterInput() {
                 case "0,3,7":
                     chordQuality = "minor";
                     rootPosition = "0,3,7";
-                    group = "allChordGroup";
                     basicChordQuality = "minor";
                     isAChord = true;
                     break;
                 // MINOR 7 and 6
                 case "0,3,7,10":
                     chordQuality = "minor 7";
-                    group = "allChordGroup";
                     rootPosition = "0,3,7,10";
                     basicChordQuality = "minor";
                     isAChord = true;
@@ -337,14 +330,12 @@ function runAfterInput() {
                     altBasicChordQuality.push("major");
                     alternateChordQuality.push("6");
                     alternateStepsArray.push(3);
-                    alternateGroup.push("allChordGroup");
 
                     break;
 
                 //MINOR MAJ7
                 case "0,3,7,11":
                     chordQuality = "m maj7";
-                    group = "allChordGroup";
                     rootPosition = "0,3,7,11";
                     basicChordQuality = "minor";
                     isAChord = true;
@@ -353,7 +344,6 @@ function runAfterInput() {
                 case "0,2,3,7,10":
                     rootPosition = "0,2,3,7,10"
                     chordQuality = "m9";
-                    group = "allChordGroup";
                     isAChord = true;
                     hasAlternate = true;
 
@@ -361,28 +351,24 @@ function runAfterInput() {
                     altRootPosition.push("0,4,7,9,11");
                     alternateChordQuality.push("maj13 (no 9th)");
                     altBasicChordQuality.push("major");
-                    alternateGroup.push("allChordGroup");
                     break;
 
                 //MAJOR
                 case "0,4,7":
                     rootPosition = "0,4,7";
                     chordQuality = "major";
-                    group = "allChordGroup";
                     basicChordQuality = "major";
                     isAChord = true;
                     break;
                 case "0,5,7":
                     rootPosition = "0,5,7";
                     chordQuality = "suspended";
-                    group = "allChordGroup";
                     basicChordQuality = "major";
                     isAChord = true;
                     break;
                 case "0,2,4,7,9":
                     rootPosition = "0,2,4,7,9";
                     chordQuality = "6/9";
-                    group = "allChordGroup";
                     basicChordQuality = "major";
                     isAChord = true;
                     break;
@@ -390,29 +376,13 @@ function runAfterInput() {
                 case "0,4,7,10":
                     rootPosition = "0,4,7,10";
                     chordQuality = "dominant 7";
-                    group = "allChordGroup";
-                    // hasAlternate = true;
                     basicChordQuality = "major";
                     isAChord = true;
-                    //Alternates
-                    //German Augmented 6th:
-                    // alternateChordQuality.push("German Augmented 6th");
-                    // alternateStepsArray.push(0);
-                    // alternateGroup.push(2);
-                    // //Tritone:
-                    // alternateChordQuality.push("tritone sub");
-                    // alternateStepsArray.push(0);
-                    // alternateGroup.push(2);
-                    // altRootPosition = rootPosition
-                    // alternateChordQuality.push("V of V");
-                    // alternateStepsArray.push(0);
-                    // alternateGroup.push(2);
 
                     break;
                 case "0,4,6,10":
                     rootPosition = "0,4,6,10";
                     chordQuality = "7b5";
-                    group = "allChordGroup";
                     position = "Half-Symmetrical"
                     basicChordQuality = "diminished";
                     altBasicChordQuality.push("diminished");
@@ -420,7 +390,6 @@ function runAfterInput() {
 
                     waitUntilStartOver = true;
                     hasAlternate = true;
-                    alternateGroup.push("allChordGroup")
                     altRootPosition.push(rootPosition);
                     alternateChordQuality.push("7b5");
                     alternateStepsArray.push(0);
@@ -430,7 +399,6 @@ function runAfterInput() {
                 case "0,3,4,7,10":
                     rootPosition = "0,3,4,7,10";
                     chordQuality = "7#9";
-                    group = "allChordGroup";
                     basicChordQuality = "major";
                     isAChord = true;
                     break;
@@ -438,7 +406,6 @@ function runAfterInput() {
                 case "0,2,4,7,10":
                     rootPosition = "0,2,4,7,10";
                     chordQuality = "9";
-                    group = "allChordGroup";
                     basicChordQuality = "major";
                     isAChord = true;
                     break;
@@ -446,7 +413,6 @@ function runAfterInput() {
                 case "0,2,4,5,7,10":
                     rootPosition = "0,2,4,5,7,10";
                     chordQuality = "11";
-                    group = "allChordGroup";
                     basicChordQuality = "major";
                     isAChord = true;
                     break;
@@ -454,7 +420,6 @@ function runAfterInput() {
                 case "0,2,4,5,7,9,10":
                     rootPosition = "0,2,4,5,7,9,10";
                     chordQuality = "13";
-                    group = "allChordGroup";
                     basicChordQuality = "major";
                     isAChord = true;
                     break;
@@ -463,21 +428,18 @@ function runAfterInput() {
                     rootPosition = "0,2,4,5,9,10";
                     chordQuality = "13 (no 5th)";
                     basicChordQuality = "major";
-                    group = "allChordGroup";
                     isAChord = true;
                     break;
                 case "0,4,5,7,9,10":
                     rootPosition = "0,4,5,7,9,10";
                     chordQuality = "13 (no 9th)";
                     basicChordQuality = "major";
-                    group = "allChordGroup";
                     isAChord = true;
                     break;
                 case "0,2,4,7,9,10":
                     rootPosition = "0,2,4,7,9,10";
                     chordQuality = "13 (no 11th)";
                     basicChordQuality = "major";
-                    group = "allChordGroup";
                     isAChord = true;
                     break;
                 //common omissions: as a suggestion fifth, ninth, and eleventh
@@ -485,7 +447,6 @@ function runAfterInput() {
                 case "0,2,4,7,9,11":
                     rootPosition = "0,2,4,7,9,11";
                     chordQuality = "maj13";
-                    group = "allChordGroup";
                     basicChordQuality = "major";
                     isAChord = true;
                     break;
@@ -493,7 +454,6 @@ function runAfterInput() {
                     rootPosition = "0,2,4,9,11";
                     chordQuality = "maj13 (no 5th)";
                     basicChordQuality = "major";
-                    group = "allChordGroup";
                     isAChord = true;
                     break;
 
@@ -501,7 +461,6 @@ function runAfterInput() {
                 case "0,1,4,7,10":
                     rootPosition = "0,1,4,7,10";
                     chordQuality = "7b9";
-                    group = "allChordGroup";
                     basicChordQuality = "major";
                     isAChord = true;
                     break;
@@ -510,42 +469,14 @@ function runAfterInput() {
                 case "0,4,10":
                     rootPosition = "0,4,10";
                     chordQuality = "dominant 7";
-                    group = "allChordGroup";
                     basicChordQuality = "major";
                     isAChord = true;
-
-                    // rootPosition = "0,4,10";
-                    // chordQuality = "Italian Augmented 6th";
-                    // group = 6;
-                    // basicChordQuality = "major";
-                    // hasAlternate = true;
-                    // alternateChordQuality.push("dominant 7");
-                    // alternateStepsArray.push(0);
-                    // alternateGroup.push(6);
-
-                    // alternateChordQuality.push("tritone sub");
-                    // alternateStepsArray.push(0);
-                    // alternateGroup.push(6);
-
-                    // alternateChordQuality.push("V of V");
-                    // alternateStepsArray.push(0);
-                    // alternateGroup.push(6);
-                    // break;
-                    // French Augmented 6th
-                    // case "0,4,6,10":
-                    //     rootPosition = "0,4,6,10";
-                    //     chordQuality = "French Augmented 6th";
-                    //     group = 6;
-                    //     hasAlternate = true;
-                    //     basicChordQuality = "major";
-
                     break;
 
                 //MAJOR 7
                 case "0,4,7,11":
                     rootPosition = "0,4,7,11";
                     chordQuality = "major 7";
-                    group = "allChordGroup";
                     basicChordQuality = "major";
                     isAChord = true;
                     break;
@@ -553,7 +484,6 @@ function runAfterInput() {
                 case "0,4,8,11":
                     rootPosition = "0,4,8,11";
                     chordQuality = "maj7 #5";
-                    group = "allChordGroup";
                     basicChordQuality = "augmented";
                     isAChord = true;
                     break;
@@ -561,7 +491,6 @@ function runAfterInput() {
                 case "0,3,6":
                     rootPosition = "0,3,6";
                     chordQuality = "diminished";
-                    group = "allChordGroup";
                     basicChordQuality = "diminished";
                     isAChord = true;
                     break;
@@ -571,8 +500,6 @@ function runAfterInput() {
                     chordQuality = "full diminished";
                     basicChordQuality = "diminished";
                     position = "Symmetrical";
-                    group = "allChordGroup"
-                    alternateGroup.push("allChordGroup")
                     isAChord = true;
                     hasAlternate = true;
                     waitUntilStartOver = true;
@@ -589,19 +516,16 @@ function runAfterInput() {
                     chordQuality = "half diminished 7";
                     basicChordQuality = "diminished";
                     isAChord = true;
-                    group = "allChordGroup";
 
                     hasAlternate = true;
 
                     alternateChordQuality.push("m7b5");
                     altBasicChordQuality.push("diminished");
-                    alternateGroup.push("allChordGroup");
                     alternateStepsArray.push(0);
                     altRootPosition.push(rootPosition);
 
                     alternateChordQuality.push("m6");
                     altBasicChordQuality.push("minor");
-                    alternateGroup.push("allChordGroup");
                     alternateStepsArray.push(3);
                     altRootPosition.push("0,3,7,9");
 
@@ -610,7 +534,6 @@ function runAfterInput() {
                 case "0,3,6,11":
                     rootPosition = "0,3,6,11";
                     chordQuality = "diminished major 7";
-                    group = "allChordGroup";
                     basicChordQuality = "diminished";
                     isAChord = true;
                     break;
@@ -636,7 +559,6 @@ function runAfterInput() {
             rootPosition = indexArray.toString();
             chordQuality = "Unknown Chord Type";
             basicChordQuality = "major";
-            group = "allChordGroup";
         }
         originalChordQuality = chordQuality;
 
@@ -647,7 +569,7 @@ function runAfterInput() {
     let inversionNumber;
     function determineInversion() {
         for (let i = 0; i < indexArray.length; i++) {
-            inversionChecker = Array.from(indexArray);
+            let inversionChecker = Array.from(indexArray);
             let valueToRemove = inversionChecker[i];
             for (let j = 0; j < indexArray.length; j++) {
                 inversionChecker[j] = inversionChecker[j] - valueToRemove;
@@ -668,74 +590,70 @@ function runAfterInput() {
     determineInversion();
 
     function findRoot() {
-        if (group === "allChordGroup") {
-            switch (inversionNumber) {
-                case 0:
-                    fromLowestUpToRoot = fretArray[0];
-                    break;
-                case 1:
-                    fromLowestUpToRoot = fretArray[1];
-                    break;
-                case 2:
-                    fromLowestUpToRoot = fretArray[2];
-                    break;
-                case 3:
-                    fromLowestUpToRoot = fretArray[3];
-                    break;
-                case 4:
-                    fromLowestUpToRoot = fretArray[4];
-                    break;
-                case 5:
-                    fromLowestUpToRoot = fretArray[5];
-                    break;
-                case 6:
-                    fromLowestUpToRoot = fretArray[6];
-                    break;
-            }
-
+        switch (inversionNumber) {
+            case 0:
+                fromLowestUpToRoot = fretArray[0];
+                break;
+            case 1:
+                fromLowestUpToRoot = fretArray[1];
+                break;
+            case 2:
+                fromLowestUpToRoot = fretArray[2];
+                break;
+            case 3:
+                fromLowestUpToRoot = fretArray[3];
+                break;
+            case 4:
+                fromLowestUpToRoot = fretArray[4];
+                break;
+            case 5:
+                fromLowestUpToRoot = fretArray[5];
+                break;
+            case 6:
+                fromLowestUpToRoot = fretArray[6];
+                break;
         }
+
     }
 
     findRoot();
     function applyInversionText() {
-        if (group === "allChordGroup") {
-            fromLowestUpToRoot = fromLowestUpToRoot % 12
-            switch (fromLowestUpToRoot) {
-                case 0:
-                case 12:
-                    position = "Root Position";
-                    break;
-                case 1:
-                case 2:
-                    position = "3rd Inversion";
-                    break;
-                case 3:
-                    if (chordQuality === "6") {
-                        position = "6th Inversion (6th In Bass)"
-                    } else {
-                        position = "6th Inversion (13th in Bass)";
-                    }
-                    break;
-                case 4:
-                    position = "2nd Inversion (Sharp 5th in Bass)"
-                case 5:
-                    position = "2nd Inversion";
-                    break;
-                case 6:
-                    position = "2nd Inversion (Flatted 5th in Bass)";
-                    break;
-                case 7:
-                    position = "5th Inversion (11th in Bass)";
-                    break;
-                case 8:
-                case 9:
-                    position = "1st Inversion";
-                    break;
-                case 10:
-                case 11:
-                    position = "4th Inversion (9th in Bass)";
-                    break;
-            }
+        fromLowestUpToRoot = fromLowestUpToRoot % 12
+        switch (fromLowestUpToRoot) {
+            case 0:
+            case 12:
+                position = "Root Position";
+                break;
+            case 1:
+            case 2:
+                position = "3rd Inversion";
+                break;
+            case 3:
+                if (chordQuality === "6") {
+                    position = "6th Inversion (6th In Bass)"
+                } else {
+                    position = "6th Inversion (13th in Bass)";
+                }
+                break;
+            case 4:
+                position = "2nd Inversion (Sharp 5th in Bass)"
+            case 5:
+                position = "2nd Inversion";
+                break;
+            case 6:
+                position = "2nd Inversion (Flatted 5th in Bass)";
+                break;
+            case 7:
+                position = "5th Inversion (11th in Bass)";
+                break;
+            case 8:
+            case 9:
+                position = "1st Inversion";
+                break;
+            case 10:
+            case 11:
+                position = "4th Inversion (9th in Bass)";
+                break;
         }
     }
     applyInversionText();
@@ -779,30 +697,7 @@ function runAfterInput() {
     }
     applyChordFunctions();
 
-    function applySpecialFunctions() {
-        //will need to implement special function logic differently.
-        switch (chordQuality) {
-            case "French Augmented 6th":
-            case "Italian Augmented 6th":
-            case "German Augmented 6th":
-                whatThisChordCanBe.push(augmented6th)
-                break;
-            case "tritone sub":
-                whatThisChordCanBe.push(tritoneSub);
-                break;
-            case "V of V":
-                whatThisChordCanBe.push(vofV);
-                break;
-        }
-
-    }
-    // applySpecialFunctions(); will need to implement special function logic differently;
-
-    let rootCalculation;
-    let theRoot;
-    let chordOccursIn = "";
-    let chordOccursInArray = [];
-
+    //split calculateRootAndNumber into more specific functions soon
     function calculateRootNumberAndLetter() {
         chordOccursInArray = [];
         rootCalculation = fromLowestUpToRoot + indexOfLowestNote;
@@ -833,11 +728,13 @@ It occurs as a:
     }
     calculateRootNumberAndLetter();
 
-    let intervalForKey1;
-    let intervalForKey2;
-    let chosenArrayIndex;
-
+    //should split findRelevantKeysAndSyncChordFunctionsToNotes into more specific functions soon
     function findRelevantKeysAndSyncChordFunctionsToNotes() {
+        let intervalForKey1;
+        let intervalForKey2;
+        let chosenArrayIndex;
+        let romanNumeral = "";
+        let majorOrMinor = "";
         for (let q = 0; q < whatThisChordCanBe.length; q++) {
             let chromaticLoop = 0;
             romanNumeral = "";
@@ -1004,13 +901,11 @@ ${position}`)
     if (hasAlternate === true) {
         startOver = true;
         for (let i = 0; i < alternateChordQuality.length; i++) {
-            group = alternateGroup[i];
             basicChordQuality = altBasicChordQuality[i];
             alternateStepsAboveOriginal = alternateStepsArray[i];
             chordQuality = alternateChordQuality[i];
             indexArray = altRootPosition[i].split(",");
             rootPosition = altRootPosition[i];
-            // determineInversion();
             findRoot();
             fromLowestUpToRoot = fromLowestUpToRoot + alternateStepsArray[i];
             applyInversionText();
