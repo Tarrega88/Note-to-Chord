@@ -6,8 +6,6 @@ let indexOfRoot = 0;
 let specialCase = false;
 let startOver = false;
 let waitUntilStartOver = false;
-let additionalInfo = "";
-let originalRoot = [];
 let aOrAn = "";
 let completeUnalteredNoteInput = [];
 
@@ -28,7 +26,6 @@ let alternateChordQuality = [];
 
 let originalChordQuality = "";
 
-let rootCalculation;
 let chordOccursIn = "";
 let chordOccursInArray = [];
 
@@ -696,7 +693,7 @@ function runAfterInput() {
     //split calculateRootAndNumber into more specific functions soon
     function calculateRootNumber(fromLowestUpToRoot) {
         chordOccursInArray = [];
-        rootCalculation = fromLowestUpToRoot + indexOfLowestNote;
+        let rootCalculation = fromLowestUpToRoot + indexOfLowestNote;
         if (rootCalculation >= 12) {
             rootCalculation = rootCalculation - 12;
         }
@@ -704,16 +701,20 @@ function runAfterInput() {
     }
     const rootNumber = calculateRootNumber(fromLowestUpToRoot);
 
-    function calculateRootLetter() {
+    function calculateRootLetter(rootCalculation) {
         let theRoot = chromaticArrayKey[rootCalculation];
-        if (originalRoot.length === 0) {
-            originalRoot.push(theRoot);
-        }
         return theRoot;
     }
     const rootLetter = calculateRootLetter(rootNumber);
 
-    function addToChordOccursIn(theRoot) {
+    function saveOriginalRoot(theRoot) {
+        let originalRoot = theRoot;
+        return originalRoot;
+    }
+
+    const savedOriginalRoot = saveOriginalRoot(rootLetter);
+
+    function addToChordOccursIn(theRoot, originalRoot) {
         if (startOver === false) {
             chordOccursIn = `${theRoot} ${chordQuality} occurs as a:
 `
@@ -724,16 +725,16 @@ function runAfterInput() {
         }
 
         if (startOver === true && alternateStepsAboveOriginal > 0) {
-            chordOccursIn = `${theRoot} ${chordQuality} shares the same notes as ${originalRoot[0]} ${originalChordQuality}.
+            chordOccursIn = `${theRoot} ${chordQuality} shares the same notes as ${originalRoot} ${originalChordQuality}.
 It occurs as a:
 `
         }
 
     }
-    const logInitiate = addToChordOccursIn(rootLetter);
+    addToChordOccursIn(rootLetter, savedOriginalRoot);
 
     //should split findRelevantKeysAndSyncChordFunctionsToNotes into more specific functions soon
-    function findRelevantKeysAndSyncChordFunctionsToNotes(theRoot) {
+    function findRelevantKeysAndSyncChordFunctionsToNotes(theRoot, rootCalculation) {
         let intervalForKey1;
         let intervalForKey2;
         let chosenArrayIndex;
@@ -876,7 +877,7 @@ Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major
         }
     }
 
-    findRelevantKeysAndSyncChordFunctionsToNotes(rootLetter);
+    findRelevantKeysAndSyncChordFunctionsToNotes(rootLetter, rootNumber);
 
     function logTheChord(theRoot) {
         if (theRoot[1] === "#" || theRoot[1] === "b") {
@@ -895,8 +896,6 @@ Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major
         console.log(`${theRoot} ${chordQuality}
 ${appliedInversionText}`)
         console.log(chordOccursIn);
-
-        console.log(additionalInfo);
     }
     if (waitUntilStartOver === false) {
         logTheChord(rootLetter);
@@ -917,8 +916,8 @@ ${appliedInversionText}`)
             applyChordFunctions();
             const altRootNumber = calculateRootNumber(fromLowestUpToRoot);
             const altRootLetter = calculateRootLetter(altRootNumber);
-            addToChordOccursIn(altRootLetter);
-            findRelevantKeysAndSyncChordFunctionsToNotes(altRootLetter);
+            addToChordOccursIn(altRootLetter, savedOriginalRoot);
+            findRelevantKeysAndSyncChordFunctionsToNotes(altRootLetter, rootNumber);
             logTheChord(altRootLetter);
         }
     }
