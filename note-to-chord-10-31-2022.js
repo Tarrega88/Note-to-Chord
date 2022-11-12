@@ -903,10 +903,8 @@ It occurs as a:
 ${appliedInversionText}`)
         console.log(chordOccursIn);
     }
-    if (determinedChordQuality.waitUntilStartOver === false) {
         logTheChord(rootLetter, determinedChordQuality);
         chordOccursIn = "";
-    }
 
     function altLog(determinedChordQuality) {
         for (let i = 0; i < determinedChordQuality.alternateChordQuality.length; i++) {
