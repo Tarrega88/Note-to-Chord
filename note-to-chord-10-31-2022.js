@@ -3,21 +3,10 @@ let unalteredNoteInput = [];
 let indexArray = [];
 
 let startOver = false;
-let waitUntilStartOver = false;
 let aOrAn = "";
 let completeUnalteredNoteInput = [];
 
-let basicChordQuality = "";
-let altBasicChordQuality = [];
-
-let chordQuality = "";
-let hasAlternate = false;
-let alternateStepsArray = [];
-
-let rootPosition;
-let altRootPosition = [];
-
-let alternateChordQuality = [];
+let whatThisChordCanBe = [];
 
 let chordOccursIn = "";
 let chordOccursInArray = [];
@@ -42,6 +31,291 @@ const enharmonicEquivalentsHigher = ["ABbb", "skip", "BCb", "CDbb", "skip", "DEb
 const enharmonicEquivalentsLower = ["AGx", "skip", "BAx", "CB#", "skip", "DCx", "skip", "EDx", "FE#", "skip", "GFx", "skip"];
 
 const chromaticArrayKey = ["A", "A#Bb", "B", "C", "C#Db", "D", "D#Eb", "E", "F", "F#Gb", "G", "G#Ab"];
+
+
+let chordDictionary = {
+
+    "0,7":
+    {
+        chordQuality: "5",
+        rootPosition: "0,7",
+        basicChordQuality: "major",
+        isAChord: true,
+    },
+    //MINOR
+    "0,3,7": {
+        chordQuality: "minor",
+        rootPosition: "0,3,7",
+        basicChordQuality: "minor",
+        isAChord: true,
+    },
+    // MINOR 7 and 6
+    "0,3,7,10":
+    {
+        chordQuality: "minor 7",
+        rootPosition: "0,3,7,10",
+        basicChordQuality: "minor",
+        isAChord: true,
+
+        hasAlternate: true,
+
+        altRootPosition: ["0,4,7,9"],
+        altBasicChordQuality: ["major"],
+        alternateChordQuality: ["6"],
+        alternateStepsArray: [3]
+    },
+
+
+
+    //MINOR MAJ7
+    "0,3,7,11":
+    {
+        chordQuality: "m maj7",
+        rootPosition: "0,3,7,11",
+        basicChordQuality: "minor",
+        isAChord: true
+    },
+
+    //MINOR 9TH
+    "0,2,3,7,10":
+    {
+        rootPosition: "0,2,3,7,10",
+        chordQuality: "m9",
+        isAChord: true,
+        hasAlternate: true,
+
+        alternateStepsArray: [3],
+        altRootPosition: ["0,4,7,9,11"],
+        alternateChordQuality: ["maj13 (no 9th)"],
+        altBasicChordQuality: ["major"],
+    },
+
+    //MAJOR
+    "0,4,7":
+    {
+        rootPosition: "0,4,7",
+        chordQuality: "major",
+        basicChordQuality: "major",
+        isAChord: true
+    },
+
+    "0,5,7":
+    {
+        rootPosition: "0,5,7",
+        chordQuality: "suspended",
+        basicChordQuality: "major",
+        isAChord: true
+    },
+
+    "0,2,4,7,9":
+    {
+        rootPosition: "0,2,4,7,9",
+        chordQuality: "6/9",
+        basicChordQuality: "major",
+        isAChord: true,
+    },
+
+    //DOMINANT 7
+    "0,4,7,10":
+    {
+        rootPosition: "0,4,7,10",
+        chordQuality: "dominant 7",
+        basicChordQuality: "major",
+        isAChord: true,
+    },
+
+
+    "0,4,6,10":
+    {
+        rootPosition: "0,4,6,10",
+        chordQuality: "7b5",
+        basicChordQuality: "diminished",
+        altBasicChordQuality: ["diminished"],
+        isAChord: true,
+
+        waitUntilStartOver: true,
+        hasAlternate: true,
+        altRootPosition: ["0,4,6,10", "0,4,6,10"],
+        alternateChordQuality: ["7b5", "7b5"],
+        alternateStepsArray: [0, 6],
+    },
+    //7#9 chord (Hendrix)
+    "0,3,4,7,10":
+    {
+        rootPosition: "0,3,4,7,10",
+        chordQuality: "7#9",
+        basicChordQuality: "major",
+        isAChord: true
+    },
+
+    // 9 Chord
+    "0,2,4,7,10":
+    {
+        rootPosition: "0,2,4,7,10",
+        chordQuality: "9",
+        basicChordQuality: "major",
+        isAChord: true
+    },
+
+    //11 chord
+    "0,2,4,5,7,10":
+    {
+        rootPosition: "0,2,4,5,7,10",
+        chordQuality: "11",
+        basicChordQuality: "major",
+        isAChord: true
+    },
+
+    //13 chord
+    "0,2,4,5,7,9,10":
+    {
+        rootPosition: "0,2,4,5,7,9,10",
+        chordQuality: "13",
+        basicChordQuality: "major",
+        isAChord: true
+    },
+
+    //
+    "0,2,4,5,9,10":
+    {
+        rootPosition: "0,2,4,5,9,10",
+        chordQuality: "13 (no 5th)",
+        basicChordQuality: "major",
+        isAChord: true
+    },
+
+    "0,4,5,7,9,10":
+    {
+        rootPosition: "0,4,5,7,9,10",
+        chordQuality: "13 (no 9th)",
+        basicChordQuality: "major",
+        isAChord: true
+    },
+
+    "0,2,4,7,9,10":
+    {
+        rootPosition: "0,2,4,7,9,10",
+        chordQuality: "13 (no 11th)",
+        basicChordQuality: "major",
+        isAChord: true,
+    },
+    //common omissions: as a suggestion fifth, ninth, and eleventh
+    //maj13 chord
+    "0,2,4,7,9,11":
+    {
+        rootPosition: "0,2,4,7,9,11",
+        chordQuality: "maj13",
+        basicChordQuality: "major",
+        isAChord: true
+    },
+
+    "0,2,4,9,11":
+    {
+        rootPosition: "0,2,4,9,11",
+        chordQuality: "maj13 (no 5th)",
+        basicChordQuality: "major",
+        isAChord: true,
+    },
+
+    // 7b9 Chord
+    "0,1,4,7,10":
+    {
+        rootPosition: "0,1,4,7,10",
+        chordQuality: "7b9",
+        basicChordQuality: "major",
+        isAChord: true,
+    },
+
+    //AUGMENTED 6TH CHORDS
+    // Italian Augmented 6th:
+    "0,4,10":
+    {
+        rootPosition: "0,4,10",
+        chordQuality: "dominant 7",
+        basicChordQuality: "major",
+        isAChord: true,
+    },
+
+
+    //MAJOR 7
+    "0,4,7,11":
+    {
+        rootPosition: "0,4,7,11",
+        chordQuality: "major 7",
+        basicChordQuality: "major",
+        isAChord: true,
+    },
+    //MAJOR 7 #5
+    "0,4,8,11":
+    {
+        rootPosition: "0,4,8,11",
+        chordQuality: "maj7 #5",
+        basicChordQuality: "augmented",
+        isAChord: true,
+    },
+
+    //DIMINISHED
+    "0,3,6":
+    {
+        rootPosition: "0,3,6",
+        chordQuality: "diminished",
+        basicChordQuality: "diminished",
+        isAChord: true,
+    },
+
+    //FULL DIMINISHED 7
+    "0,3,6,9":
+    {
+        rootPosition: "0,3,6,9",
+        chordQuality: "full diminished",
+        basicChordQuality: "diminished",
+        isAChord: true,
+        hasAlternate: true,
+        waitUntilStartOver: true,
+        altBasicChordQuality: ["full diminished"],
+        altRootPosition: ["0,3,6,9", "0,3,6,9", "0,3,6,9", "0,3,6,9"],
+        alternateChordQuality: ["full diminished", "full diminished", "full diminished", "full diminished"],
+        alternateStepsArray: [0, 3, 6, 9],
+    },
+    //HALF DIMINISHED 7 AND M7b5
+    "0,3,6,10":
+    {
+        rootPosition: "0,3,6,10",
+        chordQuality: "half diminished 7",
+        basicChordQuality: "diminished",
+        isAChord: true,
+
+        hasAlternate: true,
+
+        alternateChordQuality: ["m7b5", "m6"],
+        altBasicChordQuality: ["diminished", "minor"],
+        alternateStepsArray: [0, 3],
+        altRootPosition: ["0,3,6,10", "0,3,7,9"],
+    },
+
+    //Diminished Major 7
+    "0,3,6,11":
+    {
+        rootPosition: "0,3,6,11",
+        chordQuality: "diminished major 7",
+        basicChordQuality: "diminished",
+        isAChord: true,
+    },
+    //AUGMENTED
+    "0,4,8":
+    {
+        rootPosition: "0,4,8",
+        chordQuality: "augmented",
+        basicChordQuality: "augmented",
+        isAChord: true,
+        hasAlternate: true,
+        altRootPosition: ["0,4,8"],
+        alternateChordQuality: ["augmented"],
+        alternateStepsArray: [0, 4, 8],
+        waitUntilStartOver: true,
+    },
+
+}
 
 let firstPrompt = prompt("Enter 1 for Note Input or 2 for Guitar Fret Input", "");
 
@@ -291,275 +565,26 @@ function runAfterInput() {
 
             inversionString = inversionChecker.toString();
 
-            switch (inversionString) {
-
-                case "0,7":
-                    chordQuality = "5";
-                    rootPosition = "0,7";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                //MINOR
-                case "0,3,7":
-                    chordQuality = "minor";
-                    rootPosition = "0,3,7";
-                    basicChordQuality = "minor";
-                    isAChord = true;
-                    break;
-                // MINOR 7 and 6
-                case "0,3,7,10":
-                    chordQuality = "minor 7";
-                    rootPosition = "0,3,7,10";
-                    basicChordQuality = "minor";
-                    isAChord = true;
-
-                    hasAlternate = true;
-
-                    altRootPosition.push("0,4,7,9");
-                    altBasicChordQuality.push("major");
-                    alternateChordQuality.push("6");
-                    alternateStepsArray.push(3);
-
-                    break;
-
-                //MINOR MAJ7
-                case "0,3,7,11":
-                    chordQuality = "m maj7";
-                    rootPosition = "0,3,7,11";
-                    basicChordQuality = "minor";
-                    isAChord = true;
-                    break;
-                //MINOR 9TH
-                case "0,2,3,7,10":
-                    rootPosition = "0,2,3,7,10"
-                    chordQuality = "m9";
-                    isAChord = true;
-                    hasAlternate = true;
-
-                    alternateStepsArray.push(3);
-                    altRootPosition.push("0,4,7,9,11");
-                    alternateChordQuality.push("maj13 (no 9th)");
-                    altBasicChordQuality.push("major");
-                    break;
-
-                //MAJOR
-                case "0,4,7":
-                    rootPosition = "0,4,7";
-                    chordQuality = "major";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                case "0,5,7":
-                    rootPosition = "0,5,7";
-                    chordQuality = "suspended";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                case "0,2,4,7,9":
-                    rootPosition = "0,2,4,7,9";
-                    chordQuality = "6/9";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                //DOMINANT 7
-                case "0,4,7,10":
-                    rootPosition = "0,4,7,10";
-                    chordQuality = "dominant 7";
-                    basicChordQuality = "major";
-                    isAChord = true;
-
-                    break;
-                case "0,4,6,10":
-                    rootPosition = "0,4,6,10";
-                    chordQuality = "7b5";
-                    basicChordQuality = "diminished";
-                    altBasicChordQuality.push("diminished");
-                    isAChord = true;
-
-                    waitUntilStartOver = true;
-                    hasAlternate = true;
-                    altRootPosition.push(rootPosition);
-                    alternateChordQuality.push("7b5");
-                    alternateStepsArray.push(0);
-                    alternateStepsArray.push(6);
-                    break;
-                //7#9 chord (Hendrix)
-                case "0,3,4,7,10":
-                    rootPosition = "0,3,4,7,10";
-                    chordQuality = "7#9";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                // 9 Chord
-                case "0,2,4,7,10":
-                    rootPosition = "0,2,4,7,10";
-                    chordQuality = "9";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                //11 chord
-                case "0,2,4,5,7,10":
-                    rootPosition = "0,2,4,5,7,10";
-                    chordQuality = "11";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                //13 chord
-                case "0,2,4,5,7,9,10":
-                    rootPosition = "0,2,4,5,7,9,10";
-                    chordQuality = "13";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                //
-                case "0,2,4,5,9,10":
-                    rootPosition = "0,2,4,5,9,10";
-                    chordQuality = "13 (no 5th)";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                case "0,4,5,7,9,10":
-                    rootPosition = "0,4,5,7,9,10";
-                    chordQuality = "13 (no 9th)";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                case "0,2,4,7,9,10":
-                    rootPosition = "0,2,4,7,9,10";
-                    chordQuality = "13 (no 11th)";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                //common omissions: as a suggestion fifth, ninth, and eleventh
-                //maj13 chord
-                case "0,2,4,7,9,11":
-                    rootPosition = "0,2,4,7,9,11";
-                    chordQuality = "maj13";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                case "0,2,4,9,11":
-                    rootPosition = "0,2,4,9,11";
-                    chordQuality = "maj13 (no 5th)";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-
-                // 7b9 Chord
-                case "0,1,4,7,10":
-                    rootPosition = "0,1,4,7,10";
-                    chordQuality = "7b9";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                //AUGMENTED 6TH CHORDS
-                // Italian Augmented 6th:
-                case "0,4,10":
-                    rootPosition = "0,4,10";
-                    chordQuality = "dominant 7";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-
-                //MAJOR 7
-                case "0,4,7,11":
-                    rootPosition = "0,4,7,11";
-                    chordQuality = "major 7";
-                    basicChordQuality = "major";
-                    isAChord = true;
-                    break;
-                //MAJOR 7 #5
-                case "0,4,8,11":
-                    rootPosition = "0,4,8,11";
-                    chordQuality = "maj7 #5";
-                    basicChordQuality = "augmented";
-                    isAChord = true;
-                    break;
-                //DIMINISHED
-                case "0,3,6":
-                    rootPosition = "0,3,6";
-                    chordQuality = "diminished";
-                    basicChordQuality = "diminished";
-                    isAChord = true;
-                    break;
-                //FULL DIMINISHED 7
-                case "0,3,6,9":
-                    rootPosition = "0,3,6,9";
-                    chordQuality = "full diminished";
-                    basicChordQuality = "diminished";
-                    isAChord = true;
-                    hasAlternate = true;
-                    waitUntilStartOver = true;
-                    altRootPosition.push(rootPosition);
-                    alternateChordQuality.push("full diminished");
-                    alternateStepsArray.push(0);
-                    alternateStepsArray.push(3);
-                    alternateStepsArray.push(6);
-                    alternateStepsArray.push(9);
-                    break;
-                //HALF DIMINISHED 7 AND M7b5
-                case "0,3,6,10":
-                    rootPosition = "0,3,6,10";
-                    chordQuality = "half diminished 7";
-                    basicChordQuality = "diminished";
-                    isAChord = true;
-
-                    hasAlternate = true;
-
-                    alternateChordQuality.push("m7b5");
-                    altBasicChordQuality.push("diminished");
-                    alternateStepsArray.push(0);
-                    altRootPosition.push(rootPosition);
-
-                    alternateChordQuality.push("m6");
-                    altBasicChordQuality.push("minor");
-                    alternateStepsArray.push(3);
-                    altRootPosition.push("0,3,7,9");
-
-                    break;
-                //Diminished Major 7
-                case "0,3,6,11":
-                    rootPosition = "0,3,6,11";
-                    chordQuality = "diminished major 7";
-                    basicChordQuality = "diminished";
-                    isAChord = true;
-                    break;
-                //AUGMENTED
-                case "0,4,8":
-                    rootPosition = "0,4,8";
-                    chordQuality = "augmented";
-                    basicChordQuality = "augmented";
-                    isAChord = true;
-                    hasAlternate = true;
-                    altRootPosition.push(rootPosition);
-                    alternateChordQuality.push("augmented");
-                    alternateStepsArray.push(0);
-                    alternateStepsArray.push(4);
-                    alternateStepsArray.push(8);
-                    waitUntilStartOver = true;
-                    break;
+            if (Object.hasOwn(chordDictionary, inversionString)) {
+                return chordDictionary[inversionString];
+            } else {
+                // Put unknown logic here
             }
 
         }
-        if (!isAChord) {
-            rootPosition = indexArray.toString();
-            chordQuality = "Unknown Chord Type";
-            basicChordQuality = "major";
-        }
-
     }
 
-    determineChordQuality();
+    const determinedChordQuality = determineChordQuality();
 
-    function saveOriginalChordQuality() {
-        let originalChordQuality = chordQuality;
+    function saveOriginalChordQuality(determinedChordQuality) {
+        let originalChordQuality = determinedChordQuality.chordQuality;
         return originalChordQuality;
     }
 
-    const savedOriginalChordQuality = saveOriginalChordQuality();
+    const savedOriginalChordQuality = saveOriginalChordQuality(determinedChordQuality);
 
-    let inversionNumber;
-    function determineInversion() {
+    function determineInversion(determinedChordQuality) {
+        let inversionNumber;
         for (let i = 0; i < indexArray.length; i++) {
             let inversionChecker = Array.from(indexArray);
             let valueToRemove = inversionChecker[i];
@@ -573,15 +598,16 @@ function runAfterInput() {
             inversionChecker = inversionChecker.sort((a, b) => a - b);
 
             inversionString = inversionChecker.toString();
-            if (rootPosition.toString() === inversionString) {
+            if (determinedChordQuality.rootPosition.toString() === inversionString) {
                 inversionNumber = i;
             }
         }
+        return inversionNumber;
     }
 
-    determineInversion();
+    const determinedInversionNumber = determineInversion(determinedChordQuality);
 
-    function findRoot() {
+    function findRoot(inversionNumber) {
         let fromLowestUpToRoot;
         switch (inversionNumber) {
             case 0:
@@ -606,14 +632,13 @@ function runAfterInput() {
                 fromLowestUpToRoot = fretArray[6];
                 break;
         }
-
         return fromLowestUpToRoot;
 
     }
 
-    const foundRoot = findRoot();
+    const foundRoot = findRoot(determinedInversionNumber);
 
-    function applyInversionText(fromLowestUpToRoot) {
+    function applyInversionText(fromLowestUpToRoot, determinedChordQuality) {
         let position = "";
         fromLowestUpToRoot = fromLowestUpToRoot % 12
         switch (fromLowestUpToRoot) {
@@ -626,7 +651,7 @@ function runAfterInput() {
                 position = "3rd Inversion";
                 break;
             case 3:
-                if (chordQuality === "6") {
+                if (determinedChordQuality.chordQuality === "6") {
                     position = "6th Inversion (6th In Bass)"
                 } else {
                     position = "6th Inversion (13th in Bass)";
@@ -654,32 +679,26 @@ function runAfterInput() {
         }
         return position;
     }
-    const appliedInversionText = applyInversionText(foundRoot);
+    const appliedInversionText = applyInversionText(foundRoot, determinedChordQuality);
 
-    function setIndexArrayToRootPosition() {
+    function setIndexArrayToRootPosition(determinedChordQuality) {
         if (startOver === false) {
-            indexArray = rootPosition.split(",");
+            indexArray = determinedChordQuality.rootPosition.split(",");
         }
         for (let i = 0; i < chordArray.length; i++) {
             indexArray[i] = Number(indexArray[i]);
 
         }
-
+        return indexArray;
     }
 
-    setIndexArrayToRootPosition();
+    const indexSetToRootPosition = setIndexArrayToRootPosition(determinedChordQuality);
 
-    let whatThisChordCanBe = [];
-    //special cases
-    const augmented6th = "augmented 6th"
-    const tritoneSub = "tritone sub";
-    const vofV = "V of V";
 
-    //Determines what function the chord can fulfill based on Roman Numerals
-    let matchScaleAndChord = 0;
 
     function applyChordFunctions() {
         whatThisChordCanBe = [];
+        let matchScaleAndChord = 0;
         for (let i = 0; i < Object.keys(scales).length; i++) {
             matchScaleAndChord = 0;
             for (let j = 0; j < Object.values(scales)[i].length; j++) {
@@ -719,27 +738,27 @@ function runAfterInput() {
 
     const savedOriginalRoot = saveOriginalRoot(rootLetter);
 
-    function addToChordOccursIn(theRoot, originalRoot, originalChordQuality, alternateStepsAboveOriginal) {
+    function addToChordOccursIn(theRoot, originalRoot, originalChordQuality, alternateStepsAboveOriginal, determinedChordQuality) {
         if (startOver === false) {
-            chordOccursIn = `${theRoot} ${chordQuality} occurs as a:
+            chordOccursIn = `${theRoot} ${determinedChordQuality.chordQuality} occurs as a:
 `
         }
         if (startOver === true && alternateStepsAboveOriginal === 0) {
-            chordOccursIn = `${theRoot} ${originalChordQuality} can function as ${aOrAn} ${chordQuality}:
+            chordOccursIn = `${theRoot} ${originalChordQuality} can function as ${aOrAn} ${determinedChordQuality.chordQuality}:
 `
         }
 
         if (startOver === true && alternateStepsAboveOriginal > 0) {
-            chordOccursIn = `${theRoot} ${chordQuality} shares the same notes as ${originalRoot} ${originalChordQuality}.
+            chordOccursIn = `${theRoot} ${determinedChordQuality.chordQuality} shares the same notes as ${originalRoot} ${originalChordQuality}.
 It occurs as a:
 `
         }
 
     }
-    addToChordOccursIn(rootLetter, savedOriginalRoot, savedOriginalChordQuality);
+    addToChordOccursIn(rootLetter, savedOriginalRoot, savedOriginalChordQuality, 0, determinedChordQuality);
 
     //should split findRelevantKeysAndSyncChordFunctionsToNotes into more specific functions soon
-    function findRelevantKeysAndSyncChordFunctionsToNotes(theRoot, rootCalculation) {
+    function findRelevantKeysAndSyncChordFunctionsToNotes(rootLetter, rootCalculation, determinedChordQuality) {
         let intervalForKey1;
         let intervalForKey2;
         let chosenArrayIndex;
@@ -802,24 +821,24 @@ It occurs as a:
                 chosenArrayIndex = harmonicMajorRN.indexOf(whatThisChordCanBe[q]);
             }
 
-            function makeRomanNumeralsAndKeysLookNice() {
-                if (basicChordQuality === "major") {
+            function makeRomanNumeralsAndKeysLookNice(determinedChordQuality) {
+                if (determinedChordQuality.basicChordQuality === "major") {
                     romanNumeral = romanNumeral.toUpperCase();
                 }
-                if (basicChordQuality === "minor") {
+                if (determinedChordQuality.basicChordQuality === "minor") {
                     romanNumeral = romanNumeral.toLowerCase();
                 }
-                if (basicChordQuality === "diminished") {
+                if (determinedChordQuality.basicChordQuality === "diminished") {
                     romanNumeral = `diminished ` + romanNumeral.toLowerCase();
                 }
-                if (basicChordQuality === "augmented") {
+                if (determinedChordQuality.basicChordQuality === "augmented") {
                     romanNumeral = `augmented ` + romanNumeral.toUpperCase();
                 }
                 if (majorOrMinor.includes("_")) {
                     majorOrMinor = majorOrMinor.replace("_", " ");
                 }
             }
-            makeRomanNumeralsAndKeysLookNice();
+            makeRomanNumeralsAndKeysLookNice(determinedChordQuality);
 
             intervalForKey1 = rootCalculation - chosenArrayIndex;
 
@@ -835,7 +854,7 @@ It occurs as a:
                     i = 0;
                 }
 
-                if (chordQuality[0].toLowerCase() === "a" || chordQuality[0].toLowerCase() === "e" || chordQuality[0].toLowerCase() === "i" || chordQuality[0].toLowerCase() === "o" || chordQuality[0].toLowerCase() === "u") {
+                if (determinedChordQuality.chordQuality[0].toLowerCase() === "a" || determinedChordQuality.chordQuality[0].toLowerCase() === "e" || determinedChordQuality.chordQuality[0].toLowerCase() === "i" || determinedChordQuality.chordQuality[0].toLowerCase() === "o" || determinedChordQuality.chordQuality[0].toLowerCase() === "u") {
                     aOrAn = "an";
                 } else {
                     aOrAn = "a";
@@ -859,78 +878,62 @@ It occurs as a:
                 }
                 chordOccursInArray.sort();
 
-                if (whatThisChordCanBe[q] === augmented6th && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
-                    chordOccursIn += `The ${romanNumeral} chord typically precedes a dominant V chord, in this case the ${temporaryRelatedChord} chord.
-`
-                }
-
-                if (whatThisChordCanBe[q] === tritoneSub && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
-                    chordOccursIn += `The ${romanNumeral} chord functions as an alternative dominant V7 chord since it shares the 3rd and 7th note of that chord, but flipped.
-In this case it's a tritone sub to the ${temporaryRelatedChord}7 chord.
-`
-                }
-
-                if (whatThisChordCanBe[q] === vofV && stepsToFindRelatedChord > 0 && (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2)) {
-                    chordOccursIn += `The ${romanNumeral} chord functions as a dominant chord TO the original dominant chord.  It creates extra momentum and tension.
-In this case, it's the V of the ${temporaryRelatedChord}7 chord.
-Typical Progression: ${theRoot}7 ${temporaryRelatedChord}7 ${temporaryKey} major or minor`
-                }
-
                 chromaticLoop++;
             }
         }
     }
 
-    findRelevantKeysAndSyncChordFunctionsToNotes(rootLetter, rootNumber);
+    findRelevantKeysAndSyncChordFunctionsToNotes(rootLetter, rootNumber, determinedChordQuality);
 
-    function logTheChord(theRoot) {
+    function logTheChord(theRoot, determinedChordQuality) {
         if (theRoot[1] === "#" || theRoot[1] === "b") {
             theRoot = theRoot.replace(theRoot[1], theRoot[1] + "/")
         }
         chordOccursIn += chordOccursInArray.join(" ");
         if (theRoot[0] === lowestNote || theRoot[0] + theRoot[1] === lowestNote) {
-            console.log(`${theRoot} ${chordQuality}`)
+            console.log(`${theRoot} ${determinedChordQuality.chordQuality}`)
         } else {
-            console.log(`${theRoot} ${chordQuality} / ${lowestNote}`);
+            console.log(`${theRoot} ${determinedChordQuality.chordQuality} / ${lowestNote}`);
         }
         console.log(`Notes: ${chordArray.join(" ")}`);
         if (unalteredNoteInput !== chordArray.join(" ")) {
             console.log(`Input Notes: ${unalteredNoteInput}`)
         }
-        console.log(`${theRoot} ${chordQuality}
+        console.log(`${theRoot} ${determinedChordQuality.chordQuality}
 ${appliedInversionText}`)
         console.log(chordOccursIn);
     }
-    if (waitUntilStartOver === false) {
-        logTheChord(rootLetter);
+    if (determinedChordQuality.waitUntilStartOver === false) {
+        logTheChord(rootLetter, determinedChordQuality);
         chordOccursIn = "";
     }
 
-    function altLog() {
-        for (let i = 0; i < alternateChordQuality.length; i++) {
-            basicChordQuality = altBasicChordQuality[i];
-            let alternateStepsAboveOriginal = alternateStepsArray[i];
-            chordQuality = alternateChordQuality[i];
-            indexArray = altRootPosition[i].split(",");
-            rootPosition = altRootPosition[i];
-            findRoot();
-            let fromLowestUpToRoot = foundRoot + alternateStepsArray[i];
-            applyInversionText();
-            setIndexArrayToRootPosition();
+    function altLog(determinedChordQuality) {
+        for (let i = 0; i < determinedChordQuality.alternateChordQuality.length; i++) {
+            determinedChordQuality.basicChordQuality = determinedChordQuality.altBasicChordQuality[i];
+            let alternateStepsAboveOriginal = determinedChordQuality.alternateStepsArray[i];
+            determinedChordQuality.chordQuality = determinedChordQuality.alternateChordQuality[i];
+            indexArray = determinedChordQuality.altRootPosition[i].split(",");
+            determinedChordQuality.rootPosition = determinedChordQuality.altRootPosition[i];
+            determineInversion(determinedChordQuality);
+            let foundRoot = findRoot(determinedInversionNumber)
+            let fromLowestUpToRoot = foundRoot + determinedChordQuality.alternateStepsArray[i];
+            applyInversionText(fromLowestUpToRoot, determinedChordQuality);
+            setIndexArrayToRootPosition(determinedChordQuality);
             applyChordFunctions();
             const altRootNumber = calculateRootNumber(fromLowestUpToRoot);
             const altRootLetter = calculateRootLetter(altRootNumber);
-            addToChordOccursIn(altRootLetter, savedOriginalRoot, savedOriginalChordQuality, alternateStepsAboveOriginal);
-            findRelevantKeysAndSyncChordFunctionsToNotes(altRootLetter, altRootNumber);
-            logTheChord(altRootLetter);
+            addToChordOccursIn(altRootLetter, savedOriginalRoot, savedOriginalChordQuality, alternateStepsAboveOriginal, determinedChordQuality);
+            findRelevantKeysAndSyncChordFunctionsToNotes(altRootLetter, altRootNumber, determinedChordQuality);
+            logTheChord(altRootLetter, determinedChordQuality);
         }
     }
 
-    function determineRestart() {
-        if (hasAlternate === true) {
+    function determineRestart(determinedChordQuality) {
+        if (determinedChordQuality.hasAlternate === true) {
             startOver = true;
-            altLog();
+            altLog(determinedChordQuality);
         }
     }
-    determineRestart();
+    determineRestart(determinedChordQuality);
 }
