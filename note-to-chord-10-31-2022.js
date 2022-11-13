@@ -1,13 +1,11 @@
-let chordArray = [];
-let unalteredNoteInput = [];
-let indexArray = [];
+let chordArray = []; //adding notes for future refactors: inside of 5 functions 
+let unalteredNoteInput = []; //inside of 3 functions
+let indexArray = []; //inside of 8 functions
 
 let startOver = false;
 let aOrAn = "";
 
 let whatThisChordCanBe = [];
-
-let chordOccursIn = "";
 
 const majorRomanNumerals = ["majori", "skip", "majorii", "skip", "majoriii", "majoriv", "skip", "majorv", "skip", "majorvi", "skip", "majorvii"];
 //maj7, m7, m7, maj7, 7, m7, m7b5;
@@ -539,7 +537,7 @@ function runAfterInput() {
                 return {
                     //temporary and basic catch for chord types not input yet.  Will change this to eventually make some assumptions based on intervals that are present
                     rootPosition: inversionString,
-                    chordQuality: "Unknown Chord Type",
+                    chordQuality: " Unknown Chord Type",
                     basicChordQuality: "major",
                 }
             }
@@ -710,6 +708,7 @@ function runAfterInput() {
 
     function addToChordOccursIn(theRoot, originalRoot, originalChordQuality, alternateStepsAboveOriginal, determinedChordQuality) {
         startOver === false ? chordQuality = determinedChordQuality.chordQuality : chordQuality = determinedChordQuality.alternateChordQuality;
+        let chordOccursIn = ""
         if (startOver === false) {
             chordOccursIn = `${theRoot}${chordQuality} occurs as a:
 `
@@ -724,9 +723,9 @@ function runAfterInput() {
 It occurs as a:
 `
         }
-
+        return chordOccursIn;
     }
-    addToChordOccursIn(rootLetter, savedOriginalRoot, savedOriginalChordQuality, 0, determinedChordQuality);
+    let determinedChordOccursIn = addToChordOccursIn(rootLetter, savedOriginalRoot, savedOriginalChordQuality, 0, determinedChordQuality);
 
     //should split findRelevantKeysAndSyncChordFunctionsToNotes into more specific functions soon
     function findRelevantKeysAndSyncChordFunctionsToNotes(rootLetter, rootCalculation, determinedChordQuality) {
@@ -859,7 +858,7 @@ It occurs as a:
 
     const determinedChordFunctions = findRelevantKeysAndSyncChordFunctionsToNotes(rootLetter, rootNumber, determinedChordQuality);
 
-    function logTheChord(theRoot, determinedChordQuality, appliedAltText, determinedChordFunctions) {
+    function logTheChord(theRoot, determinedChordQuality, appliedAltText, determinedChordFunctions, chordOccursIn) {
         let inversionText;
         if (startOver === false) {
             inversionText = appliedInversionText;
@@ -885,8 +884,7 @@ It occurs as a:
 ${inversionText}`)
         console.log(chordOccursIn);
     }
-    logTheChord(rootLetter, determinedChordQuality, null, determinedChordFunctions);
-    chordOccursIn = "";
+    logTheChord(rootLetter, determinedChordQuality, null, determinedChordFunctions, determinedChordOccursIn);
 
     function altLog(determinedChordQuality) {
         for (let i = 0; i < determinedChordQuality.alternateStepsArray.length; i++) {
@@ -899,9 +897,9 @@ ${inversionText}`)
             applyChordFunctions(indexArray);
             const altRootNumber = calculateRootNumber(fromLowestUpToRoot);
             const altRootLetter = calculateRootLetter(altRootNumber);
-            addToChordOccursIn(altRootLetter, savedOriginalRoot, savedOriginalChordQuality, alternateStepsAboveOriginal, determinedChordQuality);
+            const altChordOccursIn = addToChordOccursIn(altRootLetter, savedOriginalRoot, savedOriginalChordQuality, alternateStepsAboveOriginal, determinedChordQuality);
             const altDeterminedChordFunctions = findRelevantKeysAndSyncChordFunctionsToNotes(altRootLetter, altRootNumber, determinedChordQuality);
-            logTheChord(altRootLetter, determinedChordQuality, appliedAltText, altDeterminedChordFunctions);
+            logTheChord(altRootLetter, determinedChordQuality, appliedAltText, altDeterminedChordFunctions, altChordOccursIn);
         }
     }
 
