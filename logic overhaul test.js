@@ -2,8 +2,6 @@ let chordArray = []; //adding notes for future refactors: inside of 5 functions
 let unalteredNoteInput = []; //inside of 3 functions
 let indexArray = []; //inside of 8 functions
 
-//further refactoring should probably put indexArray, unalteredNoteInput, and chordArray into an object; there should also be a second version of the chordArray that does not change the input to the enharmonic equivalents
-
 let aOrAn = "";
 
 let whatThisChordCanBe = [];
@@ -426,7 +424,6 @@ function runAfterInput() {
                     chordQuality: specialExtensionsFound,
                     basicChordQuality: foundBasicValue
                 });
-                console.log(specialExtensionsFound);
             } else
                 if (!has7) {
                     function findTriadExtensions(unalteredChordName, chordName, has5th, input) {
@@ -464,7 +461,6 @@ function runAfterInput() {
                         return chordName;
                     }
                     const triadExtensionsFound = findTriadExtensions(foundBasicValue, foundBasicValue, chordHas5thOrNot, inversionChecker);
-                    console.log(triadExtensionsFound);
                     allChordInfo.push({
                         rootPosition: inversionString,
                         chordQuality: triadExtensionsFound,
@@ -488,7 +484,7 @@ function runAfterInput() {
         const savedOriginalChordQuality = saveOriginalChordQuality(chordInfoPassThrough);
 
         function determineInversion(determinedChordQuality) {
-            let inversionNumber;
+            let inversionNumberArray = [];
             for (let i = 0; i < indexArray.length; i++) {
                 let inversionChecker = Array.from(indexArray);
                 let valueToRemove = inversionChecker[i];
@@ -500,21 +496,20 @@ function runAfterInput() {
 
                 }
                 inversionChecker = inversionChecker.sort((a, b) => a - b);
+                // fretArray = inversionChecker;
 
                 inversionString = inversionChecker.toString();
-                if (determinedChordQuality.rootPosition.toString() === inversionString) {
-                    inversionNumber = i;
-                }
-                console.log(`determinedChordQuality rootPosition to String: ${determinedChordQuality.rootPosition.toString()}`);
-                console.log(`inversionString: ${inversionString}`)
+                // if (determinedChordQuality.rootPosition.toString() === inversionString) {
+                inversionNumberArray.push(i);
+                // }
             }
-            console.log(`inversionNumber: ${inversionNumber}`)
-            return inversionNumber;
+            return inversionNumberArray;
         }
 
-        const determinedInversionNumber = determineInversion(chordInfoPassThrough);
-        console.log(`Determined Inversion Number: ${determinedInversionNumber}`)
+        const determinedInversionNumberArray = determineInversion(chordInfoPassThrough);
 
+        // for (let i = 0; i < determinedInversionNumberArray.length; i ++) {
+        let determinedInversionNumber = determinedInversionNumberArray[i];
         function findRoot(inversionNumber) {
             let fromLowestUpToRoot;
             switch (inversionNumber) {
@@ -549,7 +544,6 @@ function runAfterInput() {
             let position = "";
             chordQuality = determinedChordQuality.chordQuality;
             fromLowestUpToRoot = fromLowestUpToRoot % 12;
-            console.log(`fromLowestUpToRoot: ${fromLowestUpToRoot}`)
             switch (fromLowestUpToRoot) {
                 case 0:
                     position = "Root Position";
@@ -594,7 +588,6 @@ function runAfterInput() {
 
         function setIndexArrayToRootPosition(determinedChordQuality) {
             indexArray = determinedChordQuality.rootPosition.split(",");
-            console.log(`indexArray: ${indexArray}`)
             for (let i = 0; i < chordArray.length; i++) {
                 indexArray[i] = Number(indexArray[i]);
 
@@ -629,11 +622,9 @@ function runAfterInput() {
             if (rootCalculation >= 12) {
                 rootCalculation = rootCalculation - 12;
             }
-            console.log(`rootCalc: ${rootCalculation}`)
             return rootCalculation;
         }
         const rootNumber = calculateRootNumber(foundRoot);
-        // console.log(rootNumber);
 
         function calculateRootLetter(rootCalculation) {
             let theRoot = chromaticArrayKey[rootCalculation];
@@ -741,11 +732,11 @@ function runAfterInput() {
                         i = 0;
                     }
 
-                    if (chordQuality[0].toLowerCase() === "a" || chordQuality[0].toLowerCase() === "e" || chordQuality[0].toLowerCase() === "i" || chordQuality[0].toLowerCase() === "o" || chordQuality[0].toLowerCase() === "u") {
-                        aOrAn = "an";
-                    } else {
-                        aOrAn = "a";
-                    }
+                    // if (chordQuality[0].toLowerCase() === "a" || chordQuality[0].toLowerCase() === "e" || chordQuality[0].toLowerCase() === "i" || chordQuality[0].toLowerCase() === "o" || chordQuality[0].toLowerCase() === "u") {
+                    //     aOrAn = "an";
+                    // } else {
+                    //     aOrAn = "a";
+                    // }
 
                     let temporaryKey = chromaticArrayKey[chromaticLoop];
                     let findRelatedChordNumber = chromaticLoop + stepsToFindRelatedChord;
@@ -774,14 +765,9 @@ function runAfterInput() {
 
         function logTheChord(theRoot, determinedChordQuality, determinedChordFunctions, chordOccursIn) {
             let inversionText;
-            // if (startOver === false) {
             inversionText = appliedInversionText;
             chordQuality = determinedChordQuality.chordQuality
-            // } 
-            // else {
-            //     inversionText = appliedAltText;
-            //     chordQuality = determinedChordQuality.alternateChordQuality
-            // }
+
             if (theRoot[1] === "#" || theRoot[1] === "b") {
                 theRoot = theRoot.replace(theRoot[1], theRoot[1] + "/")
             }
