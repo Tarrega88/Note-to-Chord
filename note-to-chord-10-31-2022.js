@@ -2,6 +2,8 @@ let chordArray = []; //adding notes for future refactors: inside of 5 functions
 let unalteredNoteInput = []; //inside of 3 functions
 let indexArray = []; //inside of 8 functions
 
+//further refactoring should probably put indexArray, unalteredNoteInput, and chordArray into an object; there should also be a second version of the chordArray that does not change the input to the enharmonic equivalents
+
 let startOver = false;
 let aOrAn = "";
 
@@ -617,34 +619,37 @@ function runAfterInput() {
                 position = "Root Position";
                 break;
             case 1:
+                position = "3rd Inversion (Major 7 in Bass)"
+                break;
             case 2:
-                position = "3rd Inversion";
+                position = "3rd Inversion (7 in Bass)";
                 break;
             case 3:
-                if (chordQuality === "6") {
-                    position = "6th Inversion (6th In Bass)"
-                } else {
-                    position = "6th Inversion (13th in Bass)";
-                }
+                position = "6th Inversion (13 in Bass)";
                 break;
             case 4:
-                position = "2nd Inversion (Sharp 5th in Bass)"
+                position = "2nd Inversion (Sharp 5 in Bass)"
+                break;
             case 5:
                 position = "2nd Inversion";
                 break;
             case 6:
-                position = "2nd Inversion (Flatted 5th in Bass)";
+                position = "2nd Inversion (Flatted 5 in Bass)";
                 break;
             case 7:
-                position = "5th Inversion (11th in Bass)";
+                position = "5th Inversion (11 in Bass)";
                 break;
             case 8:
+                position = "1st Inversion (Major 3rd in Bass)";
+                break;
             case 9:
-                position = "1st Inversion";
+                position = "1st Inversion (Minor 3rd in Bass)";
                 break;
             case 10:
+                position = "4th Inversion (9 in Bass)"
+                break;
             case 11:
-                position = "4th Inversion (9th in Bass)";
+                position = "4th Inversion (b9 in Bass)";
                 break;
         }
         return position;
