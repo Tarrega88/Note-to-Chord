@@ -29,7 +29,6 @@ const chromaticArrayKey = ["A", "A#Bb", "B", "C", "C#Db", "D", "D#Eb", "E", "F",
 
 
 const basicChords = {
-
     dim: {
         intervals: [0, 3, 6],
         restrictions: ["skip", 4, 7],
@@ -39,21 +38,19 @@ const basicChords = {
         intervals: [0, 4, 8],
         restrictions: ["skip", 3, 7],
     },
-
     major: {
         intervals: [0, 4],
-        restrictions: ["skip", "skip"],
+        restrictions: ["skip"],
     },
-
     m: {
         intervals: [0, 3],
-        restrictions: ["skip", "skip"],
-    },
-    sus: {
-        intervals: [0, 5],
-        restrictions: ["skip", "skip"],
+        restrictions: ["skip"],
     },
 
+    sus: {
+        intervals: [0, 5, 7],
+        restrictions: [3, 4],
+    },
 }
 
 let firstPrompt = prompt("Enter 1 for Note Input or 2 for Guitar Fret Input", "");
@@ -314,21 +311,29 @@ function runAfterInput() {
 
             function findBasicValue(input, basicChords) {
                 for (let i = 0; i < Object.keys(basicChords).length; i++) {
-                    let counter = 0;
-                    for (let j = 0; j < Object.values(basicChords)[i].intervals.length; j++) {
-                        if (input.includes(Object.values(basicChords)[i].intervals[j]) && !input.includes(Object.values(basicChords)[i].restrictions[j])) {
-                            counter++;
-
-                        }
-                    }
-                    if (counter === Object.values(basicChords)[i].intervals.length) {
-                        return (Object.keys(basicChords)[i])
+                    const containsAll = Object.values(basicChords)[i].intervals.every(e => {
+                        return input.includes(e);
+                    });
+                    const doesNotContainRestrictions = Object.values(basicChords)[i].restrictions.every(e => {
+                        return !input.includes(e);
+                    })
+                    if (containsAll && doesNotContainRestrictions) {
+                        return (Object.keys(basicChords)[i]);
                     }
                 }
-
             }
 
             const foundBasicValue = findBasicValue(inversionChecker, basicChords);
+            // console.log(`FBV: ${foundBasicValue}`)
+
+            function doesChordHave3rd(input, foundBasicValue) {
+                let has3rd = false;
+                if (input.includes(3) || input.includes(4) || foundBasicValue === "sus") {
+                    has3rd = true;
+                }
+                return has3rd;
+            }
+            const has3rd = doesChordHave3rd(inversionChecker, foundBasicValue)
 
             function doesChordHave7(input, foundBasicValue) {
                 let has7th = false;
@@ -338,7 +343,7 @@ function runAfterInput() {
                 return has7th;
             }
             const has7 = doesChordHave7(inversionChecker, foundBasicValue);
-
+            // console.log(`FBV: ${foundBasicValue}`)
             if (has7) {
                 function which7th(input, foundBasicValue) {
                     let the7th;
@@ -426,54 +431,62 @@ function runAfterInput() {
                 });
             } else
                 if (!has7) {
+                    // console.log(has7)
                     function findTriadExtensions(unalteredChordName, chordName, has5th, input) {
+                        // console.log(`unalteredChordname: ${unalteredChordName}`)
                         if (chordName === "major") {
                             chordName = "";
                         }
-                        if (input.includes(3) && unalteredChordName !== "dim" && unalteredChordName !== "m") {
-                            chordName = chordName + "add #9"
-                        }
-                        if (input.includes(5) && chordName !== "sus") {
-                            chordName = chordName + "add11";
-                        }
-                        if (input.includes(9) && input.includes(2)) {
-                            chordName = chordName + "6/9";
-                        } else
-                            if (input.includes(2)) {
-                                chordName = chordName + "add9"
+                        if (input.length > 3 || has5th && has3rd) {
+                            if (input.includes(9) && input.includes(2)) {
+                                chordName = chordName + "6/9";
                             } else
-                                if (input.includes(9)) {
-                                    chordName = chordName + "6";
-                                };
-                        if (input.includes(6) && !has5th && unalteredChordName !== "dim") {
-                            chordName = chordName + "b5"
-                        };
-                        if (input.includes(8) && !has5th && unalteredChordName !== "aug") {
-                            chordName = chordName + "#5";
-                        };
-                        if (input.includes(8) && has5th) {
-                            chordName = chordName + "add b6";
+                                if (input.includes(2)) {
+                                    chordName = chordName + "add9"
+                                } else
+                                    if (input.includes(9)) {
+                                        chordName = chordName + "6";
+                                    };
+                            if (input.includes(3) && unalteredChordName !== "dim" && unalteredChordName !== "m") {
+                                chordName = chordName + "add #9"
+                            }
+                            if (input.includes(5) && unalteredChordName !== "sus") {
+                                chordName = chordName + "add11";
+                            }
+                            if (input.includes(6) && !has5th && unalteredChordName !== "dim") {
+                                chordName = chordName + "b5"
+                            };
+                            if (input.includes(8) && !has5th && unalteredChordName !== "aug") {
+                                chordName = chordName + "#5";
+                            };
+                            if (input.includes(8) && has5th) {
+                                chordName = chordName + "add b6";
+                            }
+                            if (input.includes(1)) {
+                                chordName = chordName + "add b9";
+                            };
+                            return chordName;
                         }
-                        if (input.includes(1)) {
-                            chordName = chordName + "add b9";
-                        };
-
-                        return chordName;
                     }
                     const triadExtensionsFound = findTriadExtensions(foundBasicValue, foundBasicValue, chordHas5thOrNot, inversionChecker);
-                    allChordInfo.push({
-                        rootPosition: inversionString,
-                        chordQuality: triadExtensionsFound,
-                        basicChordQuality: foundBasicValue
+                    if (triadExtensionsFound !== undefined) {
+                        allChordInfo.push({
+                            rootPosition: inversionString,
+                            chordQuality: triadExtensionsFound,
+                            basicChordQuality: foundBasicValue
+                        }
+                        )
+
                     }
-                    )
+
                 }
         }
+
         return allChordInfo
     }
 
     const allChordInfo = determineChordQuality();
-
+    // console.log(allChordInfo);
     for (let i = 0; i < allChordInfo.length; i++) {
         let chordInfoPassThrough = allChordInfo[i];
         function saveOriginalChordQuality(determinedChordQuality) {
@@ -788,3 +801,4 @@ ${inversionText}`)
         logTheChord(rootLetter, chordInfoPassThrough, determinedChordFunctions, determinedChordOccursIn);
     }
 }
+// }
