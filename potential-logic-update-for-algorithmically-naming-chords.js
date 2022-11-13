@@ -1,4 +1,4 @@
-let input = [0,4,7,2,9,10];
+let input = [0, 4, 9];
 
 
 function doesChordHave5th(input) {
@@ -64,54 +64,125 @@ function doesChordHave7(input, foundBasicValue) {
     }
     return has7th;
 }
-const has7OrNot = doesChordHave7(input, foundBasicValue);
+const has7 = doesChordHave7(input, foundBasicValue);
 
-
-function which7th(input, foundBasicValue) {
-    let the7th;
-    if (input.includes(9) && foundBasicValue === "dim") {
-        the7th = "full diminished 7";
-    } else
-        if (input.includes(10)) {
-            the7th = "7";
+if (has7) {
+    function which7th(input, foundBasicValue) {
+        let the7th;
+        if (input.includes(9) && foundBasicValue === "dim") {
+            the7th = "full diminished 7";
         } else
-            if (input.includes(11)) {
-                the7th = "maj7";
-            }
-    return the7th;
-}
-
-
-const found7th = which7th(input, foundBasicValue);
-
-function updateChordQualityTo7(found7th, foundBasicValue) {
-    if (foundBasicValue === "major") {
-        foundBasicValue = "";
+            if (input.includes(10)) {
+                the7th = "7";
+            } else
+                if (input.includes(11)) {
+                    the7th = "maj7";
+                }
+        return the7th;
     }
 
-    foundBasicValue = foundBasicValue + found7th;
-    return foundBasicValue;
-}
+
+    const found7th = which7th(input, foundBasicValue);
+
+    function updateChordQualityTo7(found7th, foundBasicValue) {
+        if (foundBasicValue === "major") {
+            foundBasicValue = "";
+        }
+
+        foundBasicValue = foundBasicValue + found7th;
+        return foundBasicValue;
+    }
     const updatedChordTo7 = updateChordQualityTo7(found7th, foundBasicValue);
-function findUpperExtensions(input) {
-    let upperExtension = "noUpperExtension";
-    if (input.includes(9)) {
-        upperExtension = "13";
-    } else
-        if (input.includes(5)) {
-            upperExtension = "11";
-        } else
-            if (input.includes(2)) {
-                upperExtension = "9";
+    function findUpperExtensions(input) {
+        let upperExtension = "noUpperExtension";
+        if (has7) {
+            if (input.includes(9) && foundBasicValue !== "dim") {
+                upperExtension = "13";
+            } else
+                if (input.includes(5) && foundBasicValue !== "sus") {
+                    upperExtension = "11";
+                } else
+                    if (input.includes(2)) {
+                        upperExtension = "9";
+                    }
+            return upperExtension;
+        }
+    }
+
+    const upperExtensionFound = findUpperExtensions(input, foundBasicValue);
+
+    function replace7WithUpperExtension(theUpperExtension, updatedChordTo7) {
+        let updatedChordToUpperExtension = updatedChordTo7;
+        if (theUpperExtension !== "noUpperExtension") {
+            updatedChordToUpperExtension = updatedChordTo7.replace("7", theUpperExtension);
+        }
+        return updatedChordToUpperExtension;
+    }
+    const upperExtensionReplacement = replace7WithUpperExtension(upperExtensionFound, updatedChordTo7)
+
+    function findSpecialExtensions(input, chordName, has5th, has7, basicChord) {
+        if (has7) {
+            if (input.includes(1)) {
+                chordName = chordName + "b9";
             }
-    return upperExtension;
-}
+            if (input.includes(3) && basicChord !== "m" && basicChord !== "dim") {
+                chordName = chordName + "#9";
+            }
 
-    const upperExtensionFound = findUpperExtensions(input);
+            if (input.includes(6) && has5th) {
+                chordName = chordName + "#11";
+            }
+            if (input.includes(6) && !has5th && basicChord !== "dim") {
+                chordName = chordName + "b5";
+            }
+            if (input.includes(8) && !has5th && basicChord !== "aug") {
+                chordName = chordName + "#5";
+            }
+            if (input.includes(8) && has5th) {
+                chordName = chordName + "b13";
+            }
+            return chordName;
+        }
+    }
 
-function replace7WithUpperExtension(theUpperExtension, updatedChordTo7) {
-let updatedChordToUpperExtension = updatedChordTo7.replace("7", theUpperExtension);
-return updatedChordToUpperExtension;
-}
-const upperExtensionReplacement = replace7WithUpperExtension(upperExtensionFound, updatedChordTo7)
-console.log(upperExtensionReplacement);
+    const specialExtensionsFound = findSpecialExtensions(input, upperExtensionReplacement, chordHas5thOrNot, has7, foundBasicValue);
+    console.log(specialExtensionsFound);
+} else
+    if (!has7) {
+        function findTriadExtensions(unalteredChordName, chordName, has5th) {
+            if (chordName === "major") {
+                chordName = "";
+            }
+            if (input.includes(3) && unalteredChordName !== "dim" && unalteredChordName !== "m") {
+                chordName = chordName + "add #9"
+            }
+            if (input.includes(5) && chordName !== "sus") {
+                chordName = chordName + "add11";
+            }
+            if (input.includes(9) && input.includes(2)) {
+                chordName = chordName + "6/9";
+            } else
+                if (input.includes(2)) {
+                    chordName = chordName + "add9"
+                } else
+                    if (input.includes(9)) {
+                        chordName = chordName + "6";
+                    };
+            if (input.includes(6) && !has5th && unalteredChordName !== "dim") {
+                chordName = chordName + "b5"
+            };
+            if (input.includes(8) && !has5th && unalteredChordName !== "aug") {
+                chordName = chordName + "#5";
+            };
+            if (input.includes(8) && has5th) {
+                chordName = chordName + "add b6";
+            }
+            if (input.includes(1)) {
+                chordName = chordName + "add b9";
+            };
+
+            return chordName;
+        }
+        const triadExtensionsFound = findTriadExtensions(foundBasicValue, foundBasicValue, chordHas5thOrNot);
+        console.log(triadExtensionsFound);
+    }
