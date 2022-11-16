@@ -61,6 +61,17 @@ const restrictedChords = {
 
 }
 
+let chordPriorityObject = {
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+    6: [],
+    7: [],
+}
+
 
 let firstPrompt = prompt("Enter 1 for Note Input or 2 for Guitar Fret Input", "");
 
@@ -700,8 +711,8 @@ function runAfterInput() {
             function addToChordOccursIn(theRoot, originalRoot, originalChordQuality, alternateStepsAboveOriginal, determinedChordQuality) {
                 chordQuality = determinedChordQuality.chordQuality;
                 let chordOccursIn = ""
-                chordOccursIn = `${theRoot}${chordQuality} occurs as a:
-`
+                chordOccursIn = `
+${theRoot}${chordQuality} occurs as a:`
 
                 return chordOccursIn;
             }
@@ -808,8 +819,8 @@ function runAfterInput() {
 
                         if (i === rootCalculation + intervalForKey1 || i === rootCalculation + intervalForKey2) {
 
-                            chordOccursInArray.push(`${romanNumeral} chord in the key of ${temporaryKey} ${majorOrMinor}.
-`);
+                            chordOccursInArray.push(`
+${romanNumeral} chord in the key of ${temporaryKey} ${majorOrMinor}.`);
 
                         }
                         chordOccursInArray.sort();
@@ -837,38 +848,71 @@ function runAfterInput() {
             }
             const determinedChordValidity = determineValidChord(chordInfoPassThrough);
 
-            function determineIfChordHasTooManyExtensions(chordInfo) {
-                let valid = true;
-                if (chordInfo.numberOfExtraExtensions > 1) {
-                    valid = false;
-                }
-                return valid;
+            function determineNumberOfExtraExtensions(chordInfo) {
+                return chordInfo.numberOfExtraExtensions;
             }
-            const chordHasGoodNumberOfExtensions = determineIfChordHasTooManyExtensions(chordInfoPassThrough)
-            function logTheChord(theRoot, determinedChordQuality, determinedChordFunctions, chordOccursIn) {
+            const chordExtraExtensionNumber = determineNumberOfExtraExtensions(chordInfoPassThrough);
+
+            function determineIfChordHasCommonName(chordInfo) {
+                // let valid = true;
+                // if (chordInfo.numberOfExtraExtensions > 1) {
+                //     valid = false;
+                // }
+            }
+            const chordHasCommonName = determineIfChordHasCommonName(chordInfoPassThrough);
+
+            function logTheChord(theRoot, determinedChordQuality, determinedChordFunctions, chordOccursIn, chordInfo) {
                 let inversionText;
+                let log = "";
+                if (chordInfo.numberOfExtraExtensions == 2) {
+                    log += `
+The following may be an uncommon naming convention.
+
+`
+                };
+                if (chordInfo.numberOfExtraExtensions > 2) {
+                    log += `
+This naming convention is extremely uncommon - better to call it something else.
+
+`
+                };
                 inversionText = appliedInversionText;
                 chordQuality = determinedChordQuality.chordQuality
 
                 if (theRoot[1] === "#" || theRoot[1] === "b") {
                     theRoot = theRoot.replace(theRoot[1], theRoot[1] + "/")
                 }
-                chordOccursIn += determinedChordFunctions.join(" ");
+                chordOccursIn += `
+${determinedChordFunctions.join(" ")}`;
                 if (theRoot[0] === lowestNote || theRoot[0] + theRoot[1] === lowestNote) {
-                    console.log(`${theRoot}${chordQuality}`)
+                    log += (`${theRoot}${chordQuality}`)
                 } else {
-                    console.log(`${theRoot}${chordQuality} / ${lowestNote}`);
+                    log += (`${theRoot}${chordQuality} / ${lowestNote}`);
                 }
-                console.log(`Notes: ${chordArray.join(" ")}`);
+                log += (`
+Notes: ${chordArray.join(" ")}`);
                 if (unalteredNoteInput !== chordArray.join(" ")) {
-                    console.log(`Input Notes: ${unalteredNoteInput}`)
+                    log += (`Input Notes: ${unalteredNoteInput}`)
                 }
-                console.log(`${theRoot}${chordQuality}
+                log += (`
 ${inversionText}`)
-                console.log(chordOccursIn);
+                log += `${chordOccursIn}`;
+                return log;
             }
-            if (determinedChordValidity && chordHasGoodNumberOfExtensions) {
-                logTheChord(rootLetter, chordInfoPassThrough, determinedChordFunctions, determinedChordOccursIn);
+            if (determinedChordValidity) {
+                const loggedChord = logTheChord(rootLetter, chordInfoPassThrough, determinedChordFunctions, determinedChordOccursIn, chordInfoPassThrough);
+                function fillTheChordObject(chordExtraExtensionNumber) {
+                    chordPriorityObject[chordExtraExtensionNumber].push(loggedChord);
+                }
+                fillTheChordObject(chordExtraExtensionNumber);
+
+            }
+        }
+    }
+    for (const [key, value] of Object.entries(chordPriorityObject)) {
+        if (value.length > 0) {
+            for (let i = 0; i < value.length; i++) {
+                console.log(`${value[i]}`);
             }
         }
     }
