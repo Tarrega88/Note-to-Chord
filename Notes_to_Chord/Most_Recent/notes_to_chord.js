@@ -690,7 +690,7 @@ ${theRoot}${chordQuality} occurs as a:`;
 
                 return chordOccursIn;
             }
-            let determinedChordOccursIn = addToChordOccursIn(rootLetter, savedOriginalRoot, savedOriginalChordQuality, 0, chordInfoPassThrough);
+            let determinedChordOccursIn = addToChordOccursIn(rootLetter, chordInfoPassThrough);
 
             //should split findRelevantKeysAndSyncChordFunctionsToNotes into more specific functions soon
             function findRelevantKeysAndSyncChordFunctionsToNotes(rootCalculation) {
