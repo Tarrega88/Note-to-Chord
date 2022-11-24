@@ -13,14 +13,27 @@ header {
 
 .noteInput {
     width: 60px;
-    margin-left: 100px;
+    margin-left: 5%;
     margin-top: 5px;
     padding-block: 5px;
 }
 
 .confirmNotes {
     width: 100px;
-    margin-left: 80px;
+    margin-left: 2.5%;
     margin-top: 5px;
     padding-block:5px;
 }
+
+.chordTable {
+    width: 250px;
+    border-radius: 1px;
+    background-color: rgb(240, 240, 240);
+    border-color: black;
+    margin-top: 5px;
+    position:absolute;
+    left:25%;
+    top: 5%;
+
+}
+

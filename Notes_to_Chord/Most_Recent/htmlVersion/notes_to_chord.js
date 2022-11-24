@@ -58,14 +58,14 @@ document.querySelector(".confirmNotes").addEventListener("click", function () {
     };
 
     let chordPriorityObject = {
-        0: [],
-        1: [],
-        2: [],
-        3: [],
-        4: [],
-        5: [],
-        6: [],
-        7: [],
+        0: { Root: [], Position: [] },
+        1: { Root: [], Position: [] },
+        2: { Root: [], Position: [] },
+        3: { Root: [], Position: [] },
+        4: { Root: [], Position: [] },
+        5: { Root: [], Position: [] },
+        6: { Root: [], Position: [] },
+        7: { Root: [], Position: [] },
     };
 
 
@@ -824,6 +824,33 @@ document.querySelector(".confirmNotes").addEventListener("click", function () {
                 }
                 const chordHasCommonName = determineIfChordHasCommonName(chordInfoPassThrough);
 
+                function mergeRootAndQuality(theRoot, chordInfo) {
+                    // rootAndQualityArray.push(theRoot + chordInfo.chordQuality)
+                    // document.querySelector(`#root` + rowPosition).textContent = theRoot + chordInfo.chordQuality;
+                    let mergedRoot = "";
+                    let chordQuality = chordInfo.chordQuality;
+
+                    if (theRoot[1] === "#" || theRoot[1] === "b") {
+                        mergedRoot = theRoot.replace(theRoot[1], theRoot[1] + "/");
+                    }
+                    if (theRoot[0] === lowestNote || theRoot[0] + theRoot[1] === lowestNote) {
+                        mergedRoot = `${theRoot}${chordQuality}`;
+                    } else {
+                        mergedRoot = `${theRoot}${chordQuality} / ${lowestNote}`;
+                    }
+                    return mergedRoot;
+
+                }
+
+                const mergedRoot = mergeRootAndQuality(rootLetter, chordInfoPassThrough);
+
+                // function findThePosition(inversionText) {
+                //     let position = inversionText;
+                //     return position;
+
+                // }
+                // const thePosition = findThePosition(appliedInversionText);
+
                 function logTheChord(theRoot, determinedChordQuality, determinedChordFunctions, chordOccursIn, chordInfo) {
                     let inversionText;
                     let log = "";
@@ -864,35 +891,68 @@ document.querySelector(".confirmNotes").addEventListener("click", function () {
                 }
                 if (determinedChordValidity) {
                     const loggedChord = logTheChord(rootLetter, chordInfoPassThrough, determinedChordFunctions, determinedChordOccursIn, chordInfoPassThrough);
-                    function fillTheChordObject(chordExtraExtensionNumber) {
-                        chordPriorityObject[chordExtraExtensionNumber].push(loggedChord);
-                    }
-                    fillTheChordObject(chordExtraExtensionNumber);
-                }
-            }
-        }
-        function fillTheLog() {
-            let log = "";
-            let j = 1;
-            for (const [key, value] of Object.entries(chordPriorityObject)) {
-                if (value.length > 0) {
-                    for (let i = 0; i < value.length; i++) {
-                        if (!value[i].includes("undefined")) {
-                            log += (`
-                            
-Chord ${j}
-
-${value[i]}`);
-                            j ++;
+                    function fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfo, appliedInversionText) {
+                        if (chordInfo.chordQuality) {
+                            chordPriorityObject[chordExtraExtensionNumber].Root.push(mergedRoot);
+                            chordPriorityObject[chordExtraExtensionNumber].Position.push(appliedInversionText);
                         }
                     }
+                    fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfoPassThrough, appliedInversionText);
+
                 }
+            } //if !undefined
+        } //allChordInfo.length
+        function displayTheRootAndQuality() {
+            console.log(allChordInfo);
+            let counter = 1;
+            for (let i = 0; i < Object.keys(chordPriorityObject).length; i++) {
+                for (let j = 0; j < Object.values((chordPriorityObject)[i].Root).length; j++) {
+                    if (Object.values(chordPriorityObject)[i].Root[j].length > 0) {
+                        console.log("HERE")
+                        console.log(Object.values((chordPriorityObject)[i].Root))
+                        document.querySelector(`#root` + (i + counter)).textContent = Object.values(chordPriorityObject)[i].Root[j];
+                        document.querySelector(`#position` + (i + counter)).textContent = Object.values(chordPriorityObject)[i].Position[j];
+
+                        counter++;
+                    }
+                }
+                // for (let j = 0; j < Object.values((chordPriorityObject)[i].Position).length; j ++) {
+
+                // }
+
+
             }
-            return log;
         }
-        const filledLog = fillTheLog();
-        console.log(filledLog);
-        document.querySelector(".chordOutput").textContent = filledLog;
+        displayTheRootAndQuality();
+
+
+
+        //         function fillTheLog(chordExtraExtensionNumber) {
+        //             let log = [];
+        //             let j = 1;
+
+        //             for (const [key, value] of Object.entries(chordPriorityObject)) {
+        //                 // if (value.length > 0) {
+
+        //                     console.log(value);
+        //                     // console.log("HERE")
+        //                     for (let i = 0; i < Object.keys(value).length; i++) {
+        //                         // if (!value[i].includes("undefined")) {
+        //                             console.log("HERE")
+        //                             log.push(`
+
+        // Chord ${j}
+        // ${value[i]}`);
+        //                     document.querySelector(`#root` + j).textContent = chordPriorityObject[chordExtraExtensionNumber].Root[i];
+        //                             j ++;
+        //                         // }
+        //                     // }
+        //                 }
+        //             }
+        //             return log;
+        //         }
+        // const filledLog = fillTheLog(chordExtraExtensionNumber);
+        // document.querySelector(".chordOutput").textContent = filledLog;
     }
     runAfterInput();
 
