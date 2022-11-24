@@ -57,14 +57,14 @@ document.querySelector(".confirmNotes").addEventListener("click", function () {
     };
 
     let chordPriorityObject = {
-        0: { Root: [], Position: [] },
-        1: { Root: [], Position: [] },
-        2: { Root: [], Position: [] },
-        3: { Root: [], Position: [] },
-        4: { Root: [], Position: [] },
-        5: { Root: [], Position: [] },
-        6: { Root: [], Position: [] },
-        7: { Root: [], Position: [] },
+        0: { Root: [], Position: [], ChordFunction: [], },
+        1: { Root: [], Position: [], ChordFunction: [], },
+        2: { Root: [], Position: [], ChordFunction: [], },
+        3: { Root: [], Position: [], ChordFunction: [], },
+        4: { Root: [], Position: [], ChordFunction: [], },
+        5: { Root: [], Position: [], ChordFunction: [], },
+        6: { Root: [], Position: [], ChordFunction: [], },
+        7: { Root: [], Position: [], ChordFunction: [], },
     };
 
     function emptyDisplay() {
@@ -851,7 +851,6 @@ for (let i = 1; i <= 7; i ++) {
                 }
 
                 const mergedRoot = mergeRootAndQuality(rootLetter, chordInfoPassThrough);
-
                 // function findThePosition(inversionText) {
                 //     let position = inversionText;
                 //     return position;
@@ -862,6 +861,7 @@ for (let i = 1; i <= 7; i ++) {
                 function logTheChord(theRoot, determinedChordQuality, determinedChordFunctions, chordOccursIn, chordInfo) {
                     let inversionText;
                     let log = "";
+                    console.log(determinedChordFunctions)
                     if (chordInfo.numberOfExtraExtensions === 2) {
                         log += `
     The following may be an uncommon naming convention.
@@ -899,15 +899,18 @@ for (let i = 1; i <= 7; i ++) {
                 }
                 if (determinedChordValidity) {
                     const loggedChord = logTheChord(rootLetter, chordInfoPassThrough, determinedChordFunctions, determinedChordOccursIn, chordInfoPassThrough);
-                    function fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfo, appliedInversionText) {
+                    function fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfo, appliedInversionText, chordFunction) {
+                
                         if (chordInfo.basicChordQuality !== undefined && chordInfo.chordQuality !== undefined) {
                             // console.log(`CHORD INFO`)
                             // console.log(chordInfo)
                             chordPriorityObject[chordExtraExtensionNumber].Root.push(mergedRoot);
                             chordPriorityObject[chordExtraExtensionNumber].Position.push(appliedInversionText);
+                            chordPriorityObject[chordExtraExtensionNumber].ChordFunction.push(chordFunction);
+                            console.log(chordPriorityObject)
                         }
                     }
-                    fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfoPassThrough, appliedInversionText);
+                    fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfoPassThrough, appliedInversionText, determinedChordFunctions);
 
                 }
             } //if !undefined
@@ -920,6 +923,7 @@ for (let i = 1; i <= 7; i ++) {
                     // if (Object.values(chordPriorityObject)[i].Position[j].length > 0) {
                         document.querySelector('#root' + counter).textContent = Object.values(chordPriorityObject)[i].Root[j];
                         document.querySelector('#position' + counter).textContent = Object.values(chordPriorityObject)[i].Position[j];
+                        document.querySelector('#chordFunction' + counter).textContent = Object.values(chordPriorityObject)[i].ChordFunction[j];
 
                         counter++;
                     // }
