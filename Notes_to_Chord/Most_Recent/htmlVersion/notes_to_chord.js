@@ -1,5 +1,4 @@
 document.querySelector(".confirmNotes").addEventListener("click", function () {
-
     let chordArray = [];
     //adding notes for future refactors: inside of 5 functions
     let unalteredNoteInput = [];
@@ -67,6 +66,15 @@ document.querySelector(".confirmNotes").addEventListener("click", function () {
         6: { Root: [], Position: [] },
         7: { Root: [], Position: [] },
     };
+
+    function emptyDisplay() {
+for (let i = 1; i <= 7; i ++) {
+        document.querySelector(`#root` + i).textContent = "";
+        document.querySelector(`#position` + i).textContent = "";
+}
+
+    }
+    emptyDisplay();
 
 
     // function guitarInput() {
@@ -892,7 +900,9 @@ document.querySelector(".confirmNotes").addEventListener("click", function () {
                 if (determinedChordValidity) {
                     const loggedChord = logTheChord(rootLetter, chordInfoPassThrough, determinedChordFunctions, determinedChordOccursIn, chordInfoPassThrough);
                     function fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfo, appliedInversionText) {
-                        if (chordInfo.chordQuality) {
+                        if (chordInfo.basicChordQuality !== undefined && chordInfo.chordQuality !== undefined) {
+                            // console.log(`CHORD INFO`)
+                            // console.log(chordInfo)
                             chordPriorityObject[chordExtraExtensionNumber].Root.push(mergedRoot);
                             chordPriorityObject[chordExtraExtensionNumber].Position.push(appliedInversionText);
                         }
@@ -903,18 +913,16 @@ document.querySelector(".confirmNotes").addEventListener("click", function () {
             } //if !undefined
         } //allChordInfo.length
         function displayTheRootAndQuality() {
-            console.log(allChordInfo);
+            // console.log(allChordInfo);
             let counter = 1;
             for (let i = 0; i < Object.keys(chordPriorityObject).length; i++) {
                 for (let j = 0; j < Object.values((chordPriorityObject)[i].Root).length; j++) {
-                    if (Object.values(chordPriorityObject)[i].Root[j].length > 0) {
-                        console.log("HERE")
-                        console.log(Object.values((chordPriorityObject)[i].Root))
-                        document.querySelector(`#root` + (i + counter)).textContent = Object.values(chordPriorityObject)[i].Root[j];
-                        document.querySelector(`#position` + (i + counter)).textContent = Object.values(chordPriorityObject)[i].Position[j];
+                    // if (Object.values(chordPriorityObject)[i].Position[j].length > 0) {
+                        document.querySelector('#root' + counter).textContent = Object.values(chordPriorityObject)[i].Root[j];
+                        document.querySelector('#position' + counter).textContent = Object.values(chordPriorityObject)[i].Position[j];
 
                         counter++;
-                    }
+                    // }
                 }
                 // for (let j = 0; j < Object.values((chordPriorityObject)[i].Position).length; j ++) {
 
