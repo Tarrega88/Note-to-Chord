@@ -71,6 +71,7 @@ document.querySelector(".confirmNotes").addEventListener("click", function () {
 for (let i = 1; i <= 7; i ++) {
         document.querySelector(`#root` + i).textContent = "";
         document.querySelector(`#position` + i).textContent = "";
+        document.querySelector(`#chordFunction` + i).textContent = "";
 }
 
     }
