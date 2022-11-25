@@ -1,61 +1,108 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
 }
 
 body {
-    background-color: #d2cda2db
+  background-color: #d2cda2db;
 }
 header {
-    position: flex;
+  position: flex;
+  text-align: center;
 }
 
 .noteInput {
-    width: 60px;
-    margin-left: 5%;
-    margin-top: 5px;
-    padding-block: 5px;
+  width: 30px;
+  margin-left: 10px;
+  margin-top: 5px;
+  padding-block: 5px;
 }
 
 .confirmNotes {
-    width: 100px;
-    margin-left: 2.5%;
-    margin-top: 5px;
-    padding-block:5px;
+  width: 100px;
+  margin-left: 10px;
+  margin-top: 5px;
+  padding-block: 5px;
 }
 
 .chordTable {
-    width: 70%;
-    /* border: 1px solid black; */
-    /* border-radius: 1px; */
-    background-color: rgb(240, 240, 240);
-    /* border-color: black; */
-    margin-top: 5px;
-    position:absolute;
-    left:25%;
-    top: 5%;
-    white-space: pre-wrap;
-
+  width: 70%;
+  /* border: 1px solid black; */
+  /* border-radius: 1px; */
+  background-color: rgb(240, 240, 240);
+  /* border-color: black; */
+  margin-top: 5px;
+  position: absolute;
+  left: 25%;
+  top: 5%;
+  white-space: pre-wrap;
 }
 
 .chordTableRows {
-outline:black;
-outline-width: 1px;
-outline-offset: 1px;
-outline-style:solid;
-text-align:center;
+  outline: black;
+  outline-width: 1px;
+  outline-offset: 1px;
+  outline-style: solid;
+  text-align: center;
 }
 
 #rootTitle {
-font-size: 22px;
+  font-size: 22px;
 }
 
 #positionTitle {
-font-size: 22px;
+  font-size: 22px;
 }
 
 #chordFunctionTitle {
-font-size: 22px;
-
+  font-size: 22px;
 }
+
+/* .staffInput {
+  position: absolute;
+  background-color: white;
+  width: 20%;
+  height: 20%;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.staffInputRow {
+  outline: black;
+  outline-width: 1px;
+  outline-style: solid;
+  height: 15px;
+} */
+/* 
+.bassStaffInput {
+    position: absolute;
+    background-color: white;
+    width: 20%;
+    height: 20%;
+    margin-left: 10px;
+    margin-top: 175px;
+  }
+
+.bassStaffInputRow {
+    outline: black;
+    outline-width: 1px;
+    outline-style: solid;
+    height: 15px;
+  }
+
+  #staffInputFlat1 {
+    visibility: hidden;
+  }
+
+  #staffInputFlat2 {
+    visibility: hidden;
+  }
+
+  #staffInputFlat3 {
+    visibility: hidden;
+  }
+
+  #staffInputFlat4 {
+    visibility: hidden;
+  } */

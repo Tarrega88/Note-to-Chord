@@ -1,4 +1,4 @@
-document.querySelector(".confirmNotes").addEventListener("click", function () {
+function runMain() {
     let chordArray = [];
     //adding notes for future refactors: inside of 5 functions
     let unalteredNoteInput = [];
@@ -76,7 +76,6 @@ for (let i = 1; i <= 7; i ++) {
 
     }
     emptyDisplay();
-
 
     // function guitarInput() {
     //     let guitarNotes = [];
@@ -188,13 +187,13 @@ for (let i = 1; i <= 7; i ++) {
 
         let chordNotes = {};
         chordNotes = {
-            7: document.querySelector("#input7").value,
-            6: document.querySelector("#input6").value,
-            5: document.querySelector("#input5").value,
-            4: document.querySelector("#input4").value,
-            3: document.querySelector("#input3").value,
-            2: document.querySelector("#input2").value,
-            1: document.querySelector("#input1").value,
+            7: document.querySelector("#input7").value.replace(/ /g, ""),
+            6: document.querySelector("#input6").value.replace(/ /g, ""),
+            5: document.querySelector("#input5").value.replace(/ /g, ""),
+            4: document.querySelector("#input4").value.replace(/ /g, ""),
+            3: document.querySelector("#input3").value.replace(/ /g, ""),
+            2: document.querySelector("#input2").value.replace(/ /g, ""),
+            1: document.querySelector("#input1").value.replace(/ /g, ""),
         };
 
         function numberOfNotes() {
@@ -834,8 +833,6 @@ for (let i = 1; i <= 7; i ++) {
                 const chordHasCommonName = determineIfChordHasCommonName(chordInfoPassThrough);
 
                 function mergeRootAndQuality(theRoot, chordInfo) {
-                    // rootAndQualityArray.push(theRoot + chordInfo.chordQuality)
-                    // document.querySelector(`#root` + rowPosition).textContent = theRoot + chordInfo.chordQuality;
                     let mergedRoot = "";
                     let chordQuality = chordInfo.chordQuality;
 
@@ -970,5 +967,48 @@ for (let i = 1; i <= 7; i ++) {
         // document.querySelector(".chordOutput").textContent = filledLog;
     }
     runAfterInput();
+}
 
+let inputChoice = 1;
+
+function clearInput() {
+    for (let i = 1; i <= 7; i ++) {
+        document.querySelector("#input" + i).value = "";
+    }
+}
+
+    document.querySelector(".confirmNotes").addEventListener("click", function () {
+        runMain();
+        clearInput();
+        document.getElementById("input1").focus();
+        inputChoice = 1;
 });
+document.getElementById("input1").focus();
+document.addEventListener("keydown", function (e) {
+    if ((e.key === "ArrowUp" || e.key === " ") && inputChoice < 7) {
+        inputChoice++;
+        document.getElementById("input" + inputChoice).focus();
+    }
+    if (e.key === "ArrowDown" && inputChoice > 1) {
+        inputChoice--;
+        document.getElementById("input" + inputChoice).focus();
+    }
+    if (e.key === "Enter") {
+        runMain();
+        clearInput();
+        document.getElementById("input1").focus();
+        inputChoice = 1;
+    }
+});
+
+// for (let i = 1; i <= 4; i ++) {
+// document.querySelector("#staffInputFlat" + i).addEventListener("mouseover", function () {
+//     console.log("𝅝");
+//     document.getElementById("#staffInputFlat" + i).style = "visible";
+// });
+// }
+
+// document.querySelector("#staffInputFlat1").addEventListener("mouseover", function () {
+//     console.log("𝅝");
+//     document.querySelector("#staffInputFlat1").style = "visible";
+// });

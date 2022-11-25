@@ -12,32 +12,82 @@
       <h1>Note-to-Chord Tool</h1>
     </header>
     <main>
-      <section class="left">
-        <p><input class="noteInput" id="input7" /></p>
-        <p><input class="noteInput" id="input6" /></p>
-        <p><input class="noteInput" id="input5" /></p>
-        <p><input class="noteInput" id="input4" /></p>
-        <p><input class="noteInput" id="input3" /></p>
-        <p><input class="noteInput" id="input2" /></p>
-        <p><input class="noteInput" id="input1" /></p>
+      <!-- <section class="left"> -->
+      <p><input class="noteInput" id="input7" /></p>
+      <p><input class="noteInput" id="input6" /></p>
+      <p><input class="noteInput" id="input5" /></p>
+      <p><input class="noteInput" id="input4" /></p>
+      <p><input class="noteInput" id="input3" /></p>
+      <p><input class="noteInput" id="input2" /></p>
+      <p><input class="noteInput" id="input1" /></p>
 
-        <button class="confirmNotes">Display Chord</button>
-      </section>
+      <button class="confirmNotes">Display Chord</button>
+      <!-- </section> -->
 
       <section class="right">
-        <table class = "chordTable">
-          <tr class = "chordTableRows"><td id = "rootTitle">Chord</td><td id = "positionTitle">Inversion</td><td id = "chordFunctionTitle">Function</td></tr>
-          <tr class = "chordTableRows"><td id = "root1"></td><td id = "position1"></td><td id = "chordFunction1"></td></tr>
-          <tr class = "chordTableRows"><td id = "root2"></td><td id = "position2"></td><td id = "chordFunction2"></td></tr>
-          <tr class = "chordTableRows"><td id = "root3"></td><td id = "position3"></td><td id = "chordFunction3"></td></tr>
-          <tr class = "chordTableRows"><td id = "root4"></td><td id = "position4"></td><td id = "chordFunction4"></td></tr>
-          <tr class = "chordTableRows"><td id = "root5"></td><td id = "position5"></td><td id = "chordFunction5"></td></tr>
-          <tr class = "chordTableRows"><td id = "root6"></td><td id = "position6"></td><td id = "chordFunction6"></td></tr>
-          <tr class = "chordTableRows"><td id = "root7"></td><td id = "position7"></td><td id = "chordFunction7"></td></tr>
+        <table class="chordTable">
+          <tr class="chordTableRows">
+            <td id="rootTitle">Chord</td>
+            <td id="positionTitle">Inversion</td>
+            <td id="chordFunctionTitle">Function</td>
+          </tr>
+          <tr class="chordTableRows">
+            <td id="root1"></td>
+            <td id="position1"></td>
+            <td id="chordFunction1"></td>
+          </tr>
+          <tr class="chordTableRows">
+            <td id="root2"></td>
+            <td id="position2"></td>
+            <td id="chordFunction2"></td>
+          </tr>
+          <tr class="chordTableRows">
+            <td id="root3"></td>
+            <td id="position3"></td>
+            <td id="chordFunction3"></td>
+          </tr>
+          <tr class="chordTableRows">
+            <td id="root4"></td>
+            <td id="position4"></td>
+            <td id="chordFunction4"></td>
+          </tr>
+          <tr class="chordTableRows">
+            <td id="root5"></td>
+            <td id="position5"></td>
+            <td id="chordFunction5"></td>
+          </tr>
+          <tr class="chordTableRows">
+            <td id="root6"></td>
+            <td id="position6"></td>
+            <td id="chordFunction6"></td>
+          </tr>
+          <tr class="chordTableRows">
+            <td id="root7"></td>
+            <td id="position7"></td>
+            <td id="chordFunction7"></td>
+          </tr>
         </table>
         <p class="chordOutput"></p>
+      </section>
+      <section class="lower">
+        <table class="staffInput">
+          <!-- <tr class="staffInputRow">
+            Staff Input (Not Operating Yet - Use Text Input)
+          </tr> -->
+          <tr class="staffInputRow"><td id = "staffInputFlat1"></td></tr>
+          <tr class="staffInputRow"><td id = "staffInputFlat2"></td></tr>
+          <tr class="staffInputRow"><td id = "staffInputFlat3"></td></tr>
+          <tr class="staffInputRow"><td id = "staffInputFlat4"></td></tr>
+        </table>
+        <table class="bassStaffInput">
+          <tr class="bassStaffInputRow"><td id = "bassStaffInputFlat1">𝅝</td></tr>
+          <tr class="bassStaffInputRow"><td id = "bassStaffInputFlat2"></td></tr>
+          <tr class="bassStaffInputRow"><td id = "bassStaffInputFlat3"></td></tr>
+          <tr class="bassStaffInputRow"><td id = "bassStaffInputFlat4"></td></tr>
+</table>
       </section>
     </main>
     <script src="notes_to_chord.js"></script>
   </body>
 </html>
+
