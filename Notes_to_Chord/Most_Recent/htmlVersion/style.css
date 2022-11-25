@@ -34,6 +34,7 @@ header {
     position:absolute;
     left:25%;
     top: 5%;
+    white-space: pre-wrap;
 
 }
 

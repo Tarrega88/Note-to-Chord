@@ -900,7 +900,8 @@ for (let i = 1; i <= 7; i ++) {
                 if (determinedChordValidity) {
                     const loggedChord = logTheChord(rootLetter, chordInfoPassThrough, determinedChordFunctions, determinedChordOccursIn, chordInfoPassThrough);
                     function fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfo, appliedInversionText, chordFunction) {
-                
+                        
+                        
                         if (chordInfo.basicChordQuality !== undefined && chordInfo.chordQuality !== undefined) {
                             // console.log(`CHORD INFO`)
                             // console.log(chordInfo)
@@ -923,8 +924,9 @@ for (let i = 1; i <= 7; i ++) {
                     // if (Object.values(chordPriorityObject)[i].Position[j].length > 0) {
                         document.querySelector('#root' + counter).textContent = Object.values(chordPriorityObject)[i].Root[j];
                         document.querySelector('#position' + counter).textContent = Object.values(chordPriorityObject)[i].Position[j];
-                        document.querySelector('#chordFunction' + counter).textContent = Object.values(chordPriorityObject)[i].ChordFunction[j];
-
+                        // for (let k = 0; k < Object.values(chordPriorityObject)[i].ChordFunction[j].length; k ++) {
+                        document.querySelector('#chordFunction' + counter).textContent += Object.values(chordPriorityObject)[i].ChordFunction[j].join(" ");
+                        // }
                         counter++;
                     // }
                 }
