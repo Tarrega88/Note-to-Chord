@@ -41,7 +41,21 @@ header {
 
 .chordTableRows {
 outline:black;
-outline-width: 0.1px;
+outline-width: 1px;
 outline-offset: 1px;
-outline-style: auto;
+outline-style:solid;
+text-align:center;
+}
+
+#rootTitle {
+font-size: 22px;
+}
+
+#positionTitle {
+font-size: 22px;
+}
+
+#chordFunctionTitle {
+font-size: 22px;
+
 }
