@@ -925,7 +925,7 @@ for (let i = 1; i <= 7; i ++) {
                         document.querySelector('#root' + counter).textContent = Object.values(chordPriorityObject)[i].Root[j];
                         document.querySelector('#position' + counter).textContent = Object.values(chordPriorityObject)[i].Position[j];
                         // for (let k = 0; k < Object.values(chordPriorityObject)[i].ChordFunction[j].length; k ++) {
-                        document.querySelector('#chordFunction' + counter).textContent += Object.values(chordPriorityObject)[i].ChordFunction[j].join(" ");
+                        document.querySelector('#chordFunction' + counter).textContent = Object.values(chordPriorityObject)[i].ChordFunction[j].join(" ");
                         // }
                         counter++;
                     // }
