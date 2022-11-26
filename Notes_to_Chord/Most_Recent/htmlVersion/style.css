@@ -5,9 +5,7 @@
 }
 
 body {
-  /* background-color: #d2cda2db; */
   background-image: radial-gradient(#d2cda2db , #bab892);
-
 }
 header {
   position: flex;
@@ -33,12 +31,8 @@ header {
 }
 
 .chordTable {
-
   width: 70%;
-  /* border: 1px solid black; */
-  /* border-radius: 1px; */
   background-color: rgb(240, 240, 240);
-  /* border-color: black; */
   margin-top: 20px;
   position: absolute;
   left: 25%;
@@ -72,4 +66,9 @@ header {
   background-color: beige;
   
 
+}
+
+.chordFunction {
+text-align: left;
+padding-left: 15%;
 }
