@@ -40,7 +40,7 @@ function runMain() {
         },
 
         sus: {
-            intervals: [0, 5, 7],
+            intervals: [0, 5],
             restrictions: [3, 4],
         },
     };
@@ -833,9 +833,25 @@ function runMain() {
                 }
                 const chordHasCommonName = determineIfChordHasCommonName(chordInfoPassThrough);
 
-                function mergeRootAndQuality(theRoot, chordInfo) {
+function fixChordNames(chordInfo) {
+    let chordQuality = chordInfo.chordQuality;
+    if (chordInfo.chordQuality) {
+    if (chordQuality.includes("sus")) {
+        chordQuality = chordQuality.replace("sus", "") + "sus";
+    }
+    if (chordQuality.includes("dimfull")) {
+        chordQuality = chordQuality.replace("dimfull", " full")
+    }
+    if (chordQuality.includes("dim7")) {
+        chordQuality = chordQuality.replace("dim7", " half diminished 7");
+    }
+}
+    return chordQuality;
+}
+const fixedChordQuality = fixChordNames(chordInfoPassThrough);
+                function mergeRootAndQuality(theRoot, fixedChordQuality) {
                     let mergedRoot = "";
-                    let chordQuality = chordInfo.chordQuality;
+                    let chordQuality = fixedChordQuality;
 
                     if (theRoot[1] === "#" || theRoot[1] === "b") {
                         mergedRoot = theRoot.replace(theRoot[1], theRoot[1] + "/");
@@ -849,7 +865,7 @@ function runMain() {
 
                 }
 
-                const mergedRoot = mergeRootAndQuality(rootLetter, chordInfoPassThrough);
+                const mergedRoot = mergeRootAndQuality(rootLetter, fixedChordQuality);
                 if (determinedChordValidity) {
                     function fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfo, appliedInversionText, chordFunction) {
 
@@ -858,9 +874,6 @@ function runMain() {
                             chordPriorityObject[chordExtraExtensionNumber].Root.push(mergedRoot);
                             chordPriorityObject[chordExtraExtensionNumber].Position.push(appliedInversionText);
                             chordPriorityObject[chordExtraExtensionNumber].ChordFunction.push(chordFunction);
-                            console.log(chordArray);
-                            console.log(uniqueChordArray);
-                            console.log(chordInfo);
                         }
                     }
                     fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfoPassThrough, appliedInversionText, determinedChordFunctions);
