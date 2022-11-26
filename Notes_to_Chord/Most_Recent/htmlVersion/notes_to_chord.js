@@ -457,6 +457,9 @@ function runMain() {
                     let extraExtensionsCounter = 0;
                     function findSpecialExtensions(input, chordName, has5th, has7, basicChord) {
                         if (has7) {
+                            if (input.includes(5) && basicChord === "sus") {
+                                extraExtensionsCounter++;
+                            }
                             if (input.includes(1)) {
                                 chordName = chordName + "b9";
                                 extraExtensionsCounter++;
@@ -508,6 +511,9 @@ function runMain() {
                             } else if (input.includes(9)) {
                                 chordName = chordName + "6";
                             }
+                            if (input.includes(5) && unalteredChordName === "sus") {
+                                extraExtensionsCounter++;
+                            }
                             if (input.includes(3) && unalteredChordName !== "dim" && unalteredChordName !== "m") {
                                 chordName = chordName + "add #9";
                                 extraExtensionsCounter++;
@@ -516,10 +522,16 @@ function runMain() {
                                 chordName = chordName + "add11";
                                 extraExtensionsCounter++;
                             }
-                            if (input.includes(6) && !has5th && unalteredChordName !== "dim") {
+                            if (input.includes(6)) {
+                            if  (!has5th && unalteredChordName !== "dim") {
                                 chordName = chordName + "b5";
                                 extraExtensionsCounter++;
+                            } else 
+                            if (has5th && unalteredChordName !== "dim") {
+                                chordName = chordName + "add#11";
+                                extraExtensionsCounter++;
                             }
+                        }
                             if (input.includes(8) && !has5th && unalteredChordName !== "aug") {
                                 chordName = chordName + "#5";
                                 extraExtensionsCounter++;
