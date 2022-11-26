@@ -23,7 +23,7 @@ function runMain() {
     const basicChords = {
         dim: {
             intervals: [0, 3, 6],
-            restrictions: [4, 7, 8],
+            restrictions: [2, 4, 5, 7, 8, 11],
         },
 
         aug: {
@@ -69,6 +69,7 @@ function runMain() {
             document.querySelector(`#root` + i).textContent = "";
             document.querySelector(`#position` + i).textContent = "";
             document.querySelector(`#chordFunction` + i).textContent = "";
+            document.querySelector('#note' + i).textContent = "";
         }
 
     }
@@ -857,6 +858,9 @@ function runMain() {
                             chordPriorityObject[chordExtraExtensionNumber].Root.push(mergedRoot);
                             chordPriorityObject[chordExtraExtensionNumber].Position.push(appliedInversionText);
                             chordPriorityObject[chordExtraExtensionNumber].ChordFunction.push(chordFunction);
+                            console.log(chordArray);
+                            console.log(uniqueChordArray);
+                            console.log(chordInfo);
                         }
                     }
                     fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfoPassThrough, appliedInversionText, determinedChordFunctions);
@@ -876,6 +880,13 @@ function runMain() {
             }
         }
         displayTheRootAndQuality();
+        function displayInputNotes() {
+            for (let i = 1; i <= uniqueChordArray.length; i ++) {
+                document.querySelector('#note' + i).textContent = uniqueChordArray[i - 1];
+            }
+
+        }
+        displayInputNotes();
 
     }
     runAfterInput();
