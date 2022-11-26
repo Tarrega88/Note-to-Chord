@@ -823,17 +823,16 @@ function runMain() {
                     return chordInfo.numberOfExtraExtensions;
                 }
                 const chordExtraExtensionNumber = determineNumberOfExtraExtensions(chordInfoPassThrough);
-
                 //This function is currently unused but its purpose would be to restrict the display of chords down to only those with less than a number of extra extensions.  May make this a checkbox option for displaying only simple chords.
-                function determineIfChordHasCommonName(determinedChordValidity, chordInfo) {
+                function determineIfChordHasCommonName(determinedChordValidity, chordInfo, allChordInfo) {
                     let valid = determinedChordValidity// let valid = true;
-                    if (chordInfo.numberOfExtraExtensions > 1) {
+                    if (chordInfo.numberOfExtraExtensions > 1 && allChordInfo.length > 1) {
                         valid = false;
                     }
                     return valid;
                 }
             if (!checked) {
-                 determinedChordValidity = determineIfChordHasCommonName(determinedChordValidity, chordInfoPassThrough);
+                 determinedChordValidity = determineIfChordHasCommonName(determinedChordValidity, chordInfoPassThrough, allChordInfo);
             }
 
 function fixChordQuality(chordInfo) {
