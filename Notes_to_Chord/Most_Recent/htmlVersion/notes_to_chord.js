@@ -508,7 +508,6 @@ function runMain() {
                                 extraExtensionsCounter++;
                             } else if (input.includes(9)) {
                                 chordName = chordName + "6";
-                                extraExtensionsCounter++;
                             }
                             if (input.includes(3) && unalteredChordName !== "dim" && unalteredChordName !== "m") {
                                 chordName = chordName + "add #9";
@@ -818,7 +817,7 @@ function runMain() {
                     }
                     return valid;
                 }
-                const determinedChordValidity = determineValidChord(chordInfoPassThrough);
+                let determinedChordValidity = determineValidChord(chordInfoPassThrough);
 
                 function determineNumberOfExtraExtensions(chordInfo) {
                     return chordInfo.numberOfExtraExtensions;
@@ -826,14 +825,18 @@ function runMain() {
                 const chordExtraExtensionNumber = determineNumberOfExtraExtensions(chordInfoPassThrough);
 
                 //This function is currently unused but its purpose would be to restrict the display of chords down to only those with less than a number of extra extensions.  May make this a checkbox option for displaying only simple chords.
-                function determineIfChordHasCommonName(chordInfo) {// let valid = true;
-                    // if (chordInfo.numberOfExtraExtensions > 1) {
-                    //     valid = false;
-                    // }
+                function determineIfChordHasCommonName(determinedChordValidity, chordInfo) {
+                    let valid = determinedChordValidity// let valid = true;
+                    if (chordInfo.numberOfExtraExtensions > 1) {
+                        valid = false;
+                    }
+                    return valid;
                 }
-                const chordHasCommonName = determineIfChordHasCommonName(chordInfoPassThrough);
+            if (!checked) {
+                 determinedChordValidity = determineIfChordHasCommonName(determinedChordValidity, chordInfoPassThrough);
+            }
 
-function fixChordNames(chordInfo) {
+function fixChordQuality(chordInfo) {
     let chordQuality = chordInfo.chordQuality;
     if (chordInfo.chordQuality) {
     if (chordQuality.includes("sus")) {
@@ -848,7 +851,20 @@ function fixChordNames(chordInfo) {
 }
     return chordQuality;
 }
-const fixedChordQuality = fixChordNames(chordInfoPassThrough);
+const fixedChordQuality = fixChordQuality(chordInfoPassThrough);
+
+function fixRoot(theRoot) {
+if (theRoot.length>2) {
+    for (let i = 0; i < chordArray.length; i ++) {
+        if (theRoot.slice(2) === (chordArray[i]) || theRoot.slice(0, 2) === chordArray[i]) {
+            theRoot = chordArray[i];
+        }
+    }
+}
+return theRoot;
+}
+
+const fixedRoot = fixRoot(rootLetter);
                 function mergeRootAndQuality(theRoot, fixedChordQuality) {
                     let mergedRoot = "";
                     let chordQuality = fixedChordQuality;
@@ -865,7 +881,7 @@ const fixedChordQuality = fixChordNames(chordInfoPassThrough);
 
                 }
 
-                const mergedRoot = mergeRootAndQuality(rootLetter, fixedChordQuality);
+                const mergedRoot = mergeRootAndQuality(fixedRoot, fixedChordQuality);
                 if (determinedChordValidity) {
                     function fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfo, appliedInversionText, chordFunction) {
 
@@ -935,4 +951,9 @@ document.addEventListener("keydown", function (e) {
         document.getElementById("input1").focus();
         inputChoice = 1;
     }
+});
+
+let checked = false;
+document.querySelector("#extraChordCheckBox").addEventListener("change", function () {
+    checked === false ? checked = true : checked = false;
 });
