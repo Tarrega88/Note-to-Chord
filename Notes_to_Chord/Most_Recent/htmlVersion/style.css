@@ -80,10 +80,14 @@ padding-left: 15%;
   width: 200px;
   height: 30px;
   padding-top: 10px;
-  text-align: center;
+  text-align: left;
+  text-indent: 15px;
 }
 
 #extraChordCheckBox {
-margin-left: 20px;
+margin-left: 6px;
+margin-top:3px;
+position: absolute;
+
 
 }

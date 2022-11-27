@@ -523,15 +523,15 @@ function runMain() {
                                 extraExtensionsCounter++;
                             }
                             if (input.includes(6)) {
-                            if  (!has5th && unalteredChordName !== "dim") {
-                                chordName = chordName + "b5";
-                                extraExtensionsCounter++;
-                            } else 
-                            if (has5th && unalteredChordName !== "dim") {
-                                chordName = chordName + "add#11";
-                                extraExtensionsCounter++;
+                                if (!has5th && unalteredChordName !== "dim") {
+                                    chordName = chordName + "b5";
+                                    extraExtensionsCounter++;
+                                } else
+                                    if (has5th && unalteredChordName !== "dim") {
+                                        chordName = chordName + "add#11";
+                                        extraExtensionsCounter++;
+                                    }
                             }
-                        }
                             if (input.includes(8) && !has5th && unalteredChordName !== "aug") {
                                 chordName = chordName + "#5";
                                 extraExtensionsCounter++;
@@ -549,7 +549,7 @@ function runMain() {
                         } else {
                             return;
                         }
-                       
+
                     }
                     const triadExtensionsFound = findTriadExtensions(foundBasicValue, foundBasicValue, hasPerfect5th, inversionChecker);
                     allChordInfo.push({
@@ -842,39 +842,39 @@ function runMain() {
                     }
                     return valid;
                 }
-            if (!checked) {
-                 determinedChordValidity = determineIfChordHasCommonName(determinedChordValidity, chordInfoPassThrough, allChordInfo);
-            }
+                if (!checked) {
+                    determinedChordValidity = determineIfChordHasCommonName(determinedChordValidity, chordInfoPassThrough, allChordInfo);
+                }
 
-function fixChordQuality(chordInfo) {
-    let chordQuality = chordInfo.chordQuality;
-    if (chordInfo.chordQuality) {
-    if (chordQuality.includes("sus")) {
-        chordQuality = chordQuality.replace("sus", "") + "sus";
-    }
-    if (chordQuality.includes("dimfull")) {
-        chordQuality = chordQuality.replace("dimfull", " full")
-    }
-    if (chordQuality.includes("dim7")) {
-        chordQuality = chordQuality.replace("dim7", " half diminished 7");
-    }
-}
-    return chordQuality;
-}
-const fixedChordQuality = fixChordQuality(chordInfoPassThrough);
+                function fixChordQuality(chordInfo) {
+                    let chordQuality = chordInfo.chordQuality;
+                    if (chordInfo.chordQuality) {
+                        if (chordQuality.includes("sus")) {
+                            chordQuality = chordQuality.replace("sus", "") + "sus";
+                        }
+                        if (chordQuality.includes("dimfull")) {
+                            chordQuality = chordQuality.replace("dimfull", " full")
+                        }
+                        if (chordQuality.includes("dim7")) {
+                            chordQuality = chordQuality.replace("dim7", " half diminished 7");
+                        }
+                    }
+                    return chordQuality;
+                }
+                const fixedChordQuality = fixChordQuality(chordInfoPassThrough);
 
-function fixRoot(theRoot) {
-if (theRoot.length>2) {
-    for (let i = 0; i < chordArray.length; i ++) {
-        if (theRoot.slice(2) === (chordArray[i]) || theRoot.slice(0, 2) === chordArray[i]) {
-            theRoot = chordArray[i];
-        }
-    }
-}
-return theRoot;
-}
+                function fixRoot(theRoot) {
+                    if (theRoot.length > 2) {
+                        for (let i = 0; i < chordArray.length; i++) {
+                            if (theRoot.slice(2) === (chordArray[i]) || theRoot.slice(0, 2) === chordArray[i]) {
+                                theRoot = chordArray[i];
+                            }
+                        }
+                    }
+                    return theRoot;
+                }
 
-const fixedRoot = fixRoot(rootLetter);
+                const fixedRoot = fixRoot(rootLetter);
                 function mergeRootAndQuality(theRoot, fixedChordQuality) {
                     let mergedRoot = "";
                     let chordQuality = fixedChordQuality;
@@ -920,7 +920,7 @@ const fixedRoot = fixRoot(rootLetter);
         }
         displayTheRootAndQuality();
         function displayInputNotes() {
-            for (let i = 1; i <= uniqueChordArray.length; i ++) {
+            for (let i = 1; i <= uniqueChordArray.length; i++) {
                 document.querySelector('#note' + i).textContent = uniqueChordArray[i - 1];
             }
 
@@ -962,6 +962,15 @@ document.addEventListener("keydown", function (e) {
         inputChoice = 1;
     }
 });
+
+function saveInputClickLocation() {
+    for (let i = 1; i <= 7; i++) {
+        document.querySelector("#input" + i).addEventListener("click", function () {
+            inputChoice = i;
+        });
+    }
+}
+saveInputClickLocation();
 
 let checked = false;
 document.querySelector("#extraChordCheckBox").addEventListener("change", function () {
