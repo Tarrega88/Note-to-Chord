@@ -6,7 +6,15 @@ function runMain() {
     let aOrAn = "";
 
     let whatThisChordCanBe = [];
-
+const guitarStrings = {
+    1 : ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",],
+    2 : ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",],
+    3 : ["g", "g#", "a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#",],
+    4 : ["d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#",],
+    5 : ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#",],
+    6 : ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",],
+    7 : ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",],
+}
     const romanNumerals = {
         majorRN: ["major-i", "skip", "major-ii", "skip", "major-iii", "major-iv", "skip", "major-v", "skip", "major-vi", "skip", "major-vii",],
         naturalMinorRN: ["minor-i", "skip", "minor-ii", "minor-iii", "skip", "minor-iv", "skip", "minor-v", "minor-vi", "skip", "minor-vii", "skip",],
@@ -74,8 +82,7 @@ function runMain() {
 
     }
     emptyDisplay();
-
-    function guitarInput() {
+    function guitarInput(guitarStrings) {
         let guitarNotes = [];
         let guitarArray = [];
         guitarNotes.length = 7;
@@ -91,7 +98,6 @@ function runMain() {
             1: document.querySelector("#input1").value.replace(/ /g, ""),
         };
 
-
         for (let i = 0; i < 7; i ++) {
             let guitarNote = "x";
             if (Object.values(chordNotes)[i].length > 0) {
@@ -105,21 +111,13 @@ function runMain() {
             }
         }
 
-        let guitarString1 = ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",];
-        let guitarString2 = ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",];
-        let guitarString3 = ["g", "g#", "a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#",];
-        let guitarString4 = ["d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#",];
-        let guitarString5 = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#",];
-        let guitarString6 = ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",];
-        let guitarString7 = ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",];
-
-        let input1 = guitarString1.at(guitarArray[6]);
-        let input2 = guitarString2.at(guitarArray[5]);
-        let input3 = guitarString3.at(guitarArray[4]);
-        let input4 = guitarString4.at(guitarArray[3]);
-        let input5 = guitarString5.at(guitarArray[2]);
-        let input6 = guitarString6.at(guitarArray[1]);
-        let input7 = guitarString7.at(guitarArray[0]);
+        let input1 = guitarStrings[1].at(guitarArray[6]);
+        let input2 = guitarStrings[2].at(guitarArray[5]);
+        let input3 = guitarStrings[3].at(guitarArray[4]);
+        let input4 = guitarStrings[4].at(guitarArray[3]);
+        let input5 = guitarStrings[5].at(guitarArray[2]);
+        let input6 = guitarStrings[6].at(guitarArray[1]);
+        let input7 = guitarStrings[7].at(guitarArray[0]);
 
   if (input7.length > 0 && input7.toLowerCase().charCodeAt() >= 97 && input7.toLowerCase().charCodeAt() <= 103) {
             guitarNotes[0] = input7;
@@ -145,7 +143,7 @@ function runMain() {
         whatAreTheGuitarNotes(guitarNotes, guitarArray);
     }
     if (guitarChecked) {
-        guitarInput();
+    guitarInput(guitarStrings);
     }
 
     function determineScalesToPush() {
@@ -227,7 +225,7 @@ function runMain() {
                 unalteredNoteInput.push(chordNote);
                 for (let j = 0; j < chromaticArrayKey.length; j++) {
                     if (chromaticArrayKey[j].slice(2) === chordNote || chromaticArrayKey[j].slice(0, 2) === chordNote || chromaticArrayKey[j] === chordNote) {
-                        if (!chordArray.includes(chordNote)) {
+                            if (!chordArray.includes(chordNote)) {
                             chordArray.push(chordNote);
                             indexArray.push(j);
                         }
@@ -638,10 +636,10 @@ if (!guitarChecked) {
 
                 const foundRoot = findRoot(determinedInversionNumber);
 
-                function applyInversionText(fromLowestUpToRoot, determinedChordQuality) {
+                function applyInversionText(fromLowestUpToRoot, chordInfo) {
                     let position = "";
-                    chordQuality = determinedChordQuality.chordQuality;
                     fromLowestUpToRoot = fromLowestUpToRoot % 12;
+                    //chordInfo.numberOfExtraExtensions is actually just a sort of marker for how "weird" a chord is. While there is technically no extra extension happening in these positions, the logic later on sorts chords based on their number of extra extensions, and high numbered inversions are so rare that they ought to be counted as outliers, so they're getting an extra point on the "weird" scale here to help with sorting.
                     switch (fromLowestUpToRoot) {
                         case 0:
                             position = "Root Position";
@@ -654,6 +652,7 @@ if (!guitarChecked) {
                             break;
                         case 3:
                             position = "6th Inversion (13 in Bass)";
+                            chordInfo.numberOfExtraExtensions ++;
                             break;
                         case 4:
                             position = "2nd Inversion (Sharp 5 in Bass)";
@@ -666,6 +665,7 @@ if (!guitarChecked) {
                             break;
                         case 7:
                             position = "5th Inversion (11 in Bass)";
+                            chordInfo.numberOfExtraExtensions ++;
                             break;
                         case 8:
                             position = "1st Inversion (Major 3rd in Bass)";
@@ -675,9 +675,11 @@ if (!guitarChecked) {
                             break;
                         case 10:
                             position = "4th Inversion (9 in Bass)";
+                            chordInfo.numberOfExtraExtensions ++;
                             break;
                         case 11:
                             position = "4th Inversion (b9 in Bass)";
+                            chordInfo.numberOfExtraExtensions ++;
                             break;
                     }
                     return position;
@@ -769,14 +771,14 @@ if (!guitarChecked) {
                             if (basicChordQuality === "major") {
                                 romanNumeral = romanNumeral.toUpperCase();
                             }
-                            if (basicChordQuality === "minor") {
+                            if (basicChordQuality === "m") {
                                 romanNumeral = romanNumeral.toLowerCase();
                             }
-                            if (basicChordQuality === "diminished") {
-                                romanNumeral = `diminished ` + romanNumeral.toLowerCase();
+                            if (basicChordQuality === "dim") {
+                                romanNumeral = `Diminished ` + romanNumeral.toLowerCase();
                             }
-                            if (basicChordQuality === "augmented") {
-                                romanNumeral = `augmented ` + romanNumeral.toUpperCase();
+                            if (basicChordQuality === "aug") {
+                                romanNumeral = `Augmented ` + romanNumeral.toUpperCase();
                             }
                             if (majorOrMinor.includes("_")) {
                                 majorOrMinor = majorOrMinor.replace("_", " ");
@@ -845,7 +847,6 @@ if (!guitarChecked) {
                     return chordInfo.numberOfExtraExtensions;
                 }
                 const chordExtraExtensionNumber = determineNumberOfExtraExtensions(chordInfoPassThrough);
-                //This function is currently unused but its purpose would be to restrict the display of chords down to only those with less than a number of extra extensions.  May make this a checkbox option for displaying only simple chords.
                 function determineIfChordHasCommonName(determinedChordValidity, chordInfo, allChordInfo) {
                     let valid = determinedChordValidity// let valid = true;
                     if (chordInfo.numberOfExtraExtensions > 1 && allChordInfo.length > 1) {
@@ -908,7 +909,6 @@ if (!guitarChecked) {
                         mergedRoot = `${theRoot}${chordQuality} / ${lowestNote}`;
                     }
                     return mergedRoot;
-
                 }
 
                 const mergedRoot = mergeRootAndQuality(fixedRoot, fixedChordQuality);
@@ -931,17 +931,6 @@ if (!guitarChecked) {
 
         } //allChordInfo.length
         function sortTheChordObjectByInversion() {
-            let sortedPriorityObject = {
-                0: { Root: [], Position: [], ChordFunction: [], },
-                1: { Root: [], Position: [], ChordFunction: [], },
-                2: { Root: [], Position: [], ChordFunction: [], },
-                3: { Root: [], Position: [], ChordFunction: [], },
-                4: { Root: [], Position: [], ChordFunction: [], },
-                5: { Root: [], Position: [], ChordFunction: [], },
-                6: { Root: [], Position: [], ChordFunction: [], },
-                7: { Root: [], Position: [], ChordFunction: [], },
-            };
-
         for (let i = 0; i < Object.keys(chordPriorityObject).length; i ++) {
             let array = [];
             if (Object.values(chordPriorityObject)[i].Root.length > 0) {
@@ -961,16 +950,15 @@ if (!guitarChecked) {
                 if (array[j].Position[0] === "0") {
                    array[j].Position = array[j].Position.replace("0", "");
                 }
-            sortedPriorityObject[i].Root.push(array[j].Root);
-            sortedPriorityObject[i].Position.push(array[j].Position);
-            sortedPriorityObject[i].ChordFunction.push(array[j].ChordFunction);
+            chordPriorityObject[i].Root[j] = array[j].Root;
+            chordPriorityObject[i].Position[j] = array[j].Position;
+            chordPriorityObject[i].ChordFunction[j] = array[j].ChordFunction;
             }
         }
-        return sortedPriorityObject
         }
-     const sortedChordPriority = sortTheChordObjectByInversion();
+     sortTheChordObjectByInversion();
 
-        function displayTheRootAndQuality(chordPriorityObject) {
+        function displayTheRootAndQuality() {
             let counter = 1;
             for (let i = 0; i < Object.keys(chordPriorityObject).length; i++) {
                 for (let j = 0; j < Object.values((chordPriorityObject)[i].Root).length; j++) {
@@ -981,12 +969,11 @@ if (!guitarChecked) {
                 }
             }
         }
-        displayTheRootAndQuality(sortedChordPriority);
+        displayTheRootAndQuality();
         function displayInputNotes() {
             for (let i = 1; i <= uniqueChordArray.length; i++) {
                 document.querySelector('#note' + i).textContent = uniqueChordArray[i - 1];
             }
-
         }
         displayInputNotes();
 
