@@ -872,6 +872,12 @@ if (!guitarChecked) {
                         if (chordQuality.includes("add")) {
                             chordQuality = chordQuality.replace("add", " add");
                         }
+                        if (chordQuality.includes("mmaj")) {
+                            chordQuality = chordQuality.replace("mmaj", "m maj");
+                        }
+                        if (chordQuality.includes("augmaj")) {
+                            chordQuality = chordQuality.replace("augmaj", "aug maj");
+                        }
                     }
                     return chordQuality;
                 }
@@ -915,13 +921,56 @@ if (!guitarChecked) {
                             chordPriorityObject[chordExtraExtensionNumber].Position.push(appliedInversionText);
                             chordPriorityObject[chordExtraExtensionNumber].ChordFunction.push(chordFunction);
                         }
+                        return chordPriorityObject;
                     }
                     fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfoPassThrough, appliedInversionText, determinedChordFunctions);
 
+              
                 }
             } //if !undefined
+
         } //allChordInfo.length
-        function displayTheRootAndQuality() {
+        function sortTheChordObjectByInversion() {
+            let sortedPriorityObject = {
+                0: { Root: [], Position: [], ChordFunction: [], },
+                1: { Root: [], Position: [], ChordFunction: [], },
+                2: { Root: [], Position: [], ChordFunction: [], },
+                3: { Root: [], Position: [], ChordFunction: [], },
+                4: { Root: [], Position: [], ChordFunction: [], },
+                5: { Root: [], Position: [], ChordFunction: [], },
+                6: { Root: [], Position: [], ChordFunction: [], },
+                7: { Root: [], Position: [], ChordFunction: [], },
+            };
+
+        for (let i = 0; i < Object.keys(chordPriorityObject).length; i ++) {
+            let array = [];
+            if (Object.values(chordPriorityObject)[i].Root.length > 0) {
+            }
+            for (let j = 0; j < Object.values(chordPriorityObject)[i].Position.length; j ++) {
+                if (Object.values(chordPriorityObject)[i].Position[j] === "Root Position") {
+                Object.values(chordPriorityObject)[i].Position[j] = "0" + Object.values(chordPriorityObject)[i].Position[j]
+                }
+                array.push({Root: Object.values(chordPriorityObject)[i].Root[j], Position: Object.values(chordPriorityObject)[i].Position[j], ChordFunction: Object.values(chordPriorityObject)[i].ChordFunction[j]});
+            }
+
+            array.sort(function(a,b) {
+                return ((a.Position < b.Position) ? -1 : ((a.Position === b.Position) ? 0 : 1));
+            });
+
+            for (let j = 0; j < array.length; j ++) {
+                if (array[j].Position[0] === "0") {
+                   array[j].Position = array[j].Position.replace("0", "");
+                }
+            sortedPriorityObject[i].Root.push(array[j].Root);
+            sortedPriorityObject[i].Position.push(array[j].Position);
+            sortedPriorityObject[i].ChordFunction.push(array[j].ChordFunction);
+            }
+        }
+        return sortedPriorityObject
+        }
+     const sortedChordPriority = sortTheChordObjectByInversion();
+
+        function displayTheRootAndQuality(chordPriorityObject) {
             let counter = 1;
             for (let i = 0; i < Object.keys(chordPriorityObject).length; i++) {
                 for (let j = 0; j < Object.values((chordPriorityObject)[i].Root).length; j++) {
@@ -932,7 +981,7 @@ if (!guitarChecked) {
                 }
             }
         }
-        displayTheRootAndQuality();
+        displayTheRootAndQuality(sortedChordPriority);
         function displayInputNotes() {
             for (let i = 1; i <= uniqueChordArray.length; i++) {
                 document.querySelector('#note' + i).textContent = uniqueChordArray[i - 1];
