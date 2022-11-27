@@ -6,15 +6,15 @@ function runMain() {
     let aOrAn = "";
 
     let whatThisChordCanBe = [];
-const guitarStrings = {
-    1 : ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",],
-    2 : ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",],
-    3 : ["g", "g#", "a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#",],
-    4 : ["d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#",],
-    5 : ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#",],
-    6 : ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",],
-    7 : ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",],
-}
+    const guitarStrings = {
+        1: ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",],
+        2: ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",],
+        3: ["g", "g#", "a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#",],
+        4: ["d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#",],
+        5: ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#",],
+        6: ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",],
+        7: ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",],
+    }
     const romanNumerals = {
         majorRN: ["major-i", "skip", "major-ii", "skip", "major-iii", "major-iv", "skip", "major-v", "skip", "major-vi", "skip", "major-vii",],
         naturalMinorRN: ["minor-i", "skip", "minor-ii", "minor-iii", "skip", "minor-iv", "skip", "minor-v", "minor-vi", "skip", "minor-vii", "skip",],
@@ -98,10 +98,10 @@ const guitarStrings = {
             1: document.querySelector("#input1").value.replace(/ /g, ""),
         };
 
-        for (let i = 0; i < 7; i ++) {
+        for (let i = 0; i < 7; i++) {
             let guitarNote = "x";
             if (Object.values(chordNotes)[i].length > 0) {
-            guitarNote = Object.values(chordNotes)[i]
+                guitarNote = Object.values(chordNotes)[i]
             };
             if (!isNaN(guitarNote)) {
                 guitarNote = Number(guitarNote) % 12;
@@ -119,7 +119,7 @@ const guitarStrings = {
         let input6 = guitarStrings[6].at(guitarArray[1]);
         let input7 = guitarStrings[7].at(guitarArray[0]);
 
-  if (input7.length > 0 && input7.toLowerCase().charCodeAt() >= 97 && input7.toLowerCase().charCodeAt() <= 103) {
+        if (input7.length > 0 && input7.toLowerCase().charCodeAt() >= 97 && input7.toLowerCase().charCodeAt() <= 103) {
             guitarNotes[0] = input7;
         }
         if (input6.toLowerCase().charCodeAt() >= 97 && input6.toLowerCase().charCodeAt() <= 103) {
@@ -143,9 +143,8 @@ const guitarStrings = {
         whatAreTheGuitarNotes(guitarNotes, guitarArray);
     }
     if (guitarChecked) {
-    guitarInput(guitarStrings);
+        guitarInput(guitarStrings);
     }
-
     function determineScalesToPush() {
 
         const rootScalesToPush = {
@@ -225,7 +224,7 @@ const guitarStrings = {
                 unalteredNoteInput.push(chordNote);
                 for (let j = 0; j < chromaticArrayKey.length; j++) {
                     if (chromaticArrayKey[j].slice(2) === chordNote || chromaticArrayKey[j].slice(0, 2) === chordNote || chromaticArrayKey[j] === chordNote) {
-                            if (!chordArray.includes(chordNote)) {
+                        if (!chordArray.includes(chordNote)) {
                             chordArray.push(chordNote);
                             indexArray.push(j);
                         }
@@ -239,9 +238,9 @@ const guitarStrings = {
         }
         unalteredNoteInput = unalteredNoteInput.join(" ");
     }
-if (!guitarChecked) {
-    whatAreTheNotes();
-};
+    if (!guitarChecked) {
+        whatAreTheNotes();
+    };
     function whatAreTheGuitarNotes(guitarNotes, guitarArray) {
         for (let i = 0; i < guitarNotes.length; i++) {
             let chordNotes = guitarNotes[i];
@@ -262,9 +261,16 @@ if (!guitarChecked) {
                     }
                 }
             }
+            if (document.querySelector("#input" + (i + 1)).value.length > 0 && Number(document.querySelector("#input" + (i + 1)).value) >= 0 && Number(document.querySelector("#input" + (i + 1)).value) <= 24) {
+                document.querySelector('#note' + (i + 1)).textContent = + document.querySelector("#input" + (i + 1)).value + ": " + chordNotes;
+            }
+
         }
         unalteredNoteInput = unalteredNoteInput.join(",").replace(/,/g, " ").trim();
+
     }
+
+
     function runAfterInput() {
         const uniqueChordArray = [...new Set(chordArray)];
         indexArray = [...new Set(indexArray)];
@@ -652,7 +658,7 @@ if (!guitarChecked) {
                             break;
                         case 3:
                             position = "6th Inversion (13 in Bass)";
-                            chordInfo.numberOfExtraExtensions ++;
+                            chordInfo.numberOfExtraExtensions++;
                             break;
                         case 4:
                             position = "2nd Inversion (Sharp 5 in Bass)";
@@ -665,7 +671,7 @@ if (!guitarChecked) {
                             break;
                         case 7:
                             position = "5th Inversion (11 in Bass)";
-                            chordInfo.numberOfExtraExtensions ++;
+                            chordInfo.numberOfExtraExtensions++;
                             break;
                         case 8:
                             position = "1st Inversion (Major 3rd in Bass)";
@@ -675,11 +681,11 @@ if (!guitarChecked) {
                             break;
                         case 10:
                             position = "4th Inversion (9 in Bass)";
-                            chordInfo.numberOfExtraExtensions ++;
+                            chordInfo.numberOfExtraExtensions++;
                             break;
                         case 11:
                             position = "4th Inversion (b9 in Bass)";
-                            chordInfo.numberOfExtraExtensions ++;
+                            chordInfo.numberOfExtraExtensions++;
                             break;
                     }
                     return position;
@@ -925,38 +931,39 @@ if (!guitarChecked) {
                     }
                     fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfoPassThrough, appliedInversionText, determinedChordFunctions);
 
-              
+
                 }
+
             } //if !undefined
 
         } //allChordInfo.length
         function sortTheChordObjectByInversion() {
-        for (let i = 0; i < Object.keys(chordPriorityObject).length; i ++) {
-            let array = [];
-            if (Object.values(chordPriorityObject)[i].Root.length > 0) {
-            }
-            for (let j = 0; j < Object.values(chordPriorityObject)[i].Position.length; j ++) {
-                if (Object.values(chordPriorityObject)[i].Position[j] === "Root Position") {
-                Object.values(chordPriorityObject)[i].Position[j] = "0" + Object.values(chordPriorityObject)[i].Position[j]
+            for (let i = 0; i < Object.keys(chordPriorityObject).length; i++) {
+                let array = [];
+                if (Object.values(chordPriorityObject)[i].Root.length > 0) {
                 }
-                array.push({Root: Object.values(chordPriorityObject)[i].Root[j], Position: Object.values(chordPriorityObject)[i].Position[j], ChordFunction: Object.values(chordPriorityObject)[i].ChordFunction[j]});
-            }
-
-            array.sort(function(a,b) {
-                return ((a.Position < b.Position) ? -1 : ((a.Position === b.Position) ? 0 : 1));
-            });
-
-            for (let j = 0; j < array.length; j ++) {
-                if (array[j].Position[0] === "0") {
-                   array[j].Position = array[j].Position.replace("0", "");
+                for (let j = 0; j < Object.values(chordPriorityObject)[i].Position.length; j++) {
+                    if (Object.values(chordPriorityObject)[i].Position[j] === "Root Position") {
+                        Object.values(chordPriorityObject)[i].Position[j] = "0" + Object.values(chordPriorityObject)[i].Position[j]
+                    }
+                    array.push({ Root: Object.values(chordPriorityObject)[i].Root[j], Position: Object.values(chordPriorityObject)[i].Position[j], ChordFunction: Object.values(chordPriorityObject)[i].ChordFunction[j] });
                 }
-            chordPriorityObject[i].Root[j] = array[j].Root;
-            chordPriorityObject[i].Position[j] = array[j].Position;
-            chordPriorityObject[i].ChordFunction[j] = array[j].ChordFunction;
+
+                array.sort(function (a, b) {
+                    return ((a.Position < b.Position) ? -1 : ((a.Position === b.Position) ? 0 : 1));
+                });
+
+                for (let j = 0; j < array.length; j++) {
+                    if (array[j].Position[0] === "0") {
+                        array[j].Position = array[j].Position.replace("0", "");
+                    }
+                    chordPriorityObject[i].Root[j] = array[j].Root;
+                    chordPriorityObject[i].Position[j] = array[j].Position;
+                    chordPriorityObject[i].ChordFunction[j] = array[j].ChordFunction;
+                }
             }
         }
-        }
-     sortTheChordObjectByInversion();
+        sortTheChordObjectByInversion();
 
         function displayTheRootAndQuality() {
             let counter = 1;
@@ -971,8 +978,10 @@ if (!guitarChecked) {
         }
         displayTheRootAndQuality();
         function displayInputNotes() {
-            for (let i = 1; i <= uniqueChordArray.length; i++) {
-                document.querySelector('#note' + i).textContent = uniqueChordArray[i - 1];
+            if (!guitarChecked) {
+                for (let i = 1; i <= uniqueChordArray.length; i++) {
+                    document.querySelector('#note' + i).textContent = uniqueChordArray[i - 1];
+                }
             }
         }
         displayInputNotes();
