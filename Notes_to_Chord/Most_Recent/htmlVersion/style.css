@@ -91,3 +91,22 @@ position: absolute;
 
 
 }
+
+#guitarCheckBoxRow {
+  margin-left:10px;
+  margin-top:10px;
+  background-color: beige;
+  width: 200px;
+  height: 30px;
+  padding-top: 10px;
+  text-align: left;
+  text-indent: 15px;
+}
+
+#guitarCheckBox {
+margin-left: 30px;
+margin-top:3px;
+position: absolute;
+
+
+}

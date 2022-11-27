@@ -75,55 +75,78 @@ function runMain() {
     }
     emptyDisplay();
 
-    // function guitarInput() {
-    //     let guitarNotes = [];
-    //     let guitarArray = [];
-    //     guitarNotes.length = 6;
-    //     for (let i = 6; i > 0; i--) {
-    //         let guitarPrompt = prompt(`List the fret on the ${i} string.
-    // Type anything besides a number to ignore that string.`, "");
-    //         if (!isNaN(guitarPrompt)) {
-    //             guitarPrompt = Number(guitarPrompt) % 12;
-    //             guitarArray.push(guitarPrompt);
-    //         } else {
-    //             guitarArray.push("notAFret");
-    //         }
-    //     }
+    function guitarInput() {
+        let guitarNotes = [];
+        let guitarArray = [];
+        guitarNotes.length = 7;
 
-    //     let guitarString1 = ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",];
-    //     let guitarString2 = ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",];
-    //     let guitarString3 = ["g", "g#", "a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#",];
-    //     let guitarString4 = ["d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#",];
-    //     let guitarString5 = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#",];
-    //     let guitarString6 = ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",];
+        let chordNotes = {};
+        chordNotes = {
+            7: document.querySelector("#input7").value.replace(/ /g, ""),
+            6: document.querySelector("#input6").value.replace(/ /g, ""),
+            5: document.querySelector("#input5").value.replace(/ /g, ""),
+            4: document.querySelector("#input4").value.replace(/ /g, ""),
+            3: document.querySelector("#input3").value.replace(/ /g, ""),
+            2: document.querySelector("#input2").value.replace(/ /g, ""),
+            1: document.querySelector("#input1").value.replace(/ /g, ""),
+        };
 
-    //     let input1 = guitarString1.at(guitarArray[5]);
-    //     let input2 = guitarString2.at(guitarArray[4]);
-    //     let input3 = guitarString3.at(guitarArray[3]);
-    //     let input4 = guitarString4.at(guitarArray[2]);
-    //     let input5 = guitarString5.at(guitarArray[1]);
-    //     let input6 = guitarString6.at(guitarArray[0]);
 
-    //     if (input6.toLowerCase().charCodeAt() >= 97 && input6.toLowerCase().charCodeAt() <= 103) {
-    //         guitarNotes[0] = input6;
-    //     }
-    //     if (input5.toLowerCase().charCodeAt() >= 97 && input5.toLowerCase().charCodeAt() <= 103) {
-    //         guitarNotes[1] = input5;
-    //     }
-    //     if (input4.toLowerCase().charCodeAt() >= 97 && input4.toLowerCase().charCodeAt() <= 103) {
-    //         guitarNotes[2] = input4;
-    //     }
-    //     if (input3.toLowerCase().charCodeAt() >= 97 && input3.toLowerCase().charCodeAt() <= 103) {
-    //         guitarNotes[3] = input3;
-    //     }
-    //     if (input2.toLowerCase().charCodeAt() >= 97 && input2.toLowerCase().charCodeAt() <= 103) {
-    //         guitarNotes[4] = input2;
-    //     }
-    //     if (input1.toLowerCase().charCodeAt() >= 97 && input1.toLowerCase().charCodeAt() <= 103) {
-    //         guitarNotes[5] = input1;
-    //     }
-    //     whatAreTheGuitarNotes(guitarNotes, guitarArray);
-    // }
+        for (let i = 0; i < 7; i ++) {
+            let guitarNote = "x";
+            if (Object.values(chordNotes)[i].length > 0) {
+            guitarNote = Object.values(chordNotes)[i]
+            };
+            if (!isNaN(guitarNote)) {
+                guitarNote = Number(guitarNote) % 12;
+                guitarArray.push(guitarNote);
+            } else {
+                guitarArray.push("notAFret");
+            }
+        }
+
+        let guitarString1 = ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",];
+        let guitarString2 = ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",];
+        let guitarString3 = ["g", "g#", "a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#",];
+        let guitarString4 = ["d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#",];
+        let guitarString5 = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#",];
+        let guitarString6 = ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",];
+        let guitarString7 = ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",];
+
+        let input1 = guitarString1.at(guitarArray[6]);
+        let input2 = guitarString2.at(guitarArray[5]);
+        let input3 = guitarString3.at(guitarArray[4]);
+        let input4 = guitarString4.at(guitarArray[3]);
+        let input5 = guitarString5.at(guitarArray[2]);
+        let input6 = guitarString6.at(guitarArray[1]);
+        let input7 = guitarString7.at(guitarArray[0]);
+
+  if (input7.length > 0 && input7.toLowerCase().charCodeAt() >= 97 && input7.toLowerCase().charCodeAt() <= 103) {
+            guitarNotes[0] = input7;
+        }
+        if (input6.toLowerCase().charCodeAt() >= 97 && input6.toLowerCase().charCodeAt() <= 103) {
+            guitarNotes[1] = input6;
+        }
+        if (input5.toLowerCase().charCodeAt() >= 97 && input5.toLowerCase().charCodeAt() <= 103) {
+            guitarNotes[2] = input5;
+        }
+        if (input4.toLowerCase().charCodeAt() >= 97 && input4.toLowerCase().charCodeAt() <= 103) {
+            guitarNotes[3] = input4;
+        }
+        if (input3.toLowerCase().charCodeAt() >= 97 && input3.toLowerCase().charCodeAt() <= 103) {
+            guitarNotes[4] = input3;
+        }
+        if (input2.toLowerCase().charCodeAt() >= 97 && input2.toLowerCase().charCodeAt() <= 103) {
+            guitarNotes[5] = input2;
+        }
+        if (input1.length > 0 && input1.toLowerCase().charCodeAt() >= 97 && input1.toLowerCase().charCodeAt() <= 103) {
+            guitarNotes[6] = input1;
+        }
+        whatAreTheGuitarNotes(guitarNotes, guitarArray);
+    }
+    if (guitarChecked) {
+        guitarInput();
+    }
 
     function determineScalesToPush() {
 
@@ -194,17 +217,6 @@ function runMain() {
             1: document.querySelector("#input1").value.replace(/ /g, ""),
         };
 
-        function numberOfNotes() {
-            let noteNumber = 0;
-            for (let i = 0; i < Object.keys(chordNotes).length; i++) {
-                if (Object.values(chordNotes)[i].length > 0) {
-                    noteNumber++;
-                }
-
-            }
-            return noteNumber;
-        }
-        const noteNumber = numberOfNotes();
         for (let i = 0; i < 7; i++) {
             let chordNote = "";
             if (Object.values(chordNotes)[i].length > 0) {
@@ -229,33 +241,32 @@ function runMain() {
         }
         unalteredNoteInput = unalteredNoteInput.join(" ");
     }
-
+if (!guitarChecked) {
     whatAreTheNotes();
+};
+    function whatAreTheGuitarNotes(guitarNotes, guitarArray) {
+        for (let i = 0; i < guitarNotes.length; i++) {
+            let chordNotes = guitarNotes[i];
+            if (typeof guitarArray[i] === "number") {
+                chordNotes = chordNotes[0].toUpperCase() + chordNotes.slice(1, chordNotes.length);
+                unalteredNoteInput.push(chordNotes);
+                for (let j = 0; j < chromaticArrayKey.length; j++) {
+                    if (chromaticArrayKey[j].slice(2) === chordNotes || chromaticArrayKey[j].slice(0, 2) === chordNotes || chromaticArrayKey[j] === chordNotes) {
+                        if (!chordArray.includes(chordNotes)) {
+                            chordArray.push(chordNotes);
+                            indexArray.push(j);
+                        }
+                    }
+                    if (enharmonicEquivalentsHigher[j].slice(1) === chordNotes || enharmonicEquivalentsLower[j].slice(1) === chordNotes) {
+                        chordArray.push(chromaticArrayKey[j][0]);
 
-    // function whatAreTheGuitarNotes(guitarNotes, guitarArray) {
-    //     for (let i = 0; i < guitarNotes.length; i++) {
-    //         let chordNotes = guitarNotes[i];
-    //         if (typeof guitarArray[i] === "number") {
-    //             chordNotes = chordNotes[0].toUpperCase() + chordNotes.slice(1, chordNotes.length);
-    //             unalteredNoteInput.push(chordNotes);
-    //             for (let j = 0; j < chromaticArrayKey.length; j++) {
-    //                 if (chromaticArrayKey[j].slice(2) === chordNotes || chromaticArrayKey[j].slice(0, 2) === chordNotes || chromaticArrayKey[j] === chordNotes) {
-    //                     if (!chordArray.includes(chordNotes)) {
-    //                         chordArray.push(chordNotes);
-    //                         indexArray.push(j);
-    //                     }
-    //                 }
-    //                 if (enharmonicEquivalentsHigher[j].slice(1) === chordNotes || enharmonicEquivalentsLower[j].slice(1) === chordNotes) {
-    //                     chordArray.push(chromaticArrayKey[j][0]);
-
-    //                     indexArray.push(j);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     unalteredNoteInput = unalteredNoteInput.join(",").replace(/,/g, " ").trim();
-    //     runAfterInput();
-    // }
+                        indexArray.push(j);
+                    }
+                }
+            }
+        }
+        unalteredNoteInput = unalteredNoteInput.join(",").replace(/,/g, " ").trim();
+    }
     function runAfterInput() {
         const uniqueChordArray = [...new Set(chordArray)];
         indexArray = [...new Set(indexArray)];
@@ -850,13 +861,16 @@ function runMain() {
                     let chordQuality = chordInfo.chordQuality;
                     if (chordInfo.chordQuality) {
                         if (chordQuality.includes("sus")) {
-                            chordQuality = chordQuality.replace("sus", "") + "sus";
+                            chordQuality = chordQuality.replace("sus", "") + " sus";
                         }
                         if (chordQuality.includes("dimfull")) {
                             chordQuality = chordQuality.replace("dimfull", " full")
                         }
                         if (chordQuality.includes("dim7")) {
                             chordQuality = chordQuality.replace("dim7", " half diminished 7");
+                        }
+                        if (chordQuality.includes("add")) {
+                            chordQuality = chordQuality.replace("add", " add");
                         }
                     }
                     return chordQuality;
@@ -975,4 +989,9 @@ saveInputClickLocation();
 let checked = false;
 document.querySelector("#extraChordCheckBox").addEventListener("change", function () {
     checked === false ? checked = true : checked = false;
+});
+
+let guitarChecked = false;
+document.querySelector("#guitarCheckBox").addEventListener("change", function () {
+    guitarChecked === false ? guitarChecked = true : guitarChecked = false;
 });
