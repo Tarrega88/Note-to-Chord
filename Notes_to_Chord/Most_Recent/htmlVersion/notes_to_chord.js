@@ -786,7 +786,7 @@ function runMain() {
 
                     function makeRomanNumeralsAndKeysLookNice(determinedChordQuality) {
                         let basicChordQuality = determinedChordQuality.basicChordQuality;
-                        if (basicChordQuality === "major" || basicChordQuality === " Power Chord" || basicChordQuality === " Tritone") {
+                        if (basicChordQuality === "major" || basicChordQuality === " Power Chord" || basicChordQuality === " Tritone" || basicChordQuality === "sus") {
                             romanNumeral = romanNumeral.toUpperCase();
                         }
                         if (basicChordQuality === "m") {
