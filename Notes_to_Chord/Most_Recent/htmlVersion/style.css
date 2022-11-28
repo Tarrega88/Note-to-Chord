@@ -110,3 +110,9 @@ position: absolute;
 
 
 }
+
+.guitarString {
+
+  margin-left: 8px;
+  visibility: hidden;
+}
