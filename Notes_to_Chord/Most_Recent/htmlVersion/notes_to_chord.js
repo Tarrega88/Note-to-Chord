@@ -2,10 +2,8 @@ function runMain() {
     let chordArray = [];
     let unalteredNoteInput = [];
     let indexArray = [];
-
-    let aOrAn = "";
-
     let whatThisChordCanBe = [];
+
     const guitarStrings = {
         1: ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",],
         2: ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",],
@@ -15,13 +13,6 @@ function runMain() {
         6: ["e", "f", "f#", "g", "g#", "a", "a#", "b", "c", "c#", "d", "d#",],
         7: ["b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#",],
     }
-    const romanNumerals = {
-        majorRN: ["major-i", "skip", "major-ii", "skip", "major-iii", "major-iv", "skip", "major-v", "skip", "major-vi", "skip", "major-vii",],
-        naturalMinorRN: ["minor-i", "skip", "minor-ii", "minor-iii", "skip", "minor-iv", "skip", "minor-v", "minor-vi", "skip", "minor-vii", "skip",],
-        harmonicMinorRN: ["harmonic_minor-i", "skip", "harmonic_minor-ii", "harmonic_minor-iii", "skip", "harmonic_minor-iv", "skip", "harmonic_minor-v", "harmonic_minor-vi", "skip", "skip", "harmonic_minor-vii",],
-        melodicMinorRN: ["melodic_minor-i", "skip", "melodic_minor-ii", "melodic_minor-iii", "skip", "melodic_minor-iv", "skip", "melodic_minor-v", "skip", "melodic_minor-vi", "skip", "melodic_minor-vii",],
-        harmonicMajorRN: ["harmonic_major-i", "skip", "harmonic_major-ii", "skip", "harmonic_major-iii", "harmonic_major-iv", "skip", "harmonic_major-v", "harmonic_major-vi", "skip", "skip", "harmonic_major-vii",],
-    };
 
     const enharmonicEquivalentsHigher = ["ABbb", "skip", "BCb", "CDbb", "skip", "DEbb", "skip", "EFb", "FGbb", "skip", "GAbb", "skip",];
     const enharmonicEquivalentsLower = ["AGx", "skip", "BAx", "CB#", "skip", "DCx", "skip", "EDx", "FE#", "skip", "GFx", "skip",];
@@ -164,8 +155,27 @@ function runMain() {
         }
         return rootScalesToPush
     }
-
     const rootScalesToPush = determineScalesToPush();
+
+    let romanNumerals = {
+    };
+
+    function fillRomanNumerals(rootScalesToPush) {
+        let array = ["i", "ii", "iii", "iv", "v", "vi", "vii"];
+        for (let i = 0; i < Object.keys(rootScalesToPush).length; i++) {
+            let counter = 0;
+            romanNumerals[Object.keys(rootScalesToPush)[i]] = [];
+            romanNumerals[Object.keys(rootScalesToPush)[i]].length = 12;
+            for (let j = 0; j < Object.values(rootScalesToPush)[i].length; j++) {
+                romanNumerals[Object.keys(rootScalesToPush)[i]][(Object.values(rootScalesToPush)[i][j])] = Object.keys(rootScalesToPush)[i];
+                if (romanNumerals[Object.keys(rootScalesToPush)[i]][(Object.values(rootScalesToPush)[i][j])]) {
+                    romanNumerals[Object.keys(rootScalesToPush)[i]][(Object.values(rootScalesToPush)[i][j])] += array[counter];
+                    counter++;
+                }
+            }
+        }
+    }
+    fillRomanNumerals(rootScalesToPush);
 
     function convertRootScalesToAllModes(rootScalesToPush) {
 
@@ -626,7 +636,7 @@ function runMain() {
 
                 let determinedInversionNumber = determinedInversionNumberArray[i];
                 function findRoot(inversionNumber) {
-                   let fromLowestUpToRoot = fretArray[inversionNumber];
+                    let fromLowestUpToRoot = fretArray[inversionNumber];
                     return fromLowestUpToRoot;
                 }
 
@@ -794,12 +804,6 @@ function runMain() {
                             if (i >= 12) {
                                 i = 0;
                             }
-
-                            // if (chordQuality[0].toLowerCase() === "a" || chordQuality[0].toLowerCase() === "e" || chordQuality[0].toLowerCase() === "i" || chordQuality[0].toLowerCase() === "o" || chordQuality[0].toLowerCase() === "u") {
-                            //     aOrAn = "an";
-                            // } else {
-                            //     aOrAn = "a";
-                            // }
 
                             let temporaryKey = chromaticArrayKey[chromaticLoop];
                             let findRelatedChordNumber = chromaticLoop + stepsToFindRelatedChord;
