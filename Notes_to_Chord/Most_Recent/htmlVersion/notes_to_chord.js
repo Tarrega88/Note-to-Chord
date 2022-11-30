@@ -536,7 +536,7 @@ function runMain() {
                         if (chordName === "major") {
                             chordName = "";
                         }
-                        if ((input.length === 3 && has3rd && has5th) || unalteredChordName === "dim" || unalteredChordName === "aug" || input.length > 3 && has3rd && (has5th || hasFlat5th || hasSharp5th)) {
+                        if ((input.length === 3 && has3rd && (has5th || hasFlat5th || hasSharp5th)) || unalteredChordName === "dim" || unalteredChordName === "aug" || input.length > 3 && has3rd) {
                             if (input.includes(9) && input.includes(2)) {
                                 chordName = chordName + "6/9";
                             } else if (input.includes(2)) {
