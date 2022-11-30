@@ -251,6 +251,7 @@ function runMain() {
     };
     function whatAreTheGuitarNotes(guitarNotes, guitarArray) {
         for (let i = 0; i < guitarNotes.length; i++) {
+            const guitarInput = document.querySelector("#input" + (i + 1));
             let chordNotes = guitarNotes[i];
             if (typeof guitarArray[i] === "number") {
                 chordNotes = chordNotes[0].toUpperCase() + chordNotes.slice(1, chordNotes.length);
@@ -269,8 +270,8 @@ function runMain() {
                     }
                 }
             }
-            if (document.querySelector("#input" + (i + 1)).value.length > 0 && Number(document.querySelector("#input" + (i + 1)).value) >= 0 && Number(document.querySelector("#input" + (i + 1)).value) <= 24) {
-                document.querySelector('#note' + (i + 1)).textContent = + document.querySelector("#input" + (i + 1)).value + ": " + chordNotes;
+            if (guitarInput.value.length > 0 && Number(guitarInput.value) >= 0 && Number(guitarInput.value) <= 24) {
+                document.querySelector('#note' + (i + 1)).textContent = + guitarInput.value + ": " + chordNotes;
             }
 
         }
@@ -625,30 +626,7 @@ function runMain() {
 
                 let determinedInversionNumber = determinedInversionNumberArray[i];
                 function findRoot(inversionNumber) {
-                    let fromLowestUpToRoot;
-                    switch (inversionNumber) {
-                        case 0:
-                            fromLowestUpToRoot = fretArray[0];
-                            break;
-                        case 1:
-                            fromLowestUpToRoot = fretArray[1];
-                            break;
-                        case 2:
-                            fromLowestUpToRoot = fretArray[2];
-                            break;
-                        case 3:
-                            fromLowestUpToRoot = fretArray[3];
-                            break;
-                        case 4:
-                            fromLowestUpToRoot = fretArray[4];
-                            break;
-                        case 5:
-                            fromLowestUpToRoot = fretArray[5];
-                            break;
-                        case 6:
-                            fromLowestUpToRoot = fretArray[6];
-                            break;
-                    }
+                   let fromLowestUpToRoot = fretArray[inversionNumber];
                     return fromLowestUpToRoot;
                 }
 
@@ -1037,32 +1015,32 @@ document.addEventListener("keydown", function (e) {
             let keyValue;
             const chromaticNoteSharps = ["", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
             const chromaticNoteFlats = ["", "A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab"];
-            
-                keyValue = chromaticNoteSharps.indexOf(document.querySelector("#input" + inputChoice).value)
-           
+            const inputSelection = document.querySelector("#input" + inputChoice)
+            keyValue = chromaticNoteSharps.indexOf(inputSelection.value)
+
             if (e.key === "ArrowRight") {
 
-                if (!document.querySelector("#input" + inputChoice).value.includes("b")) {
-                keyValue = chromaticNoteSharps.indexOf(document.querySelector("#input" + inputChoice).value) + 1;
+                if (!inputSelection.value.includes("b")) {
+                    keyValue = chromaticNoteSharps.indexOf(inputSelection.value) + 1;
                 } else {
-                    keyValue = chromaticNoteFlats.indexOf(document.querySelector("#input" + inputChoice).value) + 1;
+                    keyValue = chromaticNoteFlats.indexOf(inputSelection.value) + 1;
                 }
 
                 if (keyValue > 12) {
                     keyValue = 0;
                 }
-                document.querySelector("#input" + inputChoice).value = chromaticNoteSharps[keyValue];
+                inputSelection.value = chromaticNoteSharps[keyValue];
             } else
                 if (e.key === "ArrowLeft") {
-                    if (!document.querySelector("#input" + inputChoice).value.includes("#")) {
-                    keyValue = chromaticNoteFlats.indexOf(document.querySelector("#input" + inputChoice).value) - 1;
+                    if (!inputSelection.value.includes("#")) {
+                        keyValue = chromaticNoteFlats.indexOf(inputSelection.value) - 1;
                     } else {
-                        keyValue = chromaticNoteSharps.indexOf(document.querySelector("#input" + inputChoice).value) - 1;
+                        keyValue = chromaticNoteSharps.indexOf(inputSelection.value) - 1;
                     }
                     if (keyValue < 0) {
                         keyValue = 12;
                     }
-                    document.querySelector("#input" + inputChoice).value = chromaticNoteFlats[keyValue];
+                    inputSelection.value = chromaticNoteFlats[keyValue];
                 }
 
         } else {
