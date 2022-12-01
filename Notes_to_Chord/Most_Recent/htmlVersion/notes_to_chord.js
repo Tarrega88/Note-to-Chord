@@ -52,14 +52,6 @@ function runMain() {
         },
     };
 
-    const restrictedChords = {//Restriction logic is more general now, but I'm keeping this here for a while until I'm certain there are no extra strange ones that need to be thrown out of the display possibilities.
-        //This restriction logic requires the basicChord from above and then an array including the string of the exact chord type to be ignored on that basicChord type.
-        // dim: ,
-        // m: ["m6add11", "madd b6", "madd11#5","madd11add b6", "m7b5#5", "m6add11#5add b9"],
-        // major: ["6add11", "6/9b5", "6b5", "maj7#9b5#5", "6add11add b9",],
-        // sus: ["susadd9"],
-    };
-
     let chordPriorityObject = {
         0: { Root: [], Position: [], ChordFunction: [], },
         1: { Root: [], Position: [], ChordFunction: [], },
@@ -78,16 +70,15 @@ function runMain() {
             document.querySelector(`#chordFunction` + i).textContent = "";
             document.querySelector('#note' + i).textContent = "";
         }
-
     }
+
     emptyDisplay();
     function guitarInput(guitarStrings) {
         let guitarNotes = [];
         let guitarArray = [];
         guitarNotes.length = 7;
 
-        let chordNotes = {};
-        chordNotes = {
+        let chordNotes = {
             7: document.querySelector("#input7").value.replace(/ /g, ""),
             6: document.querySelector("#input6").value.replace(/ /g, ""),
             5: document.querySelector("#input5").value.replace(/ /g, ""),
@@ -97,10 +88,12 @@ function runMain() {
             1: document.querySelector("#input1").value.replace(/ /g, ""),
         };
 
+        const chordNoteValue = Object.values(chordNotes);
+
         for (let i = 0; i < 7; i++) {
             let guitarNote = "x";
-            if (Object.values(chordNotes)[i].length > 0) {
-                guitarNote = Object.values(chordNotes)[i]
+            if (chordNoteValue[i].length > 0) {
+                guitarNote = chordNoteValue[i]
             };
             if (!isNaN(guitarNote)) {
                 guitarNote = Number(guitarNote) % 12;
@@ -162,14 +155,16 @@ function runMain() {
 
     function fillRomanNumerals(rootScalesToPush) {
         let array = ["i", "ii", "iii", "iv", "v", "vi", "vii"];
-        for (let i = 0; i < Object.keys(rootScalesToPush).length; i++) {
+        const keysOfRootScales = Object.keys(rootScalesToPush);
+        const valuesOfRootScales = Object.values(rootScalesToPush);
+        for (let i = 0; i < keysOfRootScales.length; i++) {
             let counter = 0;
-            romanNumerals[Object.keys(rootScalesToPush)[i]] = [];
-            romanNumerals[Object.keys(rootScalesToPush)[i]].length = 12;
-            for (let j = 0; j < Object.values(rootScalesToPush)[i].length; j++) {
-                romanNumerals[Object.keys(rootScalesToPush)[i]][(Object.values(rootScalesToPush)[i][j])] = Object.keys(rootScalesToPush)[i];
-                if (romanNumerals[Object.keys(rootScalesToPush)[i]][(Object.values(rootScalesToPush)[i][j])]) {
-                    romanNumerals[Object.keys(rootScalesToPush)[i]][(Object.values(rootScalesToPush)[i][j])] += array[counter];
+            romanNumerals[keysOfRootScales[i]] = [];
+            romanNumerals[keysOfRootScales[i]].length = 12;
+            for (let j = 0; j < valuesOfRootScales[i].length; j++) {
+                romanNumerals[keysOfRootScales[i]][(valuesOfRootScales[i][j])] = keysOfRootScales[i];
+                if (romanNumerals[keysOfRootScales[i]][(valuesOfRootScales[i][j])]) {
+                    romanNumerals[keysOfRootScales[i]][(valuesOfRootScales[i][j])] += array[counter];
                     counter++;
                 }
             }
@@ -177,17 +172,13 @@ function runMain() {
     }
     fillRomanNumerals(rootScalesToPush);
 
-    function convertRootScalesToAllModes(rootScalesToPush) {
+    function convertRootScalesToAllModes(scalesToPush) {
 
-        const scalesToPush = rootScalesToPush;
-
-        let scales = {
-
-        }
+        let scales = {}
 
         for (let i = 0; i < Object.keys(scalesToPush).length; i++) {
             let scaleToTweak = Object.values(scalesToPush)[i];
-            for (let j = 0; j < Object.values(scalesToPush)[i].length; j++) {
+            for (let j = 0; j < scaleToTweak.length; j++) {
                 let romanNumeral = "";
                 switch (j) {
                     case 0: romanNumeral = "i";
@@ -221,8 +212,7 @@ function runMain() {
 
     function whatAreTheNotes() {
 
-        let chordNotes = {};
-        chordNotes = {
+        let chordNotes = {
             7: document.querySelector("#input7").value.replace(/ /g, ""),
             6: document.querySelector("#input6").value.replace(/ /g, ""),
             5: document.querySelector("#input5").value.replace(/ /g, ""),
@@ -232,10 +222,12 @@ function runMain() {
             1: document.querySelector("#input1").value.replace(/ /g, ""),
         };
 
+        const chordNoteValue = Object.values(chordNotes);
+
         for (let i = 0; i < 7; i++) {
             let chordNote = "";
-            if (Object.values(chordNotes)[i].length > 0) {
-                chordNote = Object.values(chordNotes)[i][0].toUpperCase() + Object.values(chordNotes)[i].slice(1, Object.values(chordNotes)[i].length);
+            if (chordNoteValue[i].length > 0) {
+                chordNote = chordNoteValue[i][0].toUpperCase() + chordNoteValue[i].slice(1, chordNoteValue[i].length);
 
                 // let chordNotes = prompt(`What's note number ${i + 1}?`);
                 chordNote = chordNote[0].toUpperCase() + chordNote.slice(1, chordNote.length);
@@ -289,7 +281,6 @@ function runMain() {
 
     }
 
-
     function runAfterInput() {
         const uniqueChordArray = [...new Set(chordArray)];
         indexArray = [...new Set(indexArray)];
@@ -323,7 +314,7 @@ function runMain() {
         function lowerTheChordUntilA() {
             if (lowestFret > 0) {
                 for (let i = 0; i < fretArray.length; i++) {
-                    fretArray[i] = fretArray[i] - lowestFret;
+                    fretArray[i] -= lowestFret;
                 }
             }
         }
@@ -502,7 +493,6 @@ function runMain() {
                                 chordName = chordName + "#9";
                                 extraExtensionsCounter++;
                             }
-
                             if (input.includes(6) && has5th) {
                                 chordName = chordName + "#11";
                                 extraExtensionsCounter++;
@@ -537,6 +527,9 @@ function runMain() {
                             chordName = "";
                         }
                         if (input.length >= 3 && has3rd || unalteredChordName === "dim" || unalteredChordName === "aug") {
+                            if (!has5th && !hasFlat5th && !hasSharp5th) {
+                                extraExtensionsCounter++;
+                            }
                             if (input.includes(9) && input.includes(2)) {
                                 chordName = chordName + "6/9";
                             } else if (input.includes(2)) {
@@ -586,8 +579,6 @@ function runMain() {
                             } else
                                 return;
 
-
-
                     }
                     const triadExtensionsFound = findTriadExtensions(foundBasicValue, foundBasicValue, hasPerfect5th, inversionChecker);
                     allChordInfo.push({
@@ -606,12 +597,6 @@ function runMain() {
         for (let i = 0; i < allChordInfo.length; i++) {
             if (Object.values(allChordInfo)[i].basicChordQuality !== undefined) {
                 let chordInfoPassThrough = allChordInfo[i];
-                function saveOriginalChordQuality(determinedChordQuality) {
-                    let originalChordQuality = determinedChordQuality.chordQuality;
-                    return originalChordQuality;
-                }
-
-                const savedOriginalChordQuality = saveOriginalChordQuality(chordInfoPassThrough);
 
                 function determineInversion() {
                     let inversionNumberArray = [];
@@ -619,9 +604,9 @@ function runMain() {
                         let inversionChecker = Array.from(indexArray);
                         let valueToRemove = inversionChecker[i];
                         for (let j = 0; j < indexArray.length; j++) {
-                            inversionChecker[j] = inversionChecker[j] - valueToRemove;
+                            inversionChecker[j] -= valueToRemove;
                             if (inversionChecker[j] < 0) {
-                                inversionChecker[j] = inversionChecker[j] + 12;
+                                inversionChecker[j] += 12;
                             }
                         }
                         inversionChecker = inversionChecker.sort((a, b) => a - b);
@@ -644,7 +629,7 @@ function runMain() {
 
                 function applyInversionText(fromLowestUpToRoot, chordInfo) {
                     let position = "";
-                    fromLowestUpToRoot = fromLowestUpToRoot % 12;
+                    fromLowestUpToRoot %= 12;
                     //chordInfo.numberOfExtraExtensions is actually just a sort of marker for how "weird" a chord is. While there is technically no extra extension happening in these positions, the logic later on sorts chords based on their number of extra extensions, and high numbered inversions are so rare that they ought to be counted as outliers, so they're getting an extra point on the "weird" scale here to help with sorting.
                     switch (fromLowestUpToRoot) {
                         case 0:
@@ -664,10 +649,10 @@ function runMain() {
                             position = "2nd Inversion (Sharp 5 in Bass)";
                             break;
                         case 5:
-                            position = "2nd Inversion";
+                            position = "2nd Inversion (5th in Bass)";
                             break;
                         case 6:
-                            position = "2nd Inversion (Flatted 5 in Bass)";
+                            position = "2nd Inversion (Flat 5 in Bass)";
                             break;
                         case 7:
                             position = "5th Inversion (11 in Bass)";
@@ -722,7 +707,7 @@ function runMain() {
                 function calculateRootNumber(fromLowestUpToRoot) {
                     let rootCalculation = fromLowestUpToRoot + indexOfLowestNote;
                     if (rootCalculation >= 12) {
-                        rootCalculation = rootCalculation - 12;
+                        rootCalculation -= 12;
                     }
                     return rootCalculation;
                 }
@@ -739,16 +724,6 @@ function runMain() {
                 }
 
                 saveOriginalRoot(rootLetter);
-
-                function addToChordOccursIn(theRoot, determinedChordQuality) {
-                    chordQuality = determinedChordQuality.chordQuality;
-                    let chordOccursIn = "";
-                    chordOccursIn = `
-    ${theRoot}${chordQuality} occurs as a:`;
-
-                    return chordOccursIn;
-                }
-                addToChordOccursIn(rootLetter, chordInfoPassThrough);
 
                 //should split findRelevantKeysAndSyncChordFunctionsToNotes into more specific functions soon
                 function findRelevantKeysAndSyncChordFunctionsToNotes(rootCalculation) {
@@ -795,7 +770,7 @@ function runMain() {
                         intervalForKey1 = rootCalculation - chosenArrayIndex;
 
                         if (rootCalculation >= 6) {
-                            intervalForKey1 = intervalForKey1 - 12;
+                            intervalForKey1 -= 12;
                         }
 
                         intervalForKey2 = intervalForKey1 + 12;
@@ -807,8 +782,8 @@ function runMain() {
 
                             let temporaryKey = chromaticArrayKey[chromaticLoop];
                             let findRelatedChordNumber = chromaticLoop + stepsToFindRelatedChord;
-                            if (findRelatedChordNumber > 11) {
-                                findRelatedChordNumber = findRelatedChordNumber - 12;
+                            if (findRelatedChordNumber >= 12) {
+                                findRelatedChordNumber -= 12;
                             }
                             if (temporaryKey.length === 4) {
                                 temporaryKey = temporaryKey.slice(0, 2) + "/" + temporaryKey.slice(2);
@@ -828,35 +803,20 @@ function runMain() {
 
                 const determinedChordFunctions = findRelevantKeysAndSyncChordFunctionsToNotes(rootNumber);
 
-                function determineValidChord(chordInfo) {
-                    let valid = true;
-                    for (let i = 0; i < Object.keys(restrictedChords).length; i++) {
-                        if (chordInfo.basicChordQuality === Object.keys(restrictedChords)[i]) {
-                            for (let j = 0; j < Object.values(restrictedChords)[i].length; j++) {
-                                if (chordInfo.chordQuality === Object.values(restrictedChords)[i][j]) {
-                                    valid = false;
-                                }
-                            }
-                        }
-                    }
-                    return valid;
-                }
-                let determinedChordValidity = determineValidChord(chordInfoPassThrough);
-
                 function determineNumberOfExtraExtensions(chordInfo) {
                     return chordInfo.numberOfExtraExtensions;
                 }
                 const chordExtraExtensionNumber = determineNumberOfExtraExtensions(chordInfoPassThrough);
-                function determineIfChordHasCommonName(determinedChordValidity, chordInfo, allChordInfo) {
-                    let valid = determinedChordValidity// let valid = true;
-                    if (chordInfo.numberOfExtraExtensions > 1 && allChordInfo.length > 1) {
-                        valid = false;
+                function determineIfChordHasCommonName(chordInfo, allChordInfo) {
+                    let valid = true// let valid = true;
+                    if (!checked) {
+                        if (chordInfo.numberOfExtraExtensions > 1 && allChordInfo.length > 1) {
+                            valid = false;
+                        }
                     }
                     return valid;
                 }
-                if (!checked) {
-                    determinedChordValidity = determineIfChordHasCommonName(determinedChordValidity, chordInfoPassThrough, allChordInfo);
-                }
+                const determinedChordValidity = determineIfChordHasCommonName(chordInfoPassThrough, allChordInfo);
 
                 function fixChordQuality(chordInfo) {
                     let chordQuality = chordInfo.chordQuality;
@@ -912,7 +872,6 @@ function runMain() {
                 if (determinedChordValidity) {
                     function fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfo, appliedInversionText, chordFunction) {
 
-
                         if (chordInfo.basicChordQuality !== undefined && chordInfo.chordQuality !== undefined) {
                             chordPriorityObject[chordExtraExtensionNumber].Root.push(mergedRoot);
                             chordPriorityObject[chordExtraExtensionNumber].Position.push(appliedInversionText);
@@ -921,7 +880,6 @@ function runMain() {
                         return chordPriorityObject;
                     }
                     fillTheChordObject(chordExtraExtensionNumber, mergedRoot, chordInfoPassThrough, appliedInversionText, determinedChordFunctions);
-
 
                 }
 
@@ -976,7 +934,6 @@ function runMain() {
             }
         }
         displayInputNotes();
-
     }
     runAfterInput();
 }
