@@ -514,7 +514,7 @@ function runMain() {
                         rootPosition: inversionString,
                         chordQuality: specialExtensionsFound,
                         basicChordQuality: foundBasicValue,
-                        numberOfExtraExtensions: extraExtensionsCounter,
+                        uncommonCounter: extraExtensionsCounter,
                     });
                 } else if (!has7) {
                     let extraExtensionsCounter = 0;
@@ -581,7 +581,7 @@ function runMain() {
                         rootPosition: inversionString,
                         chordQuality: triadExtensionsFound,
                         basicChordQuality: foundBasicValue,
-                        numberOfExtraExtensions: extraExtensionsCounter,
+                        uncommonCounter: extraExtensionsCounter,
                     });
                 }
             }
@@ -626,7 +626,6 @@ function runMain() {
                 function applyInversionText(fromLowestUpToRoot, chordInfo) {
                     let position = "";
                     fromLowestUpToRoot %= 12;
-                    //chordInfo.numberOfExtraExtensions is actually just a sort of marker for how "weird" a chord is. While there is technically no extra extension happening in these positions, the logic later on sorts chords based on their number of extra extensions, and high numbered inversions are so rare that they ought to be counted as outliers, so they're getting an extra point on the "weird" scale here to help with sorting.
                     switch (fromLowestUpToRoot) {
                         case 0:
                             position = "Root Position";
@@ -639,20 +638,22 @@ function runMain() {
                             break;
                         case 3:
                             position = "6th Inversion (13 in Bass)";
-                            chordInfo.numberOfExtraExtensions++;
+                            chordInfo.uncommonCounter++;
                             break;
                         case 4:
                             position = "2nd Inversion (Sharp 5 in Bass)";
+                            chordInfo.uncommonCounter++;
                             break;
                         case 5:
                             position = "2nd Inversion (5th in Bass)";
                             break;
                         case 6:
                             position = "2nd Inversion (Flat 5 in Bass)";
+                            chordInfo.uncommonCounter++;
                             break;
                         case 7:
                             position = "5th Inversion (11 in Bass)";
-                            chordInfo.numberOfExtraExtensions++;
+                            chordInfo.uncommonCounter++;
                             break;
                         case 8:
                             position = "1st Inversion (Major 3rd in Bass)";
@@ -662,11 +663,11 @@ function runMain() {
                             break;
                         case 10:
                             position = "4th Inversion (9 in Bass)";
-                            chordInfo.numberOfExtraExtensions++;
+                            chordInfo.uncommonCounter++;
                             break;
                         case 11:
                             position = "4th Inversion (b9 in Bass)";
-                            chordInfo.numberOfExtraExtensions++;
+                            chordInfo.uncommonCounter++;
                             break;
                     }
                     return position;
@@ -798,14 +799,14 @@ function runMain() {
 
                 const determinedChordFunctions = findRelevantKeysAndSyncChordFunctionsToNotes(rootNumber, romanNumerals);
 
-                function determineNumberOfExtraExtensions(chordInfo) {
-                    return chordInfo.numberOfExtraExtensions;
+                function determineuncommonCounter(chordInfo) {
+                    return chordInfo.uncommonCounter;
                 }
-                const chordExtraExtensionNumber = determineNumberOfExtraExtensions(chordInfoPassThrough);
+                const chordExtraExtensionNumber = determineuncommonCounter(chordInfoPassThrough);
                 function determineIfChordHasCommonName(chordInfo, allChordInfo) {
                     let valid = true// let valid = true;
                     if (!checked) {
-                        if (chordInfo.numberOfExtraExtensions > 1 && allChordInfo.length > 1) {
+                        if (chordInfo.uncommonCounter > 1 && allChordInfo.length > 1) {
                             valid = false;
                         }
                     }
