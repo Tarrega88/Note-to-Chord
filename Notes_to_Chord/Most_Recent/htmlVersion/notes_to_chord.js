@@ -24,7 +24,6 @@ function runMain() {
             intervals: [0, 3, 6],
             restrictions: [2, 4, 5, 7, 8, 11],
         },
-
         aug: {
             intervals: [0, 4, 8],
             restrictions: [3, 7],
@@ -37,7 +36,6 @@ function runMain() {
             intervals: [0, 3],
             restrictions: [4],
         },
-
         sus: {
             intervals: [0, 5],
             restrictions: [3, 4],
@@ -62,7 +60,6 @@ function runMain() {
         6: { Root: [], Position: [], ChordFunction: [], },
         7: { Root: [], Position: [], ChordFunction: [], },
     };
-
     function emptyDisplay() {
         for (let i = 1; i <= 7; i++) {
             document.querySelector(`#root` + i).textContent = "";
@@ -150,10 +147,8 @@ function runMain() {
     }
     const rootScalesToPush = determineScalesToPush();
 
-    let romanNumerals = {
-    };
-
     function fillRomanNumerals(rootScalesToPush) {
+        let romanNumerals = {};
         let array = ["i", "ii", "iii", "iv", "v", "vi", "vii"];
         const keysOfRootScales = Object.keys(rootScalesToPush);
         const valuesOfRootScales = Object.values(rootScalesToPush);
@@ -169,8 +164,9 @@ function runMain() {
                 }
             }
         }
+        return romanNumerals;
     }
-    fillRomanNumerals(rootScalesToPush);
+    const romanNumerals = fillRomanNumerals(rootScalesToPush);
 
     function convertRootScalesToAllModes(scalesToPush) {
 
@@ -730,13 +726,12 @@ function runMain() {
                     let intervalForKey1;
                     let intervalForKey2;
                     let chosenArrayIndex;
-                    let romanNumeral = "";
                     let majorOrMinor = "";
                     let stepsToFindRelatedChord = 0;
                     let chordOccursInArray = [];
                     for (let q = 0; q < whatThisChordCanBe.length; q++) {
                         let chromaticLoop = 0;
-                        romanNumeral = "";
+                        let romanNumeral = "";
 
                         romanNumeral = whatThisChordCanBe[q].slice(whatThisChordCanBe[q].indexOf("-") + 1);
                         majorOrMinor = whatThisChordCanBe[q].slice(0, whatThisChordCanBe[q].indexOf("-"));
@@ -801,7 +796,7 @@ function runMain() {
                     return chordOccursInArray;
                 }
 
-                const determinedChordFunctions = findRelevantKeysAndSyncChordFunctionsToNotes(rootNumber);
+                const determinedChordFunctions = findRelevantKeysAndSyncChordFunctionsToNotes(rootNumber, romanNumerals);
 
                 function determineNumberOfExtraExtensions(chordInfo) {
                     return chordInfo.numberOfExtraExtensions;
@@ -946,13 +941,30 @@ function clearInput() {
     }
 }
 
-document.querySelector(".confirmNotes").addEventListener("click", function () {
+document.querySelector("#confirmNotes").addEventListener("click", function () {
     runMain();
     clearInput();
     document.getElementById("input1").focus();
     inputChoice = 1;
 });
 document.getElementById("input1").focus();
+
+document.querySelector("#repeatNotes").addEventListener("click", function () {
+    for (let i = 1; i <= 7; i ++) {
+    if (!guitarChecked) {
+    document.querySelector("#input" + i).value = document.querySelector('#note' + i).textContent;
+} else {
+    document.querySelector("#input" + i).value = document.querySelector('#note' + i).textContent.split(":")[0]
+    }
+}
+});
+
+document.querySelector("#clearAll").addEventListener("click", function () {
+    for (let i = 1; i <= 7; i ++) {
+        document.querySelector("#input" + i).value = "";
+    }
+});
+
 
 document.addEventListener("keydown", function (e) {
     if ((e.key === "ArrowUp" || e.key === " ") && inputChoice < 7) {

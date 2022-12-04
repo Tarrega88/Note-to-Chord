@@ -23,7 +23,7 @@ header {
   padding-block: 5px;
 }
 
-.confirmNotes {
+.leftColumnButton {
   width: 100px;
   margin-left: 25px;
   margin-top: 5px;
@@ -90,8 +90,6 @@ padding-left: 5%;
 margin-left: 6px;
 margin-top:3px;
 position: absolute;
-
-
 }
 
 #guitarCheckBoxRow {
